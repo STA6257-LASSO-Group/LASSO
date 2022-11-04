@@ -1,6 +1,7 @@
 project:
   type: book
-
+  output-dir: _docs
+  
 book:
   title: "LASSO"
   author: "Jane Doe"
@@ -20,4 +21,5 @@ format:
     documentclass: scrreprt
 
 editor: visual
+
 
