@@ -1,9 +1,104 @@
 # Introduction
 
-This is a book created from markdown and executable code.
+**Linear regression overview**
 
-See @knuth84 for additional discussion of literate programming.
+Regression is the predicting or learning of numerical
+features in statistics and machine learning. This includes the prediction of
+numeric as well as categorical attributes. The process of performing a
+regression allows for the determination of which factors in situations matter,
+what is their impact, and how they influence other factors. Regression allows
+for data driven decisions that eliminate guesswork.
+(Joshi, Saxena)
 
-```{r}
-1 + 1
-```
+Simple linear regression finds the relationship between a
+dependent and independent variable whereas multiple linear regression can find
+the relationship between the dependent and multiple dependent variables.
+(Joshi, Saxena)
+
+The data is modeled on a graph and a line is fitted to the
+data. This allows for the determination of the coefficients of the independent
+variable or variables. (Joshi, Saxena)
+
+**Regression line fitting**
+
+Regression line fitting is a delicate balance as the line
+should predict the desired value well based on several features but be
+applicable enough to be used repeatedly with different samples of data. The
+line should not be underfitted, which would not provide an accurate prediction,
+but also should not be overfitted to the sample, the model doesn\'t stand up
+well to different samples and the data at large. (Jabbar and Khan)
+
+Prior to testing, the sample data is randomly split into two
+sections. 80% of the data is labeled as the training or estimation data and 20%
+of the data is labeled as the validation set. (Aheto, Duah, Agbadi, and Nakua)
+This allows for the fitting to be monitored. 
+Various tests can determine the goodness of fit as both sets of data are
+tested to ensure similarity. Methods of avoiding a misfit include Penalty
+Methods and Early Stopping Method (Khan and Allamy)
+
+**Bias and variance**
+
+**Regularization**
+
+Regularization was introduced in the context of dealing with
+the matrix inverse. This inverse issue caused the answer to live outside the of
+the needed mathematical space. The introduction of the regularization parameter
+is a smoothness penalty which allowed the problem to be solved. (Bickel and Li)
+
+The fitting of models with large numbers of parameters also
+has similar issues in which makes the models unstable. This issue requires the
+need for regularization to get a sensible model. The LASSO regression also has a
+penalty to ensure the model is stable and thus works with the data (Bickel and
+Li)
+
+ 
+
+[**Regularized Regression Model**]{.underline}
+
+Ordinary Least Squares needed improvements due to the issue
+with large variance even though the process has a
+low bias. Shrinking or setting the coefficients to zero can improve the
+accuracy of the predictions. This process can introduce some bias but will
+reduce the variance which can improve the prediction accuracy. (Hastie,
+Taibshirani, Wainwright)
+
+**LASSO**
+
+LASSO or Least Absolute Shrinkage and Selection Operator is
+a regularized regression modeling method that performs variable selection and
+regularization.  These two components allow
+for better accuracy in prediction and interpretability in the model.  (Emmert-Streib and Dehmer). The LASSO method
+combines the L1 constraint, which bounds the sum of the coefficients of the
+absolute values and the least-squares loss. This is a method that allows for
+the shrinking of the coefficients in a linear model setting some to zero. (Hastie,
+Taibshirani, Wainwright)
+
+Since LASSO can shrink some of the coefficients to zero this
+method provides for an automated way for doing model selection in linear
+regression. (Hastie, Taibshirani, Wainwright)
+
+**Ridge Regression**
+
+Ridge Regression is a regularized regression model that
+predates the LASSO.  (Hastie,
+Taibshirani, Wainwright) This method also has a shrinking effect on the
+coefficients of the linear model but does not reduce these coefficients to
+zero. (Emmert-Streib and Dehmer). This method can simplify the problem from the
+original set of coefficients it does not have the added property of automated
+model selection.
+
+**Feature minimization and reduction**
+
+LASSO, Ridge, and Elastic Net Regression simplify the
+features by reducing and/or simplifying the values to zero. Due to this type of
+feature selection and/or reduction, the model may result in poor fitting.
+(Aheto, Duah, Agbadi, and Nakua) This ill-fitting is mentioned in the previous
+section on regression line fitting.
+
+ **Feature selection**
+
+Modeling a situation where the number of features is larger
+than the number of observations is a difficult and unsolved problem in many
+situations. (Freijeiro-González, Febrero-Bande, González-Manteiga)
+
+ 
