@@ -124,16 +124,17 @@ ul.task-list{list-style: none;}
   <ul>
   <li><a href="#methods-and-materials" id="toc-methods-and-materials" class="nav-link active" data-scroll-target="#methods-and-materials"> <span class="header-section-number">3</span> Methods and Materials</a>
   <ul class="collapse">
+<<<<<<< HEAD
+  <li><a href="#data-sets" id="toc-data-sets" class="nav-link" data-scroll-target="#data-sets"> <span class="header-section-number">3.1</span> Data sets</a>
+=======
   <li><a href="#data-sets" id="toc-data-sets" class="nav-link" data-scroll-target="#data-sets"> <span class="header-section-number">3.1</span> Data sets</a></li>
   <li><a href="#nci-60-data-test" id="toc-nci-60-data-test" class="nav-link" data-scroll-target="#nci-60-data-test"> <span class="header-section-number">3.2</span> NCI 60 Data test</a>
+>>>>>>> 726f9ec71e805042989fea76eff9cbe649820c0d
   <ul class="collapse">
-  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description"> <span class="header-section-number">3.2.1</span> Description</a></li>
-  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"> <span class="header-section-number">3.2.2</span> Usage</a></li>
-  <li><a href="#format" id="toc-format" class="nav-link" data-scroll-target="#format"> <span class="header-section-number">3.2.3</span> Format</a></li>
-  <li><a href="#source" id="toc-source" class="nav-link" data-scroll-target="#source"> <span class="header-section-number">3.2.4</span> Source</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">3.2.5</span> References</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"> <span class="header-section-number">3.2.6</span> Examples</a></li>
+  <li><a href="#nci-60" id="toc-nci-60" class="nav-link" data-scroll-target="#nci-60"> <span class="header-section-number">3.1.1</span> NCI 60</a></li>
+  <li><a href="#jackson-heart-study" id="toc-jackson-heart-study" class="nav-link" data-scroll-target="#jackson-heart-study"> <span class="header-section-number">3.1.2</span> Jackson Heart Study</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">3.2</span> References</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -161,56 +162,32 @@ ul.task-list{list-style: none;}
 <h1 data-number="3"><span class="header-section-number">3</span> Methods and Materials</h1>
 <section id="data-sets" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="data-sets"><span class="header-section-number">3.1</span> Data sets</h2>
-<p>LASSO has been shown to outperform Ridge with sparse data where p&gt;&gt;n.&nbsp;Conversely, Ridge has been shown to outperformLASSO with dense data where p &lt; n.&nbsp;The hybrid of the two, Elastic Net, will adapt to either type of data by using properties of LASSO and Ridge. We aim to use two data sets to highlight the advantages of each of the three regularized linear techniques while also using these statistical methods to model the data and make predictions.</p>
-<p>We first want to use a data set that has more features than observations. For this situation, we will use….</p>
-<p>This one looks good to me:</p>
+<p>Previous studies indicate LASSO regression outperforms Ridge regression with sparse data sets in which the variable size is larger than the sample size. Conversely, Ridge regression has been shown to outperform LASSO regression with dense data in which the variable size is smaller than the sample size. The hybrid of the two, Elastic Net regression, will adapt to either type of data by using the properties of LASSO and Ridge regression together. We aim to use two data sets with different characteristics to highlight the advantages of each of the three linear regularization techniques while also using these statistical methods to model the data and make predictions.</p>
+<section id="nci-60" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="nci-60"><span class="header-section-number">3.1.1</span> NCI 60</h3>
+<p>Firstly, we want to use a data set that has more features than observations to highlight the LASSO regression’s performance. For this situation, we will use the NCI 60 microarray data from Ashburner et al.&nbsp;This data set consists of 6830 genes with cancer types from 64 cancer cell lines. The format of the data set is a list with two elements: <code>data</code> and <code>labs</code>. The <code>data</code> element is a 64 by 6830 matrix of the data values while the <code>labs</code> element is a vector of the cancer cell lines listing cancer types.</p>
 </section>
+<<<<<<< HEAD
+<section id="jackson-heart-study" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="jackson-heart-study"><span class="header-section-number">3.1.2</span> Jackson Heart Study</h3>
+<p>The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression’s performance over LASSO’s when the sample size greatly outnumbers the variable size. Additionally, we are interested in using this data set to test all three methods on shrinking the multicollinearity and to test LASSO’s feature selection capabilities.</p>
+<p>&nbsp;</p>
+=======
 <section id="nci-60-data-test" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="nci-60-data-test"><span class="header-section-number">3.2</span> NCI 60 Data test</h2>
 <section id="description" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">3.2.1</span> Description</h3>
 <p>NCI microarray data. The data contains expression levels on 6830 genes from 64 cancer cell lines. Cancer type is also recorded.</p>
+>>>>>>> 726f9ec71e805042989fea76eff9cbe649820c0d
 </section>
-<section id="usage" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="usage"><span class="header-section-number">3.2.2</span> Usage</h3>
-<pre><code>NCI60</code></pre>
 </section>
-<section id="format" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="format"><span class="header-section-number">3.2.3</span> Format</h3>
-<p>The format is a list containing two elements: <code>data</code> and <code>labs</code>.</p>
-<p><code>data</code> is a 64 by 6830 matrix of the expression values while <code>labs</code> is a vector listing the cancer types for the 64 cell lines.</p>
-</section>
-<section id="source" class="level3" data-number="3.2.4">
-<h3 data-number="3.2.4" class="anchored" data-anchor-id="source"><span class="header-section-number">3.2.4</span> Source</h3>
-<p>The data come from Ross et al.&nbsp;(Nat Genet., 2000). More information can be obtained at http://genome-www.stanford.edu/nci60/</p>
-</section>
-<section id="references" class="level3" data-number="3.2.5">
-<h3 data-number="3.2.5" class="anchored" data-anchor-id="references"><span class="header-section-number">3.2.5</span> References</h3>
+<section id="references" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="references"><span class="header-section-number">3.2</span> References</h2>
+<p>Ashburner M, Ball CA, Blake JA, Botstein D, Butler H, Cherry JM, Davis AP, Dolinski K, Dwight SS, Eppig JT, Harris MA, Hill DP, Issel-Tarver L, Kasarskis A, Lewis S, Matese JC, Richardson JE, Ringwald M, Rubin GM, Sherlock G. Gene ontology: tool for the unification of biology. The Gene Ontology Consortium. Nat Genet. 2000 May;25(1):25-9. doi: 10.1038/75556. PMID: 10802651; PMCID: PMC3037419.</p>
 <p>James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) <em>An Introduction to Statistical Learning with applications in R</em>, <a href="https://www.statlearning.com/">https://www.statlearning.com</a>, Springer-Verlag, New York</p>
-</section>
-<section id="examples" class="level3" data-number="3.2.6">
-<h3 data-number="3.2.6" class="anchored" data-anchor-id="examples"><span class="header-section-number">3.2.6</span> Examples</h3>
-<pre><code>table(NCI60$labs)</code></pre>
-<p>The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression’s performance over LASSO when n&gt;&gt;p.&nbsp;Additionally, we are interested in this data set to test all three methods on shrinking the multicollinearity and to test LASSO’s feature selection capabilities.</p>
-<p><u><strong>Acknowledgement:</strong></u></p>
-<p>The Jackson Heart Study (JHS) is supported and conducted in collaboration with Jackson State University (HHSN268201800013I), Tougaloo College (HHSN268201800014I), the Mississippi State Department of Health (HHSN268201800015I) and the University of Mississippi Medical Center (HHSN268201800010I, HHSN268201800011I and HHSN268201800012I) contracts from the National Heart, Lung, and Blood Institute (NHLBI) and the National Institute on Minority Health and Health Disparities (NIMHD). The authors also wish to thank the staffs and participants of the JHS.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p><u><strong>Disclaimer:</strong></u><br>
-The views expressed in this manuscript are those of the authors and do not necessarily represent the views of the National Heart, Lung, and Blood Institute; the National Institutes of Health; or the U.S. Department of Health and Human Services.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Email all inquires regarding manuscript proposals, manuscripts or abstracts to:&nbsp;<a href="mailto:jhspub@umc.edu">jhspub@umc.edu</a></th>
-</tr>
-</thead>
-
-</table>
+<p>How do we cite JHS?</p>
 
 
-</section>
 </section>
 </section>
 
