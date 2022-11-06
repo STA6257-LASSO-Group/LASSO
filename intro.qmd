@@ -1,5 +1,6 @@
 # Introduction
 
+
 ## Linear regression overview
 
 Regression is the predicting or learning of numerical features in statistics and machine learning. This includes the prediction of numeric as well as categorical attributes. The process of performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. ([@Joshi20])
@@ -39,3 +40,4 @@ Ridge Regression is a regularized regression model that predates the LASSO. (Has
 LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. ([@Aheto21]) This ill-fitting is mentioned in the previous section on regression line fitting.
 
 Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. ([@Laura20])
+
