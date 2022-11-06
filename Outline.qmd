@@ -10,7 +10,7 @@ overview of articles/text. History of LASSO and other regularized regression met
 
 ### Experiment Design
 
-Discuss what we're going to do and what we hope to achieve. 
+Discuss what we're going to do and what we hope to achieve.
 
 ### Dataset Overview
 
@@ -20,12 +20,11 @@ Discuss the qualities of the datasets we have chosen. With detail.
 
 Regularized Regression study. Included because of multicollinearity and observations greater than predictors, so a dense dataset. Ridge expected to perform better.
 
-Also used for feature selection in a classification example. 
+Also used for feature selection in a classification example.
 
 #### NCI 60 Study
 
-Regularized regression study. Included because it's a sparse dataset, so LASSO is expected to perform well. 
-
+Regularized regression study. Included because it's a sparse dataset, so LASSO is expected to perform well.
 
 ### Statistical Analysis
 
@@ -33,11 +32,10 @@ Discuss what procedure we're going to use in R. Include a section on selecting l
 
 ## Results
 
-Show what we got. With pictures. 
+Show what we got. With pictures.
 
 ## Discussion
 
-Future applications, mention the other LASSO types (group lasso etc.). Limitations / drawbacks of the various methods (e.g LASSO can't pick between correlated features well) 
+Future applications, mention the other LASSO types (group lasso etc.). Limitations / drawbacks of the various methods (e.g LASSO can't pick between correlated features well)
 
 ## References
-
