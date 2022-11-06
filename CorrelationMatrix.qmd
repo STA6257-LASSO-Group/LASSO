@@ -1,0 +1,42 @@
+---
+title: "CorrelationMatrix"
+editor: visual
+---
+
+```{r}
+#Import libraries 
+library(GGally)
+library(haven)
+library(dbplyr)
+library(dtplyr)
+library(tidyverse)
+```
+
+```{r}
+#Import data sets
+analysis1 <- read_dta("G:/My Drive/STA6257/datasets/analysis1.dta")
+View(analysis1)
+
+analysis2 <- read_dta("G:/My Drive/STA6257/datasets/analysis2.dta")
+View(analysis2)
+
+analysis3 <- read_dta("G:/My Drive/STA6257/datasets/analysis3.dta")
+View(analysis3)
+```
+
+**Correlation Matrix heat map shows multicollinearity for all 3 visits**
+
+```{r}
+
+#Correlation Matrix
+
+
+CorMatrix1 <- ggcorr(analysis1)
+CorMatrix1
+
+CorMatrix2 <-ggcorr(analysis2)
+CorMatrix2
+
+CorMatrix3 <-ggcorr(analysis3)
+CorMatrix3
+```

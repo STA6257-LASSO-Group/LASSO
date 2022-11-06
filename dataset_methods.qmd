@@ -1,0 +1,22 @@
+---
+title: "Methods: Jackson Heart Study Data"
+editor: visual
+---
+
+[**Acknowledgement:**]{.underline}
+
+The Jackson Heart Study (JHS) is supported and conducted in collaboration with Jackson State University (HHSN268201800013I), Tougaloo College (HHSN268201800014I), the Mississippi State Department of Health (HHSN268201800015I) and the University of Mississippi Medical Center (HHSN268201800010I, HHSN268201800011I and HHSN268201800012I) contracts from the National Heart, Lung, and Blood Institute (NHLBI) and the National Institute on Minority Health and Health Disparities (NIMHD). The authors also wish to thank the staffs and participants of the JHS.
+
+ 
+
+ 
+
+[**Disclaimer:**]{.underline}\
+The views expressed in this manuscript are those of the authors and do not necessarily represent the views of the National Heart, Lung, and Blood Institute; the National Institutes of Health; or the U.S. Department of Health and Human Services.
+
+ 
+
+ 
+
+| Email all inquires regarding manuscript proposals, manuscripts or abstracts to: [jhspub\@umc.edu](mailto:jhspub@umc.edu) |
+|:-------------------------------------------------------------------------------------------------------------------------|
