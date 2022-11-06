@@ -3,6 +3,46 @@ title: "Methods: Jackson Heart Study Data"
 editor: visual
 ---
 
+# Methods and Materials
+
+## Data sets
+
+LASSO has been shown to outperform Ridge with sparse data where p\>\>n. Conversely, Ridge has been shown to outperformLASSO with dense data where p \< n. The hybrid of the two, Elastic Net, will adapt to either type of data by using properties of LASSO and Ridge. We aim to use two data sets to highlight the advantages of each of the three regularized linear techniques while also using these statistical methods to model the data and make predictions.
+
+We first want to use a data set that has more features than observations. For this situation, we will use....
+
+This one looks good to me:
+
+## NCI 60 Data
+
+### Description
+
+NCI microarray data. The data contains expression levels on 6830 genes from 64 cancer cell lines. Cancer type is also recorded.
+
+### Usage
+
+    NCI60
+
+### Format
+
+The format is a list containing two elements: `data` and `labs`.
+
+`data` is a 64 by 6830 matrix of the expression values while `labs` is a vector listing the cancer types for the 64 cell lines.
+
+### Source
+
+The data come from Ross et al. (Nat Genet., 2000). More information can be obtained at http://genome-www.stanford.edu/nci60/
+
+### References
+
+James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) *An Introduction to Statistical Learning with applications in R*, [https://www.statlearning.com](https://www.statlearning.com/), Springer-Verlag, New York
+
+### Examples
+
+    table(NCI60$labs)
+
+The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression's performance over LASSO when n\>\>p. Additionally, we are interested in this data set to test all three methods on shrinking the multicollinearity and to test LASSO's feature selection capabilities.
+
 [**Acknowledgement:**]{.underline}
 
 The Jackson Heart Study (JHS) is supported and conducted in collaboration with Jackson State University (HHSN268201800013I), Tougaloo College (HHSN268201800014I), the Mississippi State Department of Health (HHSN268201800015I) and the University of Mississippi Medical Center (HHSN268201800010I, HHSN268201800011I and HHSN268201800012I) contracts from the National Heart, Lung, and Blood Institute (NHLBI) and the National Institute on Minority Health and Health Disparities (NIMHD). The authors also wish to thank the staffs and participants of the JHS.
