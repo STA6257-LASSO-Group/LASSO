@@ -2,17 +2,17 @@
 
 ## Linear regression overview
 
-Regression is the predicting or learning of numerical features in statistics and machine learning. This includes the prediction of numeric as well as categorical attributes. The process of performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. (@Joshi20)
+Regression is the predicting or learning of numerical features in statistics and machine learning. This includes the prediction of numeric as well as categorical attributes. The process of performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. ([@Joshi20])
 
-Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple dependent variables. (@Joshi20)
+Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple dependent variables. ([@Joshi20])
 
-The data is modeled on a graph and a line is fitted to the data. This allows for the determination of the coefficients of the independent variable or variables. (@Joshi20)
+The data is modeled on a graph and a line is fitted to the data. This allows for the determination of the coefficients of the independent variable or variables. ([@Joshi20])
 
 ### Regression line fitting
 
-Regression line fitting is a delicate balance as the line should predict the desired value well based on several features but be applicable enough to be used repeatedly with different samples of data. The line should not be underfitted, which would not provide an accurate prediction, but also should not be overfitted to the sample, the model doesn't stand up well to different samples and the data at large. (@Jabbar14)
+Regression line fitting is a delicate balance as the line should predict the desired value well based on several features but be applicable enough to be used repeatedly with different samples of data. The line should not be underfitted, which would not provide an accurate prediction, but also should not be overfitted to the sample, the model doesn't stand up well to different samples and the data at large. ([@Jabbar14])
 
-Prior to testing, the sample data is randomly split into two sections. 80% of the data is labeled as the training or estimation data and 20% of the data is labeled as the validation set. (@Aheto20) This allows for the fitting to be monitored. Various tests can determine the goodness of fit as both sets of data are tested to ensure similarity. Methods of avoiding a misfit include Penalty Methods and Early Stopping Method (Khan and Allamy)
+Prior to testing, the sample data is randomly split into two sections. 80% of the data is labeled as the training or estimation data and 20% of the data is labeled as the validation set. ([@Aheto20]) This allows for the fitting to be monitored. Various tests can determine the goodness of fit as both sets of data are tested to ensure similarity. Methods of avoiding a misfit include Penalty Methods and Early Stopping Method (Khan and Allamy)
 
 ### Bias and variance
 
@@ -26,17 +26,16 @@ Ordinary Least Squares needed improvements due to the issue with large variance 
 
 ### LASSO
 
-LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretability in the model. (@Dehmer19). The LASSO method combines the L1 constraint, which bounds the sum of the coefficients of the absolute values and the least-squares loss. This is a method that allows for the shrinking of the coefficients in a linear model setting some to zero. (Hastie, Taibshirani, Wainwright)
+LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretability in the model. ([@Dehmer19]). The LASSO method combines the L1 constraint, which bounds the sum of the coefficients of the absolute values and the least-squares loss. This is a method that allows for the shrinking of the coefficients in a linear model setting some to zero. (Hastie, Taibshirani, Wainwright)
 
 Since LASSO can shrink some of the coefficients to zero this method provides for an automated way for doing model selection in linear regression. (Hastie, Taibshirani, Wainwright)
 
 ### Ridge Regression
 
-Ridge Regression is a regularized regression model that predates the LASSO. (Hastie, Taibshirani, Wainwright) This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. (@Dehmer19). This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.
+Ridge Regression is a regularized regression model that predates the LASSO. (Hastie, Taibshirani, Wainwright) This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. ([@Dehmer19]). This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.
 
 ## Feature selection
 
-LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. (@Aheto21) This ill-fitting is mentioned in the previous section on regression line fitting.
+LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. ([@Aheto21]) This ill-fitting is mentioned in the previous section on regression line fitting.
 
-
-Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. (@Laura20)
+Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. ([@Laura20])
