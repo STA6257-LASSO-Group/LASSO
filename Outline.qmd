@@ -1,0 +1,43 @@
+## Introduction
+
+Overview of linear regression, bias vs variance / overfitting vs underfitting, overview of regularization. What are regularized regression methods?
+
+## Literature Review
+
+overview of articles/text. History of LASSO and other regularized regression methods. How do the regularized regression methods work? Applications of LASSO etc.
+
+## Materials and Methods
+
+### Experiment Design
+
+Discuss what we're going to do and what we hope to achieve. 
+
+### Dataset Overview
+
+Discuss the qualities of the datasets we have chosen. With detail.
+
+#### Jackson Heart Study
+
+Regularized Regression study. Included because of multicollinearity and observations greater than predictors, so a dense dataset. Ridge expected to perform better.
+
+Also used for feature selection in a classification example. 
+
+#### NCI 60 Study
+
+Regularized regression study. Included because it's a sparse dataset, so LASSO is expected to perform well. 
+
+
+### Statistical Analysis
+
+Discuss what procedure we're going to use in R. Include a section on selecting lambda (k-fold cross-validation, LARS algorithm, test-train split).
+
+## Results
+
+Show what we got. With pictures. 
+
+## Discussion
+
+Future applications, mention the other LASSO types (group lasso etc.). Limitations / drawbacks of the various methods (e.g LASSO can't pick between correlated features well) 
+
+## References
+

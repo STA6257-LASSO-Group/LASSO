@@ -15,6 +15,28 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+<<<<<<< HEAD
+=======
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+>>>>>>> 70fef0a189db79f68eb6049e58ee7724e9de26b1
 </style>
 
 
@@ -25,7 +47,7 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./dataset_methods.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -100,7 +122,12 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: Jackson Heart Study Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -113,7 +140,23 @@ ul.task-list{list-style: none;}
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#linear-regression-overview" id="toc-linear-regression-overview" class="nav-link active" data-scroll-target="#linear-regression-overview"> <span class="header-section-number">1.1</span> Linear regression overview</a>
+  <ul class="collapse">
+  <li><a href="#regression-line-fitting" id="toc-regression-line-fitting" class="nav-link" data-scroll-target="#regression-line-fitting"> <span class="header-section-number">1.1.1</span> Regression line fitting</a></li>
+  <li><a href="#bias-and-variance" id="toc-bias-and-variance" class="nav-link" data-scroll-target="#bias-and-variance"> <span class="header-section-number">1.1.2</span> Bias and variance</a></li>
+  </ul></li>
+  <li><a href="#regularization" id="toc-regularization" class="nav-link" data-scroll-target="#regularization"> <span class="header-section-number">1.2</span> Regularization</a>
+  <ul class="collapse">
+  <li><a href="#lasso" id="toc-lasso" class="nav-link" data-scroll-target="#lasso"> <span class="header-section-number">1.2.1</span> LASSO</a></li>
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"> <span class="header-section-number">1.2.2</span> Ridge Regression</a></li>
+  </ul></li>
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection"> <span class="header-section-number">1.3</span> Feature selection</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -134,6 +177,7 @@ ul.task-list{list-style: none;}
 
 </header>
 
+<<<<<<< HEAD
 <p><strong>Linear regression overview</strong></p>
 <p>Regression is the predicting or learning of numerical features in statistics and machine learning. This includes the prediction of numeric as well as categorical attributes. The process of performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. (Joshi, Saxena)</p>
 <p>Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple dependent variables. (Joshi, Saxena)</p>
@@ -160,6 +204,61 @@ ul.task-list{list-style: none;}
 <p>&nbsp;</p>
 
 
+=======
+<section id="linear-regression-overview" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="linear-regression-overview"><span class="header-section-number">1.1</span> Linear regression overview</h2>
+<p>Regression is the predicting or learning of numerical features in statistics and machine learning. This includes the prediction of numeric as well as categorical attributes. The process of performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. (<span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span>)</p>
+<p>Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple dependent variables. (<span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span>)</p>
+<p>The data is modeled on a graph and a line is fitted to the data. This allows for the determination of the coefficients of the independent variable or variables. (<span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span>)</p>
+<section id="regression-line-fitting" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="regression-line-fitting"><span class="header-section-number">1.1.1</span> Regression line fitting</h3>
+<p>Regression line fitting is a delicate balance as the line should predict the desired value well based on several features but be applicable enough to be used repeatedly with different samples of data. The line should not be underfitted, which would not provide an accurate prediction, but also should not be overfitted to the sample, the model doesn’t stand up well to different samples and the data at large. (<span class="citation" data-cites="Jabbar14">(<a href="references.html#ref-Jabbar14" role="doc-biblioref">Jabbar and Khan 2014</a>)</span>)</p>
+<p>Prior to testing, the sample data is randomly split into two sections. 80% of the data is labeled as the training or estimation data and 20% of the data is labeled as the validation set. (<span class="citation" data-cites="Aheto20">(<a href="references.html#ref-Aheto20" role="doc-biblioref"><strong>Aheto20?</strong></a>)</span>) This allows for the fitting to be monitored. Various tests can determine the goodness of fit as both sets of data are tested to ensure similarity. Methods of avoiding a misfit include Penalty Methods and Early Stopping Method (Khan and Allamy)</p>
+</section>
+<section id="bias-and-variance" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="bias-and-variance"><span class="header-section-number">1.1.2</span> Bias and variance</h3>
+</section>
+</section>
+<section id="regularization" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="regularization"><span class="header-section-number">1.2</span> Regularization</h2>
+<p>Regularization was introduced in the context of dealing with the matrix inverse. This inverse issue caused the answer to live outside the of the needed mathematical space. The introduction of the regularization parameter is a smoothness penalty which allowed the problem to be solved. (Bickel and Li)</p>
+<p>The fitting of models with large numbers of parameters also has similar issues in which makes the models unstable. This issue requires the need for regularization to get a sensible model. The LASSO regression also has a penalty to ensure the model is stable and thus works with the data (Bickel and Li)</p>
+<p>Ordinary Least Squares needed improvements due to the issue with large variance even though the process has a low bias. Shrinking or setting the coefficients to zero can improve the accuracy of the predictions. This process can introduce some bias but will reduce the variance which can improve the prediction accuracy. (Hastie, Taibshirani, Wainwright)</p>
+<section id="lasso" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="lasso"><span class="header-section-number">1.2.1</span> LASSO</h3>
+<p>LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretability in the model. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). The LASSO method combines the L1 constraint, which bounds the sum of the coefficients of the absolute values and the least-squares loss. This is a method that allows for the shrinking of the coefficients in a linear model setting some to zero. (Hastie, Taibshirani, Wainwright)</p>
+<p>Since LASSO can shrink some of the coefficients to zero this method provides for an automated way for doing model selection in linear regression. (Hastie, Taibshirani, Wainwright)</p>
+</section>
+<section id="ridge-regression" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">1.2.2</span> Ridge Regression</h3>
+<p>Ridge Regression is a regularized regression model that predates the LASSO. (Hastie, Taibshirani, Wainwright) This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.</p>
+</section>
+</section>
+<section id="feature-selection" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="feature-selection"><span class="header-section-number">1.3</span> Feature selection</h2>
+<p>LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. (<span class="citation" data-cites="Aheto21">(<a href="references.html#ref-Aheto21" role="doc-biblioref">Aheto et al. 2021</a>)</span>) This ill-fitting is mentioned in the previous section on regression line fitting.</p>
+<p>Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. (<span class="citation" data-cites="Laura20">(<a href="references.html#ref-Laura20" role="doc-biblioref">Freijeiro-González, Febrero-Bande, and González-Manteiga 2020</a>)</span>)</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Aheto21" class="csl-entry" role="doc-biblioentry">
+Aheto, Justice Moses K., Henry Duah, Pascal Agbadi, and Emmanuel Nakua. 2021. <span>“A Predictive Model, and Predictors of Under-Five Child Malaria Prevalence in Ghana: How Do LASSO, Ridge and Elastic Net Regression Approaches Compare?”</span> <em>Preventive Medicine Reports</em> 23 (June): 101475. <a href="https://doi.org/10.1016/j.pmedr.2021.101475">https://doi.org/10.1016/j.pmedr.2021.101475</a>.
+</div>
+<div id="ref-Dehmer19" class="csl-entry" role="doc-biblioentry">
+Emmert-Streib, Frank, and Matthias Dehmer. 2019. <span>“High-Dimensional LASSO-Based Computational Regression Models: Regularization, Shrinkage, and Selection.”</span> <em>Machine Learning and Knowledge Extraction</em> 27 (2): 359–83. <a href="https://doi.org/10.1093/comjnl/27.2.97">https://doi.org/10.1093/comjnl/27.2.97</a>.
+</div>
+<div id="ref-Laura20" class="csl-entry" role="doc-biblioentry">
+Freijeiro-González, Laura, Manuel Febrero-Bande, and Wenceslao González-Manteiga. 2020. <span>“<span class="nocase">A critical review of LASSO and its derivatives for variable selection under dependence among covariates</span>.”</span> <em>arXiv e-Prints</em>, December, arXiv:2012.11470. <a href="https://arxiv.org/abs/2012.11470">https://arxiv.org/abs/2012.11470</a>.
+</div>
+<div id="ref-Jabbar14" class="csl-entry" role="doc-biblioentry">
+Jabbar, Haider Khalaf, and Rafiqul Zaman Khan. 2014. <span>“Methods to Avoid over-Fitting and Under-Fitting in Supervised Machine Learning (Comparative Study).”</span> In.
+</div>
+<div id="ref-Joshi20" class="csl-entry" role="doc-biblioentry">
+Joshi, Jigyasu, and Shweta Saxena. 2020. <span>“Regression Analysis in Data Science.”</span> <em>Journal of Analysis and Computation</em>, May, 97–111.
+</div>
+</div>
+</section>
+>>>>>>> 70fef0a189db79f68eb6049e58ee7724e9de26b1
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -266,8 +365,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./dataset_methods.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: Jackson Heart Study Data</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
