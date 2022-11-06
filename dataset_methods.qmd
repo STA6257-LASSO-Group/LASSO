@@ -17,12 +17,8 @@ Firstly, we want to use a data set that has more features than observations to h
 
 The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression's performance over LASSO's when the sample size greatly outnumbers the variable size. Additionally, we are interested in using this data set to test all three methods on shrinking the multicollinearity and to test LASSO's feature selection capabilities.
 
- 
-
 ## References
 
 Ashburner M, Ball CA, Blake JA, Botstein D, Butler H, Cherry JM, Davis AP, Dolinski K, Dwight SS, Eppig JT, Harris MA, Hill DP, Issel-Tarver L, Kasarskis A, Lewis S, Matese JC, Richardson JE, Ringwald M, Rubin GM, Sherlock G. Gene ontology: tool for the unification of biology. The Gene Ontology Consortium. Nat Genet. 2000 May;25(1):25-9. doi: 10.1038/75556. PMID: 10802651; PMCID: PMC3037419.
 
 James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) *An Introduction to Statistical Learning with applications in R*, [https://www.statlearning.com](https://www.statlearning.com/), Springer-Verlag, New York
-
-How do we cite JHS?
