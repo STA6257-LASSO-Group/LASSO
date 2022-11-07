@@ -190,17 +190,17 @@ div.csl-indent {
 </section>
 <section id="regularization" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="regularization"><span class="header-section-number">1.2</span> Regularization</h2>
-<p>Regularization was introduced in the context of dealing with the matrix inverse. This inverse issue caused the answer to live outside the of the needed mathematical space. The introduction of the regularization parameter is a smoothness penalty which allowed the problem to be solved. (Bickel and Li)</p>
-<p>The fitting of models with large numbers of parameters also has similar issues in which makes the models unstable. This issue requires the need for regularization to get a sensible model. The LASSO regression also has a penalty to ensure the model is stable and thus works with the data (Bickel and Li)</p>
-<p>Ordinary Least Squares needed improvements due to the issue with large variance even though the process has a low bias. Shrinking or setting the coefficients to zero can improve the accuracy of the predictions. This process can introduce some bias but will reduce the variance which can improve the prediction accuracy. ([<span class="citation" data-cites="JamesTib21">James et al. (<a href="references.html#ref-JamesTib21" role="doc-biblioref">2021</a>)</span>])</p>
+<p>Regularization was introduced in the context of dealing with the matrix inverse. This inverse issue caused the answer to live outside the of the needed mathematical space. The introduction of the regularization parameter is a smoothness penalty which allowed the problem to be solved. (<span class="citation" data-cites="Bickel06">(<a href="references.html#ref-Bickel06" role="doc-biblioref">Fan et al. 2006</a>)</span>)</p>
+<p>The fitting of models with large numbers of parameters also has similar issues in which makes the models unstable. This issue requires the need for regularization to get a sensible model. The LASSO regression also has a penalty to ensure the model is stable and thus works with the data (<span class="citation" data-cites="Bickel06">(<a href="references.html#ref-Bickel06" role="doc-biblioref">Fan et al. 2006</a>)</span>)</p>
+<p>Ordinary Least Squares needed improvements due to the issue with large variance even though the process has a low bias. Shrinking or setting the coefficients to zero can improve the accuracy of the predictions. This process can introduce some bias but will reduce the variance which can improve the prediction accuracy. (<span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Tibshirani 2015</a>)</span>)</p>
 <section id="lasso" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="lasso"><span class="header-section-number">1.2.1</span> LASSO</h3>
-<p>LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretability in the model. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). The LASSO method combines the L1 constraint, which bounds the sum of the coefficients of the absolute values and the least-squares loss. This is a method that allows for the shrinking of the coefficients in a linear model setting some to zero. ([<span class="citation" data-cites="JamesTib21">James et al. (<a href="references.html#ref-JamesTib21" role="doc-biblioref">2021</a>)</span>])</p>
-<p>Since LASSO can shrink some of the coefficients to zero this method provides for an automated way for doing model selection in linear regression. ([<span class="citation" data-cites="JamesTib21">James et al. (<a href="references.html#ref-JamesTib21" role="doc-biblioref">2021</a>)</span>])</p>
+<p>LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretability in the model. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). The LASSO method combines the L1 constraint, which bounds the sum of the coefficients of the absolute values and the least-squares loss. This is a method that allows for the shrinking of the coefficients in a linear model setting some to zero. (<span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Tibshirani 2015</a>)</span>)</p>
+<p>Since LASSO can shrink some of the coefficients to zero this method provides for an automated way for doing model selection in linear regression. (<span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Tibshirani 2015</a>)</span>)</p>
 </section>
 <section id="ridge-regression" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">1.2.2</span> Ridge Regression</h3>
-<p>Ridge Regression is a regularized regression model that predates the LASSO. ([<span class="citation" data-cites="JamesTib21">James et al. (<a href="references.html#ref-JamesTib21" role="doc-biblioref">2021</a>)</span>]) This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.</p>
+<p>Ridge Regression is a regularized regression model that predates the LASSO. (<span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Tibshirani 2015</a>)</span>) This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. (<span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>). This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.</p>
 </section>
 </section>
 <section id="feature-selection" class="level2" data-number="1.3">
@@ -216,17 +216,20 @@ Aheto, Justice Moses K., Henry Duah, Pascal Agbadi, and Emmanuel Nakua. 2021. <s
 <div id="ref-Dehmer19" class="csl-entry" role="doc-biblioentry">
 Emmert-Streib, Frank, and Matthias Dehmer. 2019. <span>“High-Dimensional LASSO-Based Computational Regression Models: Regularization, Shrinkage, and Selection.”</span> <em>Machine Learning and Knowledge Extraction</em> 27 (2): 359–83. <a href="https://doi.org/10.1093/comjnl/27.2.97">https://doi.org/10.1093/comjnl/27.2.97</a>.
 </div>
+<div id="ref-Bickel06" class="csl-entry" role="doc-biblioentry">
+Fan, Jianqing, Peter Bickel, Bo Li, Alexandre Tsybakov, Sara van de Geer, B. Yu, Teofilo Valdes, Carlos Rivero, and Aad Vaart. 2006. <span>“Regularization in Statistics.”</span> <em>TEST: An Official Journal of the Spanish Society of Statistics and Operations Research</em> 15 (February): 271–344. <a href="https://doi.org/10.1007/BF02607055">https://doi.org/10.1007/BF02607055</a>.
+</div>
 <div id="ref-Laura20" class="csl-entry" role="doc-biblioentry">
 Freijeiro-González, Laura, Manuel Febrero-Bande, and Wenceslao González-Manteiga. 2020. <span>“<span class="nocase">A critical review of LASSO and its derivatives for variable selection under dependence among covariates</span>.”</span> <em>arXiv e-Prints</em>, December, arXiv:2012.11470. <a href="https://arxiv.org/abs/2012.11470">https://arxiv.org/abs/2012.11470</a>.
 </div>
 <div id="ref-Jabbar14" class="csl-entry" role="doc-biblioentry">
 Jabbar, Haider Khalaf, and Rafiqul Zaman Khan. 2014. <span>“Methods to Avoid over-Fitting and Under-Fitting in Supervised Machine Learning (Comparative Study).”</span> In.
 </div>
-<div id="ref-JamesTib21" class="csl-entry" role="doc-biblioentry">
-James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning, with Applications in r</em>. <a href="https://doi.org/10.1007/978-1-0716-1418-1">https://doi.org/10.1007/978-1-0716-1418-1</a>.
-</div>
 <div id="ref-Joshi20" class="csl-entry" role="doc-biblioentry">
 Joshi, Jigyasu, and Shweta Saxena. 2020. <span>“Regression Analysis in Data Science.”</span> <em>Journal of Analysis and Computation</em>, May, 97–111.
+</div>
+<div id="ref-Hastie15" class="csl-entry" role="doc-biblioentry">
+Tibshirani, Robert. 2015. <em>Statistical Learning with Sparsity: The LASSO and Generalizations</em>. CRC Press, Taylor &amp; Francis Group.
 </div>
 </div>
 </section>
