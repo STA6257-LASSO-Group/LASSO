@@ -124,12 +124,7 @@ ul.task-list{list-style: none;}
   <ul>
   <li><a href="#methods-and-materials" id="toc-methods-and-materials" class="nav-link active" data-scroll-target="#methods-and-materials"> <span class="header-section-number">3</span> Methods and Materials</a>
   <ul class="collapse">
-<<<<<<< HEAD
   <li><a href="#data-sets" id="toc-data-sets" class="nav-link" data-scroll-target="#data-sets"> <span class="header-section-number">3.1</span> Data sets</a>
-=======
-  <li><a href="#data-sets" id="toc-data-sets" class="nav-link" data-scroll-target="#data-sets"> <span class="header-section-number">3.1</span> Data sets</a></li>
-  <li><a href="#nci-60-data-test" id="toc-nci-60-data-test" class="nav-link" data-scroll-target="#nci-60-data-test"> <span class="header-section-number">3.2</span> NCI 60 Data test</a>
->>>>>>> 726f9ec71e805042989fea76eff9cbe649820c0d
   <ul class="collapse">
   <li><a href="#nci-60" id="toc-nci-60" class="nav-link" data-scroll-target="#nci-60"> <span class="header-section-number">3.1.1</span> NCI 60</a></li>
   <li><a href="#jackson-heart-study" id="toc-jackson-heart-study" class="nav-link" data-scroll-target="#jackson-heart-study"> <span class="header-section-number">3.1.2</span> Jackson Heart Study</a></li>
@@ -167,25 +162,15 @@ ul.task-list{list-style: none;}
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="nci-60"><span class="header-section-number">3.1.1</span> NCI 60</h3>
 <p>Firstly, we want to use a data set that has more features than observations to highlight the LASSO regression’s performance. For this situation, we will use the NCI 60 microarray data from Ashburner et al.&nbsp;This data set consists of 6830 genes with cancer types from 64 cancer cell lines. The format of the data set is a list with two elements: <code>data</code> and <code>labs</code>. The <code>data</code> element is a 64 by 6830 matrix of the data values while the <code>labs</code> element is a vector of the cancer cell lines listing cancer types.</p>
 </section>
-<<<<<<< HEAD
 <section id="jackson-heart-study" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="jackson-heart-study"><span class="header-section-number">3.1.2</span> Jackson Heart Study</h3>
 <p>The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression’s performance over LASSO’s when the sample size greatly outnumbers the variable size. Additionally, we are interested in using this data set to test all three methods on shrinking the multicollinearity and to test LASSO’s feature selection capabilities.</p>
-<p>&nbsp;</p>
-=======
-<section id="nci-60-data-test" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="nci-60-data-test"><span class="header-section-number">3.2</span> NCI 60 Data test</h2>
-<section id="description" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">3.2.1</span> Description</h3>
-<p>NCI microarray data. The data contains expression levels on 6830 genes from 64 cancer cell lines. Cancer type is also recorded.</p>
->>>>>>> 726f9ec71e805042989fea76eff9cbe649820c0d
 </section>
 </section>
 <section id="references" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="references"><span class="header-section-number">3.2</span> References</h2>
 <p>Ashburner M, Ball CA, Blake JA, Botstein D, Butler H, Cherry JM, Davis AP, Dolinski K, Dwight SS, Eppig JT, Harris MA, Hill DP, Issel-Tarver L, Kasarskis A, Lewis S, Matese JC, Richardson JE, Ringwald M, Rubin GM, Sherlock G. Gene ontology: tool for the unification of biology. The Gene Ontology Consortium. Nat Genet. 2000 May;25(1):25-9. doi: 10.1038/75556. PMID: 10802651; PMCID: PMC3037419.</p>
 <p>James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) <em>An Introduction to Statistical Learning with applications in R</em>, <a href="https://www.statlearning.com/">https://www.statlearning.com</a>, Springer-Verlag, New York</p>
-<p>How do we cite JHS?</p>
 
 
 </section>
