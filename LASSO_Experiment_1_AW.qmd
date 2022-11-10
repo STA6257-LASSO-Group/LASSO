@@ -1,0 +1,202 @@
+---
+title: "LASSO Expeiment 1 AW"
+editor: visual
+---
+
+```{r}
+
+#Code based on tutorial from David Caughlin's LASSO Regression in R
+#https://youtu.be/5GZ5BHOugBQ
+
+#Import libraries 
+library(GGally)
+library(haven)
+library(dbplyr)
+library(dtplyr)
+library(tidyverse)
+library(readr)
+library(caret)
+library(randomForest)
+library(mice)
+library(gdata)
+library(ggplot2)
+```
+
+```{r}
+
+#Import data sets
+analysis1 <- read_dta("G:/My Drive/STA6257/datasets/analysis1.dta")
+#View(analysis1)
+df <- (analysis1)
+#df <- as.matrix(analysis1)
+df1 <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrtmedsselfever","hrtmedsself", "eselectin","pselectin", "reninria","creatinineu24hr", "albuminu24hr","dialysisduration", "publicinstype"), info=TRUE)
+
+#analysis2 <- read_dta("G:/My Drive/STA6257/datasets/analysis2.dta")
+#View(analysis2)
+
+#analysis3 <- read_dta("G:/My Drive/STA6257/datasets/analysis3.dta")
+#View(analysis3)
+```
+
+```{r}
+
+#Using Ejection Fraction (ef) as Outcome Variable for Intial Experiment
+
+#df <- as.vector.data.frame(analysis1)
+#df <- as.matrix(analysis1)
+#df <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrtmedsselfever","hrtmedsself", "eselectin","pselectin", "reninria","creatinineu24hr", "albuminu24hr","dialysisduration", "publicinstype"), info=TRUE) 
+
+#df_imp <- md.pattern(df1)
+#data_imp <- complete(mice(df1,                                 # Predictive mean matching imputation
+  #                        m = 1,
+        #                  method = "pmm"))
+
+
+
+#df$ef <- na.omit(df$ef)
+#df$ef <- as.factor(df$ef) 
+
+
+
+#fit_rf<-randomForest(as.factor(ef) ~ .,
+        #data=as.matrix(df1),
+        #importance=TRUE,
+        #prOximity=TRUE,
+        #na.action=na.roughfix)
+
+#summary(analysis1)
+
+#Partitioning Data 80/20 Split
+set.seed(123)
+
+#Create Index Matrix: 80% split matrix NOT list only split once
+index <- createDataPartition(data_imp$ef, p=0.8, list=FALSE, times=1)
+
+#Create Test and Training df
+#-is all except index
+train_df <- data_imp[index,]
+test_df <- data_imp[-index,]
+
+```
+
+```{r}
+# k-fold Cross Validation to train LASSO
+#(because sample size is large, using 10-fold)
+
+#Train Control Function from Caret Package
+#Create Object to assign all the training method info to 
+#cross validation method, 10 fold
+tctrl_method <- trainControl(method='cv', number=10,
+                           savePredictions = 'all')
+
+#Specify & train LASSO Regression Model
+#Create vector of Lambda Values to find optimal (LASSO Tuning Parameter)
+lambda_vector <- 10^seq(5,-5, length=500)
+
+set.seed(123)
+
+#LASSO Regression Model estimated from Training data and 10-fold cv
+# dot is all other variables except outcome variable
+#grand mean center, "center" and standardize, "scale" at this step
+#c=combine, glmnet in caret package, alpha=1 for lasso (0 for ridge)
+
+mod1 <- train(ef ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=1,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+
+#Warning Message OK!!
+
+#Best Optimal Lambda
+mod1$bestTune
+mod1$bestTune$lambda
+
+
+#LASSO regression model coefficients/parameter estimates
+coef(mod1$finalModel,mod1$bestTune$lambda)
+
+#returns sparse matrix of 184 variables! 
+
+
+#plot log(lambda) & RMSE 
+
+plot(log(mod1$results$lambda),
+     mod1$results$RMSE,
+     xlab="log(lambda)",
+     ylab="RMSE",
+     xlim=c(-5,2))
+     
+log(0.03213764)
+
+
+```
+
+```{r}
+#Predictor Variable Importance list top 20
+
+varImp(mod1)
+
+
+#Data Visualization of importance
+
+ggplot(varImp(mod1))
+
+```
+
+```{r}
+#Model Prediction on test data
+
+predict1 <- predict(mod1, newdata=test_df)
+
+
+#Model Accuracy
+
+mod1_rmse <- data.frame(RMSE=RMSE(predict1, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+rss <- sum((predict1 - test_df$ef) ^ 2)
+tss <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+mod1_rsq <- 1 - rss/tss
+
+mod1_rmse
+mod1_rsq
+
+#UHOH get Negative? R^2??
+
+
+
+
+##OLD attempts 
+#mod2acc <- data.frame(R2E=(predict1, test_df$ef))
+
+#R SQUARED error metric 
+#RSQUARE = function(y_actual,y_predict){
+  #cor(y_actual,y_predict)^2
+#}
+
+#RSQUARE = function(predict1,test_df[ef]){
+  #cor(predict1,test_df[ef])^2
+#}
+
+#mod2acc <- data.frame(Rsquared=R2(predict1,test_df$ef,use="pairwise.complete.obs"))
+                      
+#mod2acc <- data.frame(Rsquared=R2(as.numeric(predict1, test_df$ef,use="complete.obs")))
+```
+
+![![](images/paste-24F3CC6E.png)](images/paste-006ADB65.png)
+
+![](images/paste-E3660AD7.png)
+
+```{r}
+#Compare LASSO to OLS Multiple Linear Regression
+
+
+
+```
