@@ -25,7 +25,7 @@ library(ggplot2)
 ```{r}
 
 #Import data sets
-analysis1 <- read_dta("G:/My Drive/STA6257/datasets/analysis1.dta")
+analysis1 <- read_dta("analysis1.dta")
 #View(analysis1)
 df <- (analysis1)
 #df <- as.matrix(analysis1)

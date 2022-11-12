@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LASSO - 2&nbsp; Methods: Jackson Heart Study Data</title>
+<title>LASSO - 2&nbsp; Methods and Materials</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,7 +25,7 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./JacksonHeart.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -65,7 +65,7 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: Jackson Heart Study Data</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods and Materials</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -100,12 +100,22 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: Jackson Heart Study Data</span></a>
+  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods and Materials</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NCI60.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -122,15 +132,12 @@ ul.task-list{list-style: none;}
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#methods-and-materials" id="toc-methods-and-materials" class="nav-link active" data-scroll-target="#methods-and-materials"> <span class="header-section-number">3</span> Methods and Materials</a>
+  <li><a href="#data-sets" id="toc-data-sets" class="nav-link active" data-scroll-target="#data-sets"> <span class="header-section-number">2.1</span> Data sets</a>
   <ul class="collapse">
-  <li><a href="#data-sets" id="toc-data-sets" class="nav-link" data-scroll-target="#data-sets"> <span class="header-section-number">3.1</span> Data sets</a>
-  <ul class="collapse">
-  <li><a href="#nci-60" id="toc-nci-60" class="nav-link" data-scroll-target="#nci-60"> <span class="header-section-number">3.1.1</span> NCI 60</a></li>
-  <li><a href="#jackson-heart-study" id="toc-jackson-heart-study" class="nav-link" data-scroll-target="#jackson-heart-study"> <span class="header-section-number">3.1.2</span> Jackson Heart Study</a></li>
+  <li><a href="#nci-60" id="toc-nci-60" class="nav-link" data-scroll-target="#nci-60"> <span class="header-section-number">2.1.1</span> NCI 60</a></li>
+  <li><a href="#jackson-heart-study" id="toc-jackson-heart-study" class="nav-link" data-scroll-target="#jackson-heart-study"> <span class="header-section-number">2.1.2</span> Jackson Heart Study</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">3.2</span> References</a></li>
-  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">2.2</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -139,7 +146,7 @@ ul.task-list{list-style: none;}
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: Jackson Heart Study Data</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods and Materials</span></h1>
 </div>
 
 
@@ -153,27 +160,24 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<section id="methods-and-materials" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Methods and Materials</h1>
-<section id="data-sets" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="data-sets"><span class="header-section-number">3.1</span> Data sets</h2>
+<section id="data-sets" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="data-sets"><span class="header-section-number">2.1</span> Data sets</h2>
 <p>Previous studies indicate LASSO regression outperforms Ridge regression with sparse data sets in which the variable size is larger than the sample size. Conversely, Ridge regression has been shown to outperform LASSO regression with dense data in which the variable size is smaller than the sample size. The hybrid of the two, Elastic Net regression, will adapt to either type of data by using the properties of LASSO and Ridge regression together. We aim to use two data sets with different characteristics to highlight the advantages of each of the three linear regularization techniques while also using these statistical methods to model the data and make predictions.</p>
-<section id="nci-60" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="nci-60"><span class="header-section-number">3.1.1</span> NCI 60</h3>
+<section id="nci-60" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="nci-60"><span class="header-section-number">2.1.1</span> NCI 60</h3>
 <p>Firstly, we want to use a data set that has more features than observations to highlight the LASSO regression’s performance. For this situation, we will use the NCI 60 microarray data from Ashburner et al.&nbsp;This data set consists of 6830 genes with cancer types from 64 cancer cell lines. The format of the data set is a list with two elements: <code>data</code> and <code>labs</code>. The <code>data</code> element is a 64 by 6830 matrix of the data values while the <code>labs</code> element is a vector of the cancer cell lines listing cancer types.</p>
 </section>
-<section id="jackson-heart-study" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="jackson-heart-study"><span class="header-section-number">3.1.2</span> Jackson Heart Study</h3>
+<section id="jackson-heart-study" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="jackson-heart-study"><span class="header-section-number">2.1.2</span> Jackson Heart Study</h3>
 <p>The Jackson Heart Study (JHS) data has 198 variables and an n of 2653 for Visit 1 (out of 3). The JHS data will be used to highlight Ridge regression’s performance over LASSO’s when the sample size greatly outnumbers the variable size. Additionally, we are interested in using this data set to test all three methods on shrinking the multicollinearity and to test LASSO’s feature selection capabilities.</p>
 </section>
 </section>
-<section id="references" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="references"><span class="header-section-number">3.2</span> References</h2>
+<section id="references" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="references"><span class="header-section-number">2.2</span> References</h2>
 <p>Ashburner M, Ball CA, Blake JA, Botstein D, Butler H, Cherry JM, Davis AP, Dolinski K, Dwight SS, Eppig JT, Harris MA, Hill DP, Issel-Tarver L, Kasarskis A, Lewis S, Matese JC, Richardson JE, Ringwald M, Rubin GM, Sherlock G. Gene ontology: tool for the unification of biology. The Gene Ontology Consortium. Nat Genet. 2000 May;25(1):25-9. doi: 10.1038/75556. PMID: 10802651; PMCID: PMC3037419.</p>
 <p>James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) <em>An Introduction to Statistical Learning with applications in R</em>, <a href="https://www.statlearning.com/">https://www.statlearning.com</a>, Springer-Verlag, New York</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -281,8 +285,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./JacksonHeart.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

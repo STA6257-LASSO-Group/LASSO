@@ -1,8 +1,3 @@
----
-title: "Methods: Jackson Heart Study Data"
-editor: visual
----
-
 # Methods and Materials
 
 ## Data sets
