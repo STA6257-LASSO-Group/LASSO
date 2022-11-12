@@ -22,9 +22,9 @@ Early Stopping Method is used for the prevention of both over and underfitting. 
 
 Bias measures the amount of deviation from the expected value is from the estimator in the models. Variance measures how far the data fluctuates. (Mehta, Bukov, Wang)
 
-If we consider the bulls eye as an example: low bias indicates that the estimators are in th vicinity of the bulls eye and low variance indicates that the estimators are close together like in a cluster. (Gudivada, Apon, Ding)
+If we consider the bulls eye as an example: low bias indicates that the estimators are in th vicinity of the bulls eye and low variance indicates that the estimators are close together like in a cluster. ([@Gudivada17])
 
-![*Gudivada, Venkat & Apon, Amy & Ding, Junhua. (2017). Data Quality Considerations for Big Data and Machine Learning: Going Beyond Data Cleaning and Transformations. International Journal on Advances in Software. Figure 1*](images/Gudivada,%20Apon,%20Ding%20-%20Bulls%20eye%20.jpg){fig-align="center" width="310"}
+![*Figure 1*](images/Gudivada.jpg){fig-align="center" width="310"}
 
 ## Regularization
 

@@ -1,0 +1,106 @@
+#### Calculating Model Using Ridge Regression
+
+```{r}
+#xtest <- test %>% select(X2:X6830)
+#ytest <- test$X1
+#xtest <- data.matrix(xtest)
+#geneTable <- dummy_cols(geneTable, select_columns = "cancerGroup")
+
+#train <- geneTable %>% sample_frac(.80)
+#test <- anti_join(geneTable, train, by='id')
+
+#geneTable <- geneTable %>% mutate(cancerGroup = nciData$labs) %>% mutate(cancerGroup = as.factor(cancerGroup)) %>% filter(cancerGroup != "UNKNOWN" & cancerGroup != "K562B-repro" & cancerGroup != "K562A-repro" & cancerGroup != "MCF7A-repro" & cancerGroup != "MCF7D-repro")
+
+#Alpha = 0
+
+model <- cv.glmnet(predictors, resp, alpha=0)
+bestLambda <- model$lambda.min
+bestLambda
+plot(model)
+
+finalModel <- glmnet(predictors,resp, alpha=0, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+
+#for(x in 1:nrow(coefTable)){
+ #if(coefTable[x,1] > 0)
+   #{print(coefTable[x,1])} 
+#}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = predictors)
+# <- predict(finalModel, s= bestLambda, newx = xtest)
+
+eval_results(resp,finalModelPredict,geneTable)
+#eval_results(ytest,finalModelTest,test)
+
+
+#sst <- sum((resp - mean(resp))^2)
+#sse <- sum((finalModelPredict - resp)^2)
+
+#find R-Squared
+#rsq <- 1 - sse/sst
+#rsq
+
+
+```
+
+### Test block to demonstrate sparse vs dense
+
+```{r}
+
+
+n = 1000
+p = 2000
+nzc = trunc(p/10)
+x = matrix(rnorm(n * p), n, p)
+iz = sample(1:(n * p), size = n * p * 0.85, replace = FALSE)
+x[iz] = 0
+sx = Matrix(x, sparse = TRUE)
+inherits(sx, "sparseMatrix")  #confirm that it is sparse
+beta = rnorm(nzc)
+fx = x[, seq(nzc)] %*% beta
+eps = rnorm(n)
+y = fx + eps
+px = exp(fx)
+px = px/(1 + px)
+ly = rbinom(n = length(px), prob = px, size = 1)
+system.time(fit1 <- glmnet(sx, y))
+system.time(fit2n <- glmnet(x, y))
+
+x<-data.frame(x)
+x <- x %>% mutate(id = row_number())
+train <- x %>% sample_frac(.80)
+test <- anti_join(x, train, by='id')
+ytrain <- train$X1
+ytest <- test$X1
+xtrain <- train %>% select(c(-"X1",-"id"))
+xtest <- test %>% select(c(-"X1",-"id"))
+
+predictors <- data.matrix(xtrain)
+resp <- data.matrix(ytrain)
+xtest <- data.matrix(xtest)
+ytest <- data.matrix(ytest)
+
+model <- cv.glmnet(predictors, resp, alpha=1)
+bestLambda <- model$lambda.min
+bestLambda
+plot(model)
+
+
+finalModel <- glmnet(predictors,resp, alpha=1)
+coefTable <- coefficients(finalModel)
+plot(finalModel)
+
+
+
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] > 0)
+   {print(coefTable[x,1])} 
+}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = predictors)
+finalModelTest <- predict(finalModel, s= bestLambda, newx = xtest)
+
+eval_results(resp,finalModelPredict,train)
+eval_results(ytest,finalModelTest,test)
+
+```

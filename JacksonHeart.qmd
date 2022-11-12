@@ -1,0 +1,140 @@
+## Regularized Regression Implementation to the Jackson Heart Study Data
+
+```{r echo = FALSE, message=FALSE, warning=FALSE, results='hide'}
+
+#Code based on tutorial from David Caughlin's LASSO Regression in R
+#https://youtu.be/5GZ5BHOugBQ
+
+#Import libraries 
+library(GGally)
+library(haven)
+library(dbplyr)
+library(dtplyr)
+library(tidyverse)
+library(readr)
+library(caret)
+library(randomForest)
+library(mice)
+library(gdata)
+library(ggplot2)
+library(misty)
+library(olsrr)
+library(glmnet)
+
+eval_results <- function(true, predicted, df) {
+  SSE <- sum((predicted - true)^2)
+  SST <- sum((true - mean(true))^2)
+  R_square <- 1 - SSE / SST
+  RMSE = sqrt(SSE/nrow(df))
+    
+  # Model performance metrics
+data.frame(
+  RMSE = RMSE,
+  Rsquare = R_square
+)
+  
+}
+```
+
+The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
+
+```{r}
+#Import data sets
+analysis1 <- read_dta("analysis1.dta")
+#View(analysis1)
+df <- (analysis1)
+#df <- as.matrix(analysis1)
+df<- df %>% select(c("totchol","age","bmi","sbp","dbp","hba1c","fpg","fastinginsulin","alcw", "waist"))
+mcar <- na.test(df)
+```
+
+The results of the MCAR test are significant, so the data is not missing at random.
+
+```{r}
+cleanedData <- mice(df, printFlag = FALSE)
+df <- complete(cleanedData,1)
+dfpred <- df %>% select(c(-"totchol"))
+dfResp <- df %>% select(c("totchol"))
+dfResp <- data.matrix(dfResp)
+dfpred <- data.matrix(dfpred)
+```
+
+The data is now cleaned and complete. It will be passed through several regression models, beginning with a traditional OLS regression.
+
+```{r}
+ggplot(df)+aes(totchol)+geom_histogram(binwidth=30)+labs(x="Total Cholesterol")
+model = lm(totchol ~ age+bmi+sbp+dbp+hba1c+fpg+fastinginsulin+alcw+waist, data=df)
+summary(model)
+corrplot::corrplot(cor(df), method="number")
+ols_vif_tol(model)
+
+```
+
+The correlation matrix and the VIF score show some correlation between waist and bmi, as well as systolic and diastolic blood pressures. In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.
+
+### Ridge Regression Model
+
+```{r}
+model <- cv.glmnet(dfpred, dfResp, alpha=0)
+bestLambda <- model$lambda.min
+bestLambda
+plot(model)
+
+finalModel <- glmnet(dfpred,dfResp, alpha=0, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
+model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
+eval_results(dfResp,finalModelPredict,df)
+```
+
+In the Ridge regression, each variable has now had their coefficient scaled based on how much importance they add to the model. No variable can be eliminated using this method, but the penalty term can cause their coefficient, and therefore their weight, to approach 0.
+
+### LASSO Regression Model
+
+```{r}
+model <- cv.glmnet(dfpred, dfResp, alpha=1)
+bestLambda <- model$lambda.min
+bestLambda
+plot(model)
+
+finalModel <- glmnet(dfpred,dfResp, alpha=1, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] > 0)
+ {print(coefTable[x,1])  
+   } 
+}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
+model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
+eval_results(dfResp,finalModelPredict,df)
+```
+
+In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance is very low.
+
+### Elastic Net Model
+
+```{r}
+model <- cv.glmnet(dfpred, dfResp, alpha=.5)
+bestLambda <- model$lambda.min
+bestLambda
+plot(model)
+
+finalModel <- glmnet(dfpred,dfResp, alpha=.5, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] > 0)
+ {print(coefTable[x,1])  
+   } 
+}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
+
+eval_results(dfResp,finalModelPredict,df)
+
+model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
+
+```
+
+Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The value of alpha in the glmnet package determines the strength of the lambda parameter.

@@ -1,9 +1,3 @@
 # Preface {.unnumbered}
 
-This is a Quarto book. Testing a change.
-
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
-
-```{r}
-1 + 1
-```
+This project will present an overview of three regularized regression methods: LASSO regression, Ridge Regression, and the Elastic Net. 
