@@ -38,15 +38,15 @@ Ordinary Least Squares needed improvements due to the issue with large variance 
 
 LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretation in the model. ([@Dehmer19]).
 
-In the variable selection side, LASSO regression identifies the proper variables that will minimize prediction error and lessen the computer-intensive nature. Less variables, less computational power is needed. (Ranstam, Cook)
+In the variable selection side, LASSO regression identifies the proper variables that will minimize prediction error and lessen the computer-intensive nature. Less variables, less computational power is needed. ([@Cook18])
 
-The selection of variables comes from a constraint on the model parameters. This is done by forcing the sum of the absolute value of these coefficients to be less than a fixed value $\lambda$. This constraint lowers the complexity of the model by eliminating variables from the model that are reduced to zero after the shrinkage. (Ranstam, Cook)
+The selection of variables comes from a constraint on the model parameters. This is done by forcing the sum of the absolute value of these coefficients to be less than a fixed value $\lambda$. This constraint lowers the complexity of the model by eliminating variables from the model that are reduced to zero after the shrinkage. ([@Cook18])
 
 This shrinking of some of the coefficients to zero provides for an automated way for doing model selection in linear regression. ([@Hastie15])
 
-$\lambda$ is chosen using an automated k-fold cross-validation approach. This approach is were the data is partitioned into sub-samples of equal size. *k-1* out of *k* sub-samples are used for developing the model with the $k^{th}$ sample used to validate the model. This process is done *k* times to ensure each sub-set *k* is used to validate the model as some point. This process provides a range of values for $\lambda$. This provides a data set that allows for choosing a preferred $\lambda$. (Ranstam, Cook)
+$\lambda$ is chosen using an automated k-fold cross-validation approach. This approach is were the data is partitioned into sub-samples of equal size. *k-1* out of *k* sub-samples are used for developing the model with the $k^{th}$ sample used to validate the model. This process is done *k* times to ensure each sub-set *k* is used to validate the model as some point. This process provides a range of values for $\lambda$. This provides a data set that allows for choosing a preferred $\lambda$. ([@Cook18])
 
-LASSO is not perfect. LASSO trades off the potential bias of individual parameter estimates for a better overall prediction. An important disadvantage to note is that the individual regression coefficients may be less reliable to interpret individually. The focus of the LASSO regression is to provide the best combined prediction. (Ranstam, Cook)
+LASSO is not perfect. LASSO trades off the potential bias of individual parameter estimates for a better overall prediction. An important disadvantage to note is that the individual regression coefficients may be less reliable to interpret individually. The focus of the LASSO regression is to provide the best combined prediction. ([@Cook18])
 
 ### Ridge Regression
 
