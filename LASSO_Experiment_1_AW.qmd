@@ -44,15 +44,27 @@ df1 <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrt
 
 #df <- as.vector.data.frame(analysis1)
 #df <- as.matrix(analysis1)
-#df <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrtmedsselfever","hrtmedsself", "eselectin","pselectin", "reninria","creatinineu24hr", "albuminu24hr","dialysisduration", "publicinstype"), info=TRUE) 
+#df <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrtmedsselfever","hrtmedsself", "eselectin","pselectin", "reninria","creatinineu24hr", "albuminu24hr","dialysisduration", "publicinstype"), info=TRUE)
 
+#Dropped these variables to make analysis easier for this assignment. Variables had most NA's or non-numeric values.
+
+#------------------------------------------------------------------------------
+
+
+#THIS STEP TAKES 4EVER-ONLY RUN THIS ONCE TO GET "data_imp" THEN COMMENT OUT
+
+
+#data_imp <- complete(mice(df1,m = 1,method = "pmm"))
+
+
+# Predictive mean matching imputation
+
+
+#--------------------------------------------------------------------------------
+
+
+#OLD atempts
 #df_imp <- md.pattern(df1)
-#data_imp <- complete(mice(df1,                                 # Predictive mean matching imputation
-  #                        m = 1,
-        #                  method = "pmm"))
-
-
-
 #df$ef <- na.omit(df$ef)
 #df$ef <- as.factor(df$ef) 
 
@@ -66,6 +78,9 @@ df1 <- remove.vars(df, names=c("subjid","sex", "fmlyinc", "menopause","hip","hrt
 
 #summary(analysis1)
 
+```
+
+```{r}
 #Partitioning Data 80/20 Split
 set.seed(123)
 
@@ -76,7 +91,6 @@ index <- createDataPartition(data_imp$ef, p=0.8, list=FALSE, times=1)
 #-is all except index
 train_df <- data_imp[index,]
 test_df <- data_imp[-index,]
-
 ```
 
 ```{r}
@@ -100,6 +114,15 @@ set.seed(123)
 #grand mean center, "center" and standardize, "scale" at this step
 #c=combine, glmnet in caret package, alpha=1 for lasso (0 for ridge)
 
+
+
+
+```
+
+```{r}
+
+#LASSO Model (alpha=1)
+
 mod1 <- train(ef ~ .,
               data=train_df,
               preProcess=c("center", "scale"),
@@ -109,6 +132,11 @@ mod1 <- train(ef ~ .,
               na.action=na.omit)
 
 #Warning Message OK!!
+
+
+```
+
+```{r}
 
 #Best Optimal Lambda
 mod1$bestTune
@@ -130,6 +158,7 @@ plot(log(mod1$results$lambda),
      xlim=c(-5,2))
      
 log(0.03213764)
+
 
 
 ```
@@ -190,13 +219,72 @@ mod1_rsq
 #mod2acc <- data.frame(Rsquared=R2(as.numeric(predict1, test_df$ef,use="complete.obs")))
 ```
 
-![![](images/paste-24F3CC6E.png)](images/paste-006ADB65.png)
+```{r}
+#Compare LASSO to Ridge Regression
 
-![](images/paste-E3660AD7.png)
+#Ridge Model (alpha=0)
+
+mod2 <- train(ef ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=0,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+
+#Warning Message OK!!
+
+```
 
 ```{r}
-#Compare LASSO to OLS Multiple Linear Regression
+#RIDGE plot log(lambda) & RMSE 
 
+plot(log(mod2$results$lambda),
+     mod2$results$RMSE,
+     xlab="log(lambda)",
+     ylab="RMSE",
+     xlim=c(-5,8))
+     
+log(0.03213764)
+
+
+
+#Predictor Variable Importance list top 20
+
+varImp(mod2)
+
+
+#Data Visualization of importance
+
+ggplot(varImp(mod2))
+
+
+#Model Prediction on test data
+
+predict2 <- predict(mod2, newdata=test_df)
+
+
+#Model Accuracy
+
+mod2_rmse <- data.frame(RMSE=RMSE(predict2, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+rss2 <- sum((predict2 - test_df$ef) ^ 2)
+tss2 <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+mod2_rsq <- 1 - rss2/tss2
+
+mod2_rmse
+mod2_rsq
+
+
+```
+
+```{r}
+#Elastic Net
 
 
 ```
