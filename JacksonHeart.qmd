@@ -1,5 +1,7 @@
 ## Regularized Regression Implementation to the Jackson Heart Study Data
 
+### Preparing the data
+
 ```{r echo = FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 #Code based on tutorial from David Caughlin's LASSO Regression in R
@@ -36,19 +38,18 @@ data.frame(
 }
 ```
 
-The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
+The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model.
+The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
 
 ```{r}
 #Import data sets
 analysis1 <- read_dta("analysis1.dta")
-#View(analysis1)
 df <- (analysis1)
-#df <- as.matrix(analysis1)
 df<- df %>% select(c("totchol","age","bmi","sbp","dbp","hba1c","fpg","fastinginsulin","alcw", "waist"))
 mcar <- na.test(df)
 ```
 
-The results of the MCAR test are significant, so the data is not missing at random.
+The results of the MCAR test are significant, so the data is not missing at random.The MICE algorithm will be used to impute the missing data values.
 
 ```{r}
 cleanedData <- mice(df, printFlag = FALSE)
@@ -59,18 +60,34 @@ dfResp <- data.matrix(dfResp)
 dfpred <- data.matrix(dfpred)
 ```
 
-The data is now cleaned and complete. It will be passed through several regression models, beginning with a traditional OLS regression.
+The data is now cleaned and complete. 
+
+To see the impact of multicollinearity present in the fitted model, the VIF (Variable Inflation Factor) will be calculated and displayed. 
+
+It will be passed through several regression models, beginning with a traditional OLS regression.
+
+Before we begin, we fill first examine the data for correlations between the variables. 
 
 ```{r}
-ggplot(df)+aes(totchol)+geom_histogram(binwidth=30)+labs(x="Total Cholesterol")
-model = lm(totchol ~ age+bmi+sbp+dbp+hba1c+fpg+fastinginsulin+alcw+waist, data=df)
-summary(model)
 corrplot::corrplot(cor(df), method="number")
-ols_vif_tol(model)
 
 ```
 
-The correlation matrix and the VIF score show some correlation between waist and bmi, as well as systolic and diastolic blood pressures. In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.
+The correlation matrix shows some correlation between waist and bmi, as well as systolic and diastolic blood pressures.
+
+Once the model has been fit, it will be examined for the presence of multicollinearity between its independent variables. The importance of these steps is to ensure that whatever model we fit will be the best fit for the specific qualities of the data. 
+
+```{r}
+
+ggplot(df)+aes(totchol)+geom_histogram(binwidth=30)+labs(x="Total Cholesterol")
+model = lm(totchol ~ age+bmi+sbp+dbp+hba1c+fpg+fastinginsulin+alcw+waist, data=df)
+ols_vif_tol(model)
+summary(model)
+
+
+```
+
+In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.
 
 ### Ridge Regression Model
 
@@ -86,6 +103,12 @@ coefTable <- coefficients(finalModel)
 finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
 model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
 eval_results(dfResp,finalModelPredict,df)
+
+library(genridge)
+library(car)
+summary(finalModel)
+
+
 ```
 
 In the Ridge regression, each variable has now had their coefficient scaled based on how much importance they add to the model. No variable can be eliminated using this method, but the penalty term can cause their coefficient, and therefore their weight, to approach 0.

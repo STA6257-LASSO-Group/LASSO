@@ -1,3 +1,7 @@
 # Preface {.unnumbered}
 
-This project will present an overview of three regularized regression methods: LASSO regression, Ridge Regression, and the Elastic Net. 
+This project will present an overview of three regularized regression methods: LASSO regression, Ridge Regression, and the Elastic Net.
+
+[Slides](https://sta6257-lasso-group.github.io/LASSOPres/LASSOPres.html#/title-slide)
+
+[Slides QMD](https://github.com/STA6257-LASSO-Group/LASSOPres/blob/main/LASSOPres.qmd)
