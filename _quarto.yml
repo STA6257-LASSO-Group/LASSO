@@ -11,7 +11,7 @@ book:
     - intro.qmd
     - dataset_methods.qmd
     - JacksonHeart.qmd
-    - NCI60.qmd
+    - HumanFreedomIndex.qmd
     - summary.qmd
     - references.qmd
 

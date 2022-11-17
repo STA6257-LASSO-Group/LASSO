@@ -4,9 +4,11 @@
 
 Previous studies indicate LASSO regression outperforms Ridge regression with sparse data sets in which the variable size is larger than the sample size. Conversely, Ridge regression has been shown to outperform LASSO regression with dense data in which the variable size is smaller than the sample size. The hybrid of the two, Elastic Net regression, will adapt to either type of data by using the properties of LASSO and Ridge regression together. We aim to use two data sets with different characteristics to highlight the advantages of each of the three linear regularization techniques while also using these statistical methods to model the data and make predictions.
 
-### NCI 60
+### Human Freedom Index
 
-Firstly, we want to use a data set that has more features than observations to highlight the LASSO regression's performance. For this situation, we will use the NCI 60 microarray data from Ashburner et al. This data set consists of 6830 genes with cancer types from 64 cancer cell lines. The format of the data set is a list with two elements: `data` and `labs`. The `data` element is a 64 by 6830 matrix of the data values while the `labs` element is a vector of the cancer cell lines listing cancer types.
+The Human Freedom Index from the openintro R package will be used to demonstrate regularization in a high dimensional example where the number of predictors is greater than the number of observations. This data consists of sociological measures of the different types of freedom. The main dataset has 1458 observations with 123 variables, but for this example, a single year of complete observations will be used. This results in a dataset of 93 observations across 99 variables and mimics the situation that would occur if a researcher attempted to analyze the most recent year of this data in isolation from the rest of the dataset. 
+
+Aside from year, country, and region identifiers, each column in this data set is a continuous numerical variable. Some variables have high degrees of collinearity because of their relation to one another. For example, total disappearances is expected to have high collinearity with total violent disappearances. 
 
 ### Jackson Heart Study
 

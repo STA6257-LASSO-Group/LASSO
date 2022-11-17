@@ -88,7 +88,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./NCI60.html" rel="next">
+<link href="./HumanFreedomIndex.html" rel="next">
 <link href="./dataset_methods.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./NCI60.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></a>
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -270,15 +270,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ols_vif_tol</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Variables Tolerance      VIF
-1            age 0.7027328 1.423016
-2            bmi 0.3082231 3.244404
-3            sbp 0.5412839 1.847459
-4            dbp 0.6024382 1.659921
-5          hba1c 0.3436319 2.910090
-6            fpg 0.3574687 2.797448
-7 fastinginsulin 0.7702531 1.298274
-8           alcw 0.9510784 1.051438
-9          waist 0.3079270 3.247522</code></pre>
+1            age 0.7032523 1.421965
+2            bmi 0.3124746 3.200260
+3            sbp 0.5411050 1.848070
+4            dbp 0.6012865 1.663101
+5          hba1c 0.3651503 2.738599
+6            fpg 0.3783066 2.643359
+7 fastinginsulin 0.7654541 1.306414
+8           alcw 0.9534784 1.048791
+9          waist 0.3126722 3.198238</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -288,27 +288,27 @@ lm(formula = totchol ~ age + bmi + sbp + dbp + hba1c + fpg +
     fastinginsulin + alcw + waist, data = df)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--107.303  -26.154   -3.125   23.450  135.815 
+    Min      1Q  Median      3Q     Max 
+-108.02  -26.60   -2.75   23.14  136.78 
 
 Coefficients:
                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    144.52005    9.22887  15.660  &lt; 2e-16 ***
-age              0.41415    0.07517   5.510 3.95e-08 ***
-bmi             -0.05971    0.19107  -0.312   0.7547    
-sbp              0.07291    0.06455   1.130   0.2588    
-dbp              0.17521    0.11146   1.572   0.1161    
-hba1c            0.74789    1.13654   0.658   0.5106    
-fpg              0.07002    0.04246   1.649   0.0993 .  
-fastinginsulin   0.06340    0.07275   0.871   0.3836    
-alcw             0.09385    0.14900   0.630   0.5288    
-waist           -0.01002    0.08399  -0.119   0.9051    
+(Intercept)    144.17854    9.19552  15.679  &lt; 2e-16 ***
+age              0.40452    0.07514   5.384 7.93e-08 ***
+bmi             -0.01896    0.18930  -0.100   0.9202    
+sbp              0.08528    0.06453   1.321   0.1865    
+dbp              0.22115    0.11149   1.984   0.0474 *  
+hba1c            0.07196    1.10335   0.065   0.9480    
+fpg              0.09186    0.04265   2.154   0.0313 *  
+fastinginsulin   0.06261    0.07178   0.872   0.3832    
+alcw             0.01540    0.15082   0.102   0.9187    
+waist           -0.04129    0.08327  -0.496   0.6200    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 38.11 on 2643 degrees of freedom
-Multiple R-squared:  0.03077,   Adjusted R-squared:  0.02747 
-F-statistic: 9.323 on 9 and 2643 DF,  p-value: 4.664e-14</code></pre>
+Residual standard error: 38.1 on 2643 degrees of freedom
+Multiple R-squared:  0.03081,   Adjusted R-squared:  0.02751 
+F-statistic: 9.336 on 9 and 2643 DF,  p-value: 4.434e-14</code></pre>
 </div>
 </div>
 <p>In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.</p>
@@ -320,7 +320,7 @@ F-statistic: 9.323 on 9 and 2643 DF,  p-value: 4.664e-14</code></pre>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 10.99218</code></pre>
+<pre><code>[1] 11.78014</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -332,21 +332,21 @@ F-statistic: 9.323 on 9 and 2643 DF,  p-value: 4.664e-14</code></pre>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  Overall
-age            0.31119228
-bmi            0.06735940
-sbp            0.09392448
-dbp            0.10732890
-hba1c          0.97633864
-fpg            0.05425274
-fastinginsulin 0.04823652
-alcw           0.06075889
-waist          0.00135843</code></pre>
+<pre><code>                   Overall
+age            0.297244013
+bmi            0.058085793
+sbp            0.104778689
+dbp            0.139792305
+hba1c          0.638665698
+fpg            0.062491100
+fastinginsulin 0.045608139
+alcw           0.002189947
+waist          0.013797106</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      RMSE    Rsquare
-1 38.05297 0.02980946</code></pre>
+1 38.05374 0.02961777</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(genridge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -411,7 +411,7 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6004232</code></pre>
+<pre><code>[1] 0.706201</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -425,32 +425,30 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>   } </span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 153.5614
-[1] 0.3604615
-[1] 0.07691016
-[1] 0.09268015
-[1] 0.4952395
-[1] 0.06429517
-[1] 0.002344832</code></pre>
+<pre><code>[1] 153.5196
+[1] 0.3411542
+[1] 0.08854914
+[1] 0.1159561
+[1] 0.07625768</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                   Overall
-age            0.360375984
-bmi            0.000000000
-sbp            0.077014507
-dbp            0.092558060
-hba1c          0.491343171
-fpg            0.064406896
-fastinginsulin 0.002375402
-alcw           0.000000000
-waist          0.000000000</code></pre>
+<pre><code>                  Overall
+age            0.34086381
+bmi            0.00000000
+sbp            0.08880358
+dbp            0.11566071
+hba1c          0.00000000
+fpg            0.07626091
+fastinginsulin 0.00000000
+alcw           0.00000000
+waist          0.00000000</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      RMSE    Rsquare
-1 38.05796 0.02955489</code></pre>
+1 38.05838 0.02938099</code></pre>
 </div>
 </div>
 <p>In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance is very low.</p>
@@ -462,7 +460,7 @@ waist          0.000000000</code></pre>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.094167</code></pre>
+<pre><code>[1] 1.172601</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -476,33 +474,31 @@ waist          0.000000000</code></pre>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>   } </span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 152.9616
-[1] 0.3592534
-[1] 0.07806548
-[1] 0.0962651
-[1] 0.5409492
-[1] 0.063444
-[1] 0.005930849</code></pre>
+<pre><code>[1] 151.9855
+[1] 0.3454318
+[1] 0.08967311
+[1] 0.1277632
+[1] 0.07894259</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      RMSE  Rsquare
-1 38.05643 0.029633</code></pre>
+<pre><code>      RMSE    Rsquare
+1 38.05413 0.02959792</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                   Overall
-age            0.358967330
-bmi            0.000000000
-sbp            0.078304103
-dbp            0.095991666
-hba1c          0.540028049
-fpg            0.063481202
-fastinginsulin 0.005912395
-alcw           0.000000000
-waist          0.000000000</code></pre>
+<pre><code>                  Overall
+age            0.34516846
+bmi            0.00000000
+sbp            0.08990106
+dbp            0.12750200
+hba1c          0.00000000
+fpg            0.07894571
+fastinginsulin 0.00000000
+alcw           0.00000000
+waist          0.00000000</code></pre>
 </div>
 </div>
 <p>Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The value of alpha in the glmnet package determines the strength of the lambda parameter.</p>
@@ -615,7 +611,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./NCI60.html" class="pagination-link">
+      <a href="./HumanFreedomIndex.html" class="pagination-link">
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

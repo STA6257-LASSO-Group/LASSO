@@ -38,8 +38,7 @@ data.frame(
 }
 ```
 
-The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model.
-The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
+The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
 
 ```{r}
 #Import data sets
@@ -60,13 +59,13 @@ dfResp <- data.matrix(dfResp)
 dfpred <- data.matrix(dfpred)
 ```
 
-The data is now cleaned and complete. 
+The data is now cleaned and complete.
 
-To see the impact of multicollinearity present in the fitted model, the VIF (Variable Inflation Factor) will be calculated and displayed. 
+To see the impact of multicollinearity present in the fitted model, the VIF (Variable Inflation Factor) will be calculated and displayed.
 
 It will be passed through several regression models, beginning with a traditional OLS regression.
 
-Before we begin, we fill first examine the data for correlations between the variables. 
+Before we begin, we fill first examine the data for correlations between the variables.
 
 ```{r}
 corrplot::corrplot(cor(df), method="number")
@@ -75,7 +74,7 @@ corrplot::corrplot(cor(df), method="number")
 
 The correlation matrix shows some correlation between waist and bmi, as well as systolic and diastolic blood pressures.
 
-Once the model has been fit, it will be examined for the presence of multicollinearity between its independent variables. The importance of these steps is to ensure that whatever model we fit will be the best fit for the specific qualities of the data. 
+Once the model has been fit, it will be examined for the presence of multicollinearity between its independent variables. The importance of these steps is to ensure that whatever model we fit will be the best fit for the specific qualities of the data.
 
 ```{r}
 
