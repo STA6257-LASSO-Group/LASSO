@@ -104,3 +104,19 @@ eval_results(resp,finalModelPredict,train)
 eval_results(ytest,finalModelTest,test)
 
 ```
+
+
+```{r}
+train_ind <- sample(seq_len(nrow(iris)),size=100)
+train <- iris[train_ind,]
+test <- iris[-train_ind,]
+model=lm(Sepal.Length ~Sepal.Width,data=train)
+model
+predicted1 <-predict.lm(model,test)
+length(predicted1)
+#fake response to keep dataframe structure
+predicted2 <-predict.lm(model, predict.lm(model,data.frame(Sepal.Width=test$Sepal.Width)))
+length(predicted2)
+predicted1-predicted2
+
+```

@@ -18,6 +18,11 @@ library(lars)
 library(glmnet)
 library(data.table)
 library(caTools)
+library(olsrr)
+library(openintro)
+library(mice)
+library(misty)
+
 eval_results <- function(true, predicted, df) {
   SSE <- sum((predicted - true)^2)
   SST <- sum((true - mean(true))^2)
@@ -32,26 +37,123 @@ data.frame(
   
 }
 
+freedomData <- hfi
+freedomData <- freedomData %>% filter(year!=2016)%>% select(c(-"year",-"ISO_code",-"countries",-"region",-"ef_score",-"ef_rank",-"hf_rank",-"hf_quartile",-"pf_score",-"pf_rank",-"pf_religion_estop_establish",-"pf_religion_estop_operate"))%>%mutate(id = row_number())
+
+
+
 nciData <- ISLR::NCI60
 #The gene expression length data is held in the geneTable object. 
 geneTable <- nciData$data
 geneTable <- data.matrix(geneTable)
 geneTable <- data.frame(geneTable)
-
 geneTable <- geneTable %>% mutate(id = row_number())
 #only complete cases will be considered. 
 geneTable <- na.omit(geneTable)
 
-resp <- geneTable$X1
+train <- geneTable %>% sample_frac(.90)
+test <- anti_join(geneTable, train, by='id')
+ytrain <- train$X1
+ytest <- test$X1
+xtrain <- train %>% select(c(-"X1",-"id"))
+xtest <- test %>% select(c(-"X1",-"id"))
+
+resp <- ytrain
+#resp <- ytrain$X1
 
 #predictors <- geneTable %>% select(X2:X6830, cancerGroup_CNS:cancerGroup_UNKNOWN)
-predictors <- geneTable %>% select(X2:X6830)
-
+#predictors <- geneTable %>% select(X2:X6830)
+predictors <- xtrain %>% select(X2:X6830)
 predictors <- data.matrix(predictors)
+xtest <- data.matrix(xtest)
 ggplot()+aes(resp)+geom_histogram(binwidth = .3)+labs(x="Gene 1 Expression Level")
 ```
 
 The graph above shows the distribution of the gene expression level being examined.
+
+```{r}
+#human freedom index test
+freedomData <- hfi
+freedomData <- freedomData %>% filter(year==2016)%>% select(c(-"year",-"ISO_code",-"countries",-"region",-"hf_score",-"ef_rank",-"hf_rank",-"hf_quartile",-"pf_score",-"pf_rank",-"pf_religion_estop_establish",-"pf_religion_estop_operate",-"pf_identity_legal",-"pf_rol_procedural",-"pf_rol_civil",-"pf_rol_criminal",-"pf_ss_women_inheritance_widows",-"pf_ss_women_inheritance_daughters",-"pf_association_political_establish",-"pf_association_political_operate",-"pf_association_sport_operate",-"pf_association_sport_establish",-"pf_identity_divorce",-"pf_association_prof_operate",-"pf_association_prof_establish"))%>%mutate(id = row_number())
+#check missing data values
+freedomData <- na.omit(freedomData) 
+mcar<-na.test(freedomData)
+cleanedData <- mice(freedomData,printFlag=FALSE)
+freedomData <- complete(cleanedData,1)
+hist(freedomData$ef_score)
+train <- freedomData %>% sample_frac(.70)
+test <- anti_join(freedomData, train, by='id')
+ytrain <- train$ef_score
+ytest <- test$ef_score
+xtrain2 <- train %>% select(c(-"id"))
+xtrain <- train %>% select(c(-"ef_score",-"id"))
+xtest2 <- test %>% select(c(-"id"))
+xtest <- test %>% select(c(-"ef_score",-"id"))
+
+xtestFrame <- xtest
+xtest <- data.matrix(xtest)
+predictors <- data.matrix(xtrain)
+resp <- ytrain
+
+linModel <- lm(ef_score~., data=xtrain2)
+summary(linModel)
+
+linModelTest <- predict.lm(linModel, xtest2)
+print("Test")
+print(eval_results(ytest,linModelTest,freedomData)$Rsquare)
+print(eval_results(ytest,linModelTest,freedomData)$RMSE)
+
+actuals_preds <- data.frame(cbind(actuals=xtest2$ef_score, predicteds=linModelTest))  # make actuals_predicteds dataframe.
+correlation_accuracy <- cor(actuals_preds)  # 82.7%
+head(actuals_preds)
+
+
+for(y in 1:50)
+{
+model <- cv.glmnet(predictors, resp, alpha=.5)
+bestLambda <- model$lambda.min
+#plot(model)
+finalModel <- glmnet(predictors,resp, alpha=.5, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+coefList <- data.frame(matrix(ncol=2,nrow=0))
+colnames(coefList)<-c("Gene Number","Coefficient")
+
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] > 0)
+ {rows <- nrow(coefList)
+   newRow <- c(x,coefTable[x,1])
+    coefList[rows+1,] <- newRow    
+   } 
+}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = predictors)
+finalModelTest <- predict(finalModel, s= bestLambda, newx = xtest)
+#print(coefList)
+print("Train")
+print(eval_results(resp,finalModelPredict,freedomData)$Rsquare)
+print(eval_results(resp,finalModelPredict,freedomData)$RMSE)
+print("Test")
+print(eval_results(ytest,finalModelTest,freedomData)$Rsquare)
+print(eval_results(ytest,finalModelTest,freedomData)$RMSE)
+}
+```
+
+
+```{r}
+train_ind <- sample(seq_len(nrow(iris)),size=100)
+train <- iris[train_ind,]
+test <- iris[-train_ind,]
+model=lm(Sepal.Length ~Sepal.Width,data=train)
+model
+predicted1 <-predict.lm(model,test)
+length(predicted1)
+#fake response to keep dataframe structure
+predicted2 <-predict.lm(model, predict.lm(model,data.frame(Sepal.Width=test$Sepal.Width)))
+length(predicted2)
+predicted1-predicted2
+
+```
+
 
 ### Calculating Model Using LASSO
 
@@ -92,3 +194,37 @@ eval_results(resp,finalModelPredict,geneTable)
 ```
 
 In the final model, the 6829 original gene expression levels have been reduced down to `r rows` different genes that the LASSO algorithm identified as having a large impact on gene 1's expression level.
+```{r}
+#set.seed(250)
+#Create model using cross fold validation and glmnet. 
+for(y in 1:50)
+{
+model <- cv.glmnet(predictors, resp, alpha=.75)
+bestLambda <- model$lambda.min
+#plot(model)
+finalModel <- glmnet(predictors,resp, alpha=.75, lambda=bestLambda)
+coefTable <- coefficients(finalModel)
+coefList <- data.frame(matrix(ncol=2,nrow=0))
+colnames(coefList)<-c("Gene Number","Coefficient")
+
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] > 0)
+ {rows <- nrow(coefList)
+   newRow <- c(x,coefTable[x,1])
+    coefList[rows+1,] <- newRow    
+   } 
+}
+
+finalModelPredict <- predict(finalModel, s= bestLambda, newx = predictors)
+finalModelTest <- predict(finalModel, s= bestLambda, newx = xtest)
+#print(coefList)
+print("Train")
+print(eval_results(resp,finalModelPredict,geneTable)$Rsquare)
+print(eval_results(resp,finalModelPredict,geneTable)$RMSE)
+print("Test")
+print(eval_results(ytest,finalModelTest,geneTable)$Rsquare)
+print(eval_results(ytest,finalModelTest,geneTable)$RMSE)
+}
+```
+
+

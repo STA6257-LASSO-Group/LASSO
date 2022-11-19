@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; High Dimensional Data Example</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./summary.html" rel="next">
+<link href="./JacksonHeart.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods and Materials</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#trimming-and-fitting-a-linear-model" id="toc-trimming-and-fitting-a-linear-model" class="nav-link active" data-scroll-target="#trimming-and-fitting-a-linear-model"> <span class="header-section-number">4.0.1</span> Trimming and Fitting a Linear Model</a></li>
+  <li><a href="#fitting-regularized-models" id="toc-fitting-regularized-models" class="nav-link" data-scroll-target="#fitting-regularized-models"> <span class="header-section-number">4.0.2</span> Fitting Regularized Models</a></li>
+  <li><a href="#regularization-results-discussion" id="toc-regularization-results-discussion" class="nav-link" data-scroll-target="#regularization-results-discussion"> <span class="header-section-number">4.0.3</span> Regularization Results / Discussion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>In this dataset, the data is already standardized. The dataset is being trimmed of summary scores and filtered to a single year. It is also being trimmed of variables with over 50% missing values. Only complete observations will be kept. This is to simulate the situation of a researcher being asked to review a single year of HFI data.</p>
+<p>The techniques in this demonstration utilize the glmnet package to fit the regularized models. More information about this package can be found at <span class="citation" data-cites="glmnet">(<a href="references.html#ref-glmnet" role="doc-biblioref"><span>“An Introduction to ‘Glmnet‘”</span> 2021</a>)</span></p>
+<p>For this demonstration, the political freedom homicide variable will be the response variable. Each of the other distinct variables (excluding indexes and total scores) will be used as predictors.</p>
+<div class="cell">
+
+</div>
+<section id="trimming-and-fitting-a-linear-model" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="trimming-and-fitting-a-linear-model"><span class="header-section-number">4.0.1</span> Trimming and Fitting a Linear Model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Human Freedom Index Linear Model</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>freedomData <span class="ot">&lt;-</span> hfi</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>freedomData <span class="ot">&lt;-</span> freedomData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2016</span>)<span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"year"</span>,<span class="sc">-</span><span class="st">"ISO_code"</span>,<span class="sc">-</span><span class="st">"countries"</span>,<span class="sc">-</span><span class="st">"region"</span>,<span class="sc">-</span><span class="st">"ef_score"</span>,<span class="sc">-</span><span class="st">"ef_rank"</span>,<span class="sc">-</span><span class="st">"hf_rank"</span>,<span class="sc">-</span><span class="st">"hf_quartile"</span>,<span class="sc">-</span><span class="st">"pf_score"</span>,<span class="sc">-</span><span class="st">"pf_rank"</span>,<span class="sc">-</span><span class="st">"pf_religion_estop_establish"</span>,<span class="sc">-</span><span class="st">"pf_religion_estop_operate"</span>,<span class="sc">-</span><span class="st">"pf_identity_legal"</span>,<span class="sc">-</span><span class="st">"pf_rol_procedural"</span>,<span class="sc">-</span><span class="st">"pf_rol_civil"</span>,<span class="sc">-</span><span class="st">"pf_rol_criminal"</span>,<span class="sc">-</span><span class="st">"pf_ss_women_inheritance_widows"</span>,<span class="sc">-</span><span class="st">"pf_ss_women_inheritance_daughters"</span>,<span class="sc">-</span><span class="st">"pf_association_political_establish"</span>,<span class="sc">-</span><span class="st">"pf_association_political_operate"</span>,<span class="sc">-</span><span class="st">"pf_association_sport_operate"</span>,<span class="sc">-</span><span class="st">"pf_association_sport_establish"</span>,<span class="sc">-</span><span class="st">"pf_identity_divorce"</span>,<span class="sc">-</span><span class="st">"pf_association_prof_operate"</span>,<span class="sc">-</span><span class="st">"pf_association_prof_establish"</span>))<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#check missing data values</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>freedomData <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(freedomData) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> freedomData <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(.<span class="dv">8</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(freedomData, train, <span class="at">by=</span><span class="st">'id'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ytrain <span class="ot">&lt;-</span> train<span class="sc">$</span>pf_ss_homicide</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>ytest <span class="ot">&lt;-</span> test<span class="sc">$</span>pf_ss_homicide</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>xtrainLin <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"id"</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>xtrain <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"pf_ss_homicide"</span>,<span class="sc">-</span><span class="st">"id"</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>xtestLin <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"id"</span>))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>xtest <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"pf_ss_homicide"</span>,<span class="sc">-</span><span class="st">"id"</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>xtestFrame <span class="ot">&lt;-</span> xtest</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>xtest <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xtest)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>predictors <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xtrain)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> ytrain</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>linModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(hf_score<span class="sc">~</span>., <span class="at">data=</span>xtrainLin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/HFIModel1.png" class="img-fluid" data-fig-align="center" alt="Model Output"> <img src="images/HFModel2.png" class="img-fluid" data-fig-align="center" alt="Model Output"></p>
+<p>The figures above the show the outcome of trying to fit a traditional linear model to the data as it is. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.</p>
+<p>To fit the regularization models, the glmnet function will be used. The CV.glmnet function below performs a cross-fold validation on the training data in order to obtain the optimal lambda value for the respective model. In this function, the value of alpha controls the form of regularization that will be applied. An alpha value of 1 corresponds to LASSO regression, a value of 0 corresponds to Ridge Regression, and a value in between corresponds to a form of Elastic Net Regularization. The magnitude of alpha controls the penalty term in the Elastic Net Regularization. As in most regularization problems, the value of the penalty term (in this case lambda) is of critical importance.</p>
+</section>
+<section id="fitting-regularized-models" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="fitting-regularized-models"><span class="header-section-number">4.0.2</span> Fitting Regularized Models</h3>
+<p>Each method will have a model fit. These will then have their RSquare and RMSE scores displayed to show a relative performance for each method.</p>
+<p>The basic code structure is as follows:</p>
+<ul>
+<li>Perform Cross Validation to acquire the optimal lambda. The alpha term is altered based on the method.</li>
+<li>Pass the optimal lambda into a new model based on the training data.</li>
+<li>Examine the impact on the coefficients.</li>
+<li>Using the model, make predictions on the training data and the test data.</li>
+<li>Store results and display scores for each method.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#LASSO</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>modelResults <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">6</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(modelResults)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Model"</span>,<span class="st">"Train_RSquare"</span>,<span class="st">"Train_RMSE"</span>,<span class="st">"Test_RSquare"</span>,<span class="st">"Test_RMSE"</span>,<span class="st">"CoefficientCount"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span><span class="dv">1</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="HumanFreedomIndex_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The LASSO Lambda plot demonstrates the MSE for different values of lambda.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LASSO"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>LASSOCoef <span class="ot">&lt;-</span> coefList</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ridge</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span><span class="dv">0</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="HumanFreedomIndex_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The Ridge Regression plot shows higher values of lambda. For Ridge Regression, the choice of lambda represents a factor of shrinkage. A lambda of 0 would be equivalent to normal linear regression while a very high lambda would shrink all coefficients towards 0.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ridge"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Three different models using elastic net will now be fit with different increments of alpha.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 1</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">25</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">25</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.25"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 2</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">5</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.50"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 3</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">75</span>)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">75</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.75"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regularization-results-discussion" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="regularization-results-discussion"><span class="header-section-number">4.0.3</span> Regularization Results / Discussion</h3>
+<p>The final model group looks like the table below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(modelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Model Train_RSquare Train_RMSE Test_RSquare  Test_RMSE CoefficientCount
+1   LASSO     0.9990826 0.06470719    0.9989703 0.05073202               15
+2   Ridge     0.4899169 1.52580552    0.3360347 1.28826065               98
+3 ENet.25     0.9855884 0.25646862    0.9663094 0.29019201               42
+4 ENet.50     0.9955236 0.14293590    0.9933645 0.12878596               33
+5 ENet.75     0.9982469 0.08944987    0.9977011 0.07580355               20</code></pre>
+</div>
+</div>
+<p>The number of coefficients selected by each individual method corresponds to how “LASSO” like or “Ridge” like the alpha parameter was set. The pure LASSO regression shows that 17 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.</p>
+<p>The LASSO selected features included:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LASSOCoef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         Predictor           Coefficient
+1                      (Intercept)     0.246989254682971
+2  pf_ss_disappearances_fatalities   -0.0229795644196457
+3             pf_ss_disappearances    -0.920108345006449
+4              pf_ss_women_missing  -0.00656699554563086
+5                      pf_ss_women    -0.948005864215791
+6                            pf_ss      2.86827154612905
+7              pf_movement_foreign   -0.0025531070828486
+8           pf_religion_harassment   -0.0113062366583371
+9                      pf_religion   -0.0011274391314288
+10            pf_expression_killed   0.00464623090586289
+11             pf_expression_cable   -0.0033037571811297
+12           ef_legal_restrictions -0.000970327463156045
+13                  ef_legal_crime    0.0251862979550082
+14         ef_trade_movement_visit   -0.0013968298432049
+15               ef_trade_movement  -0.00299775049192848</code></pre>
+</div>
+</div>
+<p>The model with the best fit in this case was the pure LASSO model. As has been shown, this regression model can be used for predictions. More refinement can be performed. For example, in this case, there is still the likelihood that the model is overfit since 17 predictors is still a large number when compared to 93 observations. To further understand this is a matter of the underlying mechanics in the data. It is also possible that these 17 predictors still have some manner of collinearity present. Regularization, in this case, has now given a workable group of features to analyze for a refined linear model.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-glmnet" class="csl-entry" role="doc-biblioentry">
+<span>“An Introduction to ‘Glmnet‘.”</span> 2021. stanford.edu. <a href="https://glmnet.stanford.edu/articles/glmnet.html">https://glmnet.stanford.edu/articles/glmnet.html</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./JacksonHeart.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./summary.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
