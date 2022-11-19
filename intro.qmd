@@ -6,7 +6,6 @@ Regression is the predicting or learning of numerical features in statistics and
 
 Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple independent variables. [@Joshi20]
 
-
 The data is modeled on a graph and a line is fitted to the data. This allows for the calculation of the coefficients of the independent variable or variables. ([@Joshi20])
 
 ### Regression line fitting
@@ -17,11 +16,9 @@ Several methods can be used to ensure appropriate line fitting. We can compare t
 
 The penalty method is important to prevent over-fitting. We set $E_{train}$ and $E_{test}$ to be the training set error and test error, respectively. We then try to find a the minimal penalty such that $E_{test} = E_{train} + Penalty$ [@Jabbar14]
 
-The early stopping method is used for the prevention of both over and under-fitting. The sample data is broken down into three parts: training, validation, and testing. This data is then broken down in to the similar 80%/20% split to estimate the line and then to validate the process. [@Jabbar14]
-### Bias and variance
+The early stopping method is used for the prevention of both over and under-fitting. The sample data is broken down into three parts: training, validation, and testing. This data is then broken down in to the similar 80%/20% split to estimate the line and then to validate the process. [@Jabbar14] \### Bias and variance
 
 Bias measures the amount of deviation from the expected value is from the estimator in the models. Variance measures how far the data fluctuates. (Mehta, Bukov, Wang)
-
 
 If we consider the bulls eye as an example: low bias indicates that the estimators are in the vicinity of the bulls eye and low variance indicates that the estimators are close together like in a cluster. [@Gudivada17]
 
@@ -33,13 +30,11 @@ Regularization was introduced in the context of dealing with the matrix inverse.
 
 The fitting of models with large numbers of parameters also has similar issues in which makes the models unstable. This issue requires the need for regularization to get a sensible model. The LASSO regression also has a penalty to ensure the model is stable and thus works with the data. [@Bickel06]
 
-
 Ordinary least squares needed improvements due to the issue with large variance even though the process has a low bias. Shrinking or setting the coefficients to zero can improve the accuracy of the predictions. This process can introduce some bias but will reduce the variance which can improve the prediction accuracy. [@Hastie15]
 
 ### LASSO
 
 LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretation in the model. [@Dehmer19].
-
 
 In the variable selection side, LASSO regression identifies the proper variables that will minimize prediction error and lessen the computer-intensive nature. Less variables mean less computational power is needed. [@Cook18]
 
@@ -47,16 +42,15 @@ The selection of variables comes from a constraint on the model parameters. This
 
 This shrinking of some of the coefficients to zero provides for an automated way for doing model selection in linear regression. [@Hastie15]
 
-
 $\lambda$ is chosen using an automated k-fold cross-validation approach. This approach is were the data is partitioned into sub-samples of equal size. *k-1* out of *k* sub-samples are used for developing the model with the $k^{th}$ sample used to validate the model. This process is done *k* times to ensure each sub-set *k* is used to validate the model as some point. This process provides a range of values for $\lambda$ and provides a data set to determine a preferred $\lambda$. [@Cook18]
 
-LASSO is not perfect. LASSO trades off the potential bias of individual parameter estimates for a better overall prediction. (Ranstam, Cook). This method allows for the determination of a smaller subset of predictors that shows the strongest effects on the model. ([@Hastie15]) Important disadvantage to note is that the individual regression coefficients may be less reliable to interpret individually [@Cook18]. Also, LASSO is not capable of selecting more predictors than the number of of observations in the sample.([@Dehmer19]). 
+LASSO is not perfect. LASSO trades off the potential bias of individual parameter estimates for a better overall prediction. (Ranstam, Cook). This method allows for the determination of a smaller subset of predictors that shows the strongest effects on the model. ([@Hastie15]) Important disadvantage to note is that the individual regression coefficients may be less reliable to interpret individually [@Cook18]. Also, LASSO is not capable of selecting more predictors than the number of of observations in the sample.([@Dehmer19]).
 
-The focus of the LASSO regression is to provide the best overall prediction and to reduce the number of variables to identify the predictors of importance not to interpret the meaning of individual predictor coefficients or keep excessive predictors. [@Cook18]. 
+The focus of the LASSO regression is to provide the best overall prediction and to reduce the number of variables to identify the predictors of importance not to interpret the meaning of individual predictor coefficients or keep excessive predictors. [@Cook18].
 
 ### Ridge Regression
 
-Ridge Regression is a regularized regression model that predates LASSO. ([@Hastie15]). Again, the need for improving the ordinary least squares comes from the fact that these models have a low bias but large variance. We can trade off some of the large variance by introducing some estimation bias allowing for accuracy of the prediction to improve. The preferred $\lambda$ in this model is different from the LASSO $\lambda$ as this ridge parameter reduces the coefficients toward zero without eliminating the the variables  completely by reducing coefficients to zero.([@Dehmer19])
+Ridge Regression is a regularized regression model that predates LASSO. ([@Hastie15]). Again, the need for improving the ordinary least squares comes from the fact that these models have a low bias but large variance. We can trade off some of the large variance by introducing some estimation bias allowing for accuracy of the prediction to improve. The preferred $\lambda$ in this model is different from the LASSO $\lambda$ as this ridge parameter reduces the coefficients toward zero without eliminating the the variables completely by reducing coefficients to zero.([@Dehmer19])
 
 Ridge Regression works best when the ordinary least squares estimates have a high variance and the number of predictors is larger than the number of samples. The benefit of this method is the trade off of reducing the variance by increasing a low bias which can improve the prediction accuracy of the model.([@Dehmer19])
 
@@ -65,8 +59,8 @@ The downfall with this method is the reduction of the coefficients toward zero n
 ### Elastic Net Regularization
 
 The elastic net was designed to improve the LASSO method as well as combine the benefits of LASSO and ridge regression. The elastic net has the benefit of LASSO regression as this method can perform variable selection and the benefit of ridge regression since it can be used in cases where the number of predictors is larger than the number of observations. Recall that ridge regression cannot perform variable selection and LASSO cannot manage cases with the number of predictors is much larger than the number of observations.([@Dehmer19])
- 
-An issue that can arise from the LASSO is in situations with strongly correlated predictors the variable selection method keeps only the strongest variable. Whereas, the elastic net tends to keep these strongly correlated predictors together in the model with its underlying grouping technique. ([@Dehmer19]) 
+
+An issue that can arise from the LASSO is in situations with strongly correlated predictors the variable selection method keeps only the strongest variable. Whereas, the elastic net tends to keep these strongly correlated predictors together in the model with its underlying grouping technique. ([@Dehmer19])
 
 The elastic net is able to blend the methods of LASSO and ridge regression by combining the squared penalty both methods and weighing them based on the number of correlated predictors. ([@Hastie15])
 
@@ -89,4 +83,3 @@ To try and improve the prediction accuracy issue in these sorts of models, the r
 -   Elastic Net Regularization: This is an extension of LASSO where an additional L2 norm penalty term is added to the LASSO. This serves to give LASSO qualities of Ridge regression and helps to improve prediction accuracy by shrinking coefficients and removing unimportant predictors.
 
 The other main area that regularized regression methods attempt to improve is model interpretability. In this case, the LASSO and Elastic Net Regularization methods improve model interpretability by removing unimportant predictors from the model. This is also called feature selection. A downside of Ridge Regression is that it does not perform feature selection and is unable to improve model interpretability since all predictors remain in the model. In cases where there are high numbers of predictors, Ridge Regression, then, can produce a model that has good predictive ability, but poor interpretability. [@Hastie05] [@Tibshirani96]
-
