@@ -1,4 +1,4 @@
-## High Dimensional Data Example
+## Human Freedom Index (High Dimensional Data Example)
 
 In this dataset, the data is already standardized. The dataset is being trimmed of summary scores and filtered to a single year. It is also being trimmed of variables with over 50% missing values. Only complete observations will be kept. This is to simulate the situation of a researcher being asked to review a single year of HFI data.
 
