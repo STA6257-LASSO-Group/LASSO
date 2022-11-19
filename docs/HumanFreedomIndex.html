@@ -443,11 +443,11 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(modelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Model Train_RSquare Train_RMSE Test_RSquare  Test_RMSE CoefficientCount
-1   LASSO     0.9990255 0.07761922    0.9976281 0.04669836               12
-2   Ridge     0.5081568 1.74374207    0.2968107 0.80406938               98
-3 ENet.25     0.9888014 0.26311800    0.8933123 0.31319489               37
-4 ENet.50     0.9964299 0.14856297    0.9769471 0.14558605               29
-5 ENet.75     0.9986080 0.09276757    0.9954494 0.06468306               19</code></pre>
+1   LASSO     0.9990121 0.07226831    0.9981389 0.05918213               11
+2   Ridge     0.3022909 1.92055264    0.1656932 1.25305539               98
+3 ENet.25     0.9891321 0.23969644    0.9451068 0.32141539               40
+4 ENet.50     0.9965432 0.13518454    0.9912712 0.12816950               28
+5 ENet.75     0.9986039 0.08590949    0.9970629 0.07434730               16</code></pre>
 </div>
 </div>
 <p>The number of coefficients selected by each individual method corresponds to how “LASSO” like or “Ridge” like the alpha parameter was set. The pure LASSO regression shows that 13 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.</p>
@@ -456,18 +456,17 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LASSOCoef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                         Predictor           Coefficient
-1                      (Intercept)   -0.0137016526623208
-2  pf_ss_disappearances_fatalities   -0.0100229246107959
-3             pf_ss_disappearances     -0.91592493871887
-4              pf_ss_women_missing   -9.411529587481e-05
-5                      pf_ss_women    -0.951714353662126
-6                            pf_ss      2.85385812172564
-7             pf_movement_domestic -0.000178619505635937
-8                      pf_religion  -0.00519632817662716
-9     pf_identity_parental_divorce -0.000510598121707783
-10                  ef_legal_crime    0.0427449492134439
-11                 ef_legal_gender   -0.0121165169102116
-12         ef_trade_movement_visit  -0.00278044696726429</code></pre>
+1                      (Intercept)     0.129676517850378
+2  pf_ss_disappearances_fatalities   -0.0146714340320808
+3             pf_ss_disappearances    -0.902231512843645
+4                      pf_ss_women    -0.953882920519535
+5                            pf_ss      2.85321435140525
+6           pf_religion_harassment   -0.0223026429291771
+7             pf_association_sport  -0.00317238900013525
+8             pf_expression_killed   0.00246240573210166
+9                   ef_legal_crime    0.0328255741798929
+10         ef_trade_movement_visit  -0.00196412760608385
+11               ef_trade_movement -0.000482527780599825</code></pre>
 </div>
 </div>
 <p>The model with the best fit in this case was the pure LASSO model. As has been shown, this regression model can be used for predictions. More refinement can be performed. For example, in this case, there is still the likelihood that the model is overfit since 13 predictors is still a large number when compared to 93 observations. To further understand this is a matter of the underlying mechanics in the data. It is also possible that these 13 predictors still have some manner of collinearity present. Regularization, in this case, has now given a workable group of features to analyze for a refined linear model.</p>
