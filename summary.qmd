@@ -1,7 +1,41 @@
 # Summary
 
-In summary, this book has no content whatsoever.
+## **Human Freedom Index (High Dimensional Data Example)**
 
-```{r}
-1 + 1
-```
+The Human Freedom Index uses parameters to determine the personal and economic freedoms of a particular country or jurisdiction. The data used to create the model was trimmed to include the parameters that contained greater than 50% of responses then the countries and jurisdictions with complete observations was utilized. The response variable for the model is the political freedom homicide model. The remaining distinct variables will be used as predictors.
+
+First a linear model was attempted. This model returned an error regarding the degrees of freedom due to the number of predictors in the set. The natural response is the need for a reduction in the number of predictors. The best way to manage a reduction of parameters is the use of regularization models.
+
+The three basic regularization models are ridge regression, elastic net, and LASSO. The data was then used to compute the LASSO lambda and the ridge regression lambda. The elastic net uses both lambdas as it is a blend of the two models.
+
+Ridge regression reduces the parameters coefficients but does not eliminate any parameters, LASSO eliminates the most parameters, and the elastic net is a blend of the two. The blending of the elastic net can be determined by the selection of alpha. Where an alpha closer to 0 is more like the ridge regression which retains more parameters and an alpha closer to 1 is closer to LASSO which retains less parameters.
+
+We created 5 models.
+| Predictors           | p-values | Conclusion (based on evidence and p-value) |
+|----------------------|----------|--------------------------------------------|
+| Age                  | 0        | Significant                                |
+| Total Cholesterol    | 0.0003   | Significant                                |
+| HBA1C                | 0.237    | Not Significant                            |
+| High School Graduate | 0.530    | Not Significant                            |
+| BMI Categorization   | 0.003    | Significant                                |
+
+The data was broken down into an 80/20 split to allow for
+the creation and testing of the models. The R2 of the models were computed to determine
+the best model.
+
+-         
+Ridge Regression:  0.360
+
+-         
+Elastic Net with alpha =.25: 0.953
+
+-         
+Elastic Net with alpha =.50: 0.992
+
+-         
+Elastic Net with alpha =.75: 0.998
+
+-         
+LASSO: 0.999
+
+The pure LASSO model was determined to be the best fit.
