@@ -1,0 +1,33 @@
+# Summary
+
+## **Human Freedom Index (High Dimensional Data Example)**
+
+The Human Freedom Index uses parameters to determine the personal and economic freedoms of a particular country or jurisdiction. The data used to create the model was trimmed to include the parameters that contained greater than 50% of responses then the countries and jurisdictions with complete observations was utilized. The response variable for the model is the political freedom homicide model. The remaining distinct variables will be used as predictors.
+
+First a linear model was attempted. This model returned an error regarding the degrees of freedom due to the number of predictors in the set. The natural response is the need for a reduction in the number of predictors. The best way to manage a reduction of parameters is the use of regularization models.
+
+The three basic regularization models are ridge regression, elastic net, and LASSO. The data was then used to compute the LASSO $\lambda$ and the ridge regression $\lambda$. The elastic net uses both $\lambda$'s as it is a blend of the two models.
+
+Ridge regression reduces the parameters coefficients but does not eliminate any parameters, LASSO eliminates the most parameters, and the elastic net is a blend of the two. The blending of the elastic net can be determined by the selection of $\alpha$. Where an $\alpha$ closer to 0 is more like the ridge regression which retains more parameters and an $\alpha$ closer to 1 is closer to LASSO which retains less parameters.
+
+We created 5 models.
+
+| Regularization Model Type | Number of Coefficients |
+|:-------------------------:|:----------------------:|
+|     Ridge Regression      |           98           |
+| Elastic net $\alpha=0.25$ |           47           |
+| Elastic net $\alpha=0.50$ |           27           |
+| Elastic net $\alpha=0.75$ |           15           |
+|           LASSO           |           10           |
+
+The data was broken down into an 80/20 split to allow for the creation and testing of the models. The R2 of the models were computed to determine the best model.
+
+| Regularization Model Type | $R^2$ |
+|:-------------------------:|:-----:|
+|     Ridge Regression      |  98   |
+| Elastic net $\alpha=0.25$ |  47   |
+| Elastic net $\alpha=0.50$ |  27   |
+| Elastic net $\alpha=0.75$ |  15   |
+|           LASSO           |  10   |
+
+The pure LASSO model was determined to be the best fit. This model needs a little more testing to ensure the model is not overfit to the particular data. This may be an issue due to the low number of observations ($n=93$). This model did reduce the number of parameters methodically which can allow us to revisit the linear model.
