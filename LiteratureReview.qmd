@@ -1,6 +1,10 @@
 # Current Literature
 
-## Usage Cases for Regularized Regression 
+## Usage Cases for Regularized Regression
+
+Regularized Regression techniques have been used extensively in the available literature, and, interestingly, the application is not strictly limited to the regression problem. For example, the feature selection qualities of the LASSO method have been useful as a preprocessor before applying a machine learning method such as a neural network.
+
+Because these methods are well established, there is continuing development on extensions of them in the literature. For example, [@Sethi21] used a method based on LASSO called Correlation based Adaptive LASSO to predict air quality across areas of Delhi, India. This method is actually an "extension of an extension" since Adaptive LASSO is itself based on the original LASSO method. Adaptive LASSO is a LASSO method with oracle properties that utilizes Ridge Regression to help prevent the overfitting of large coefficients that can occur with traditional LASSO. This example demonstrates that regularization methods are a changing field of study.
 
 ## Feature selection
 
@@ -8,3 +12,10 @@ LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/o
 
 Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. ([@Laura20])
 
+In their paper, [@Song2021] used a LASSO regression algorithm to perform feature selection on a time-series problem that studied gas concentration rates over time in Chinese coal mines. The idea behind this study was that the concentration of gas is linked to accident rates in coal mines, but there were a large number of features to deal with. The researchers used LASSO to perform feature selection before fitting an ANN with both the complete set and reduced set of features. In this case, the predictors solved the LASSO problem (finding the optimal value of the shrinkage penalty Lambda) using the Least Angle Regression (LARS) algorithm.
+
+[@Aheto21] used Regularized Regression to study the prevalence of child malaria in Ghana. In their study, the different dependent variables were unable to be well modeled by other approaches (such as ARIMA and correlation models), so regularization was applied to reduce the number of covariates in the models.
+
+## High Dimensional Data
+
+Regularized regression methods are frequently used in data sets with high dimension. These sorts of data sets can be frequently found in data studying the effects of genes since genomic data is frequently very high dimension relative to observations. In their paper [@Ogutu12], the researchers compare the performance of LASSO, Ridge, and Elastic Net Regularization to try and determine the best markers in the genome that are related to Genomic Breeding Value.

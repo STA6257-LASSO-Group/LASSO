@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Autumn Weeks, Kathleen Annis, Matt Thompson">
-<meta name="dcterms.date" content="2022-11-04">
 
-<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</title>
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 2&nbsp; Current Literature</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,6 +15,25 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -27,7 +44,8 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./dataset_methods.html" rel="next">
+<link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -66,7 +84,7 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -91,7 +109,7 @@ ul.task-list{list-style: none;}
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -101,7 +119,7 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LiteratureReview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></a>
+  <a href="./LiteratureReview.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -138,7 +156,9 @@ ul.task-list{list-style: none;}
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#usage-cases-for-regularized-regression" id="toc-usage-cases-for-regularized-regression" class="nav-link active" data-scroll-target="#usage-cases-for-regularized-regression"> <span class="header-section-number">2.1</span> Usage Cases for Regularized Regression</a></li>
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection"> <span class="header-section-number">2.2</span> Feature selection</a></li>
+  <li><a href="#high-dimensional-data" id="toc-high-dimensional-data" class="nav-link" data-scroll-target="#high-dimensional-data"> <span class="header-section-number">2.3</span> High Dimensional Data</a></li>
   </ul>
 </nav>
     </div>
@@ -147,39 +167,54 @@ ul.task-list{list-style: none;}
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Autumn Weeks, Kathleen Annis, Matt Thompson </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 4, 2022</p>
-    </div>
-  </div>
     
   </div>
   
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This project will present an overview of three regularized regression methods: LASSO regression, Ridge Regression, and the Elastic Net.</p>
-<p><a href="https://sta6257-lasso-group.github.io/LASSOPres/LASSOPres.html#/title-slide">Slides</a></p>
-<p><a href="https://github.com/STA6257-LASSO-Group/LASSOPres/blob/main/LASSOPres.qmd">Slides QMD</a></p>
+<section id="usage-cases-for-regularized-regression" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="usage-cases-for-regularized-regression"><span class="header-section-number">2.1</span> Usage Cases for Regularized Regression</h2>
+<p>Regularized Regression techniques have been used extensively in the available literature, and, interestingly, the application is not strictly limited to the regression problem. For example, the feature selection qualities of the LASSO method have been useful as a preprocessor before applying a machine learning method such as a neural network.</p>
+<p>Because these methods are well established, there is continuing development on extensions of them in the literature. For example, <span class="citation" data-cites="Sethi21">(<a href="references.html#ref-Sethi21" role="doc-biblioref">Sethi and Mittal 2021</a>)</span> used a method based on LASSO called Correlation based Adaptive LASSO to predict air quality across areas of Delhi, India. This method is actually an “extension of an extension” since Adaptive LASSO is itself based on the original LASSO method. Adaptive LASSO is a LASSO method with oracle properties that utilizes Ridge Regression to help prevent the overfitting of large coefficients that can occur with traditional LASSO. This example demonstrates that regularization methods are a changing field of study.</p>
+</section>
+<section id="feature-selection" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="feature-selection"><span class="header-section-number">2.2</span> Feature selection</h2>
+<p>LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. (<span class="citation" data-cites="Aheto21">(<a href="references.html#ref-Aheto21" role="doc-biblioref">Aheto et al. 2021</a>)</span>) This ill-fitting is mentioned in the previous section on regression line fitting.</p>
+<p>Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. (<span class="citation" data-cites="Laura20">(<a href="references.html#ref-Laura20" role="doc-biblioref">Freijeiro-González, Febrero-Bande, and González-Manteiga 2020</a>)</span>)</p>
+<p>In their paper, <span class="citation" data-cites="Song2021">(<a href="references.html#ref-Song2021" role="doc-biblioref">Song and Pan 2021</a>)</span> used a LASSO regression algorithm to perform feature selection on a time-series problem that studied gas concentration rates over time in Chinese coal mines. The idea behind this study was that the concentration of gas is linked to accident rates in coal mines, but there were a large number of features to deal with. The researchers used LASSO to perform feature selection before fitting an ANN with both the complete set and reduced set of features. In this case, the predictors solved the LASSO problem (finding the optimal value of the shrinkage penalty Lambda) using the Least Angle Regression (LARS) algorithm.</p>
+<p><span class="citation" data-cites="Aheto21">(<a href="references.html#ref-Aheto21" role="doc-biblioref">Aheto et al. 2021</a>)</span> used Regularized Regression to study the prevalence of child malaria in Ghana. In their study, the different dependent variables were unable to be well modeled by other approaches (such as ARIMA and correlation models), so regularization was applied to reduce the number of covariates in the models.</p>
+</section>
+<section id="high-dimensional-data" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="high-dimensional-data"><span class="header-section-number">2.3</span> High Dimensional Data</h2>
+<p>Regularized regression methods are frequently used in data sets with high dimension. These sorts of data sets can be frequently found in data studying the effects of genes since genomic data is frequently very high dimension relative to observations. In their paper <span class="citation" data-cites="Ogutu12">(<a href="references.html#ref-Ogutu12" role="doc-biblioref">Ogutu, Schulz-Streeck, and Piepho 2012</a>)</span>, the researchers compare the performance of LASSO, Ridge, and Elastic Net Regularization to try and determine the best markers in the genome that are related to Genomic Breeding Value.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Aheto21" class="csl-entry" role="doc-biblioentry">
+Aheto, Justice Moses K., Henry Duah, Pascal Agbadi, and Emmanuel Nakua. 2021. <span>“A Predictive Model, and Predictors of Under-Five Child Malaria Prevalence in Ghana: How Do LASSO, Ridge and Elastic Net Regression Approaches Compare?”</span> <em>Preventive Medicine Reports</em> 23 (June): 101475. <a href="https://doi.org/10.1016/j.pmedr.2021.101475">https://doi.org/10.1016/j.pmedr.2021.101475</a>.
+</div>
+<div id="ref-Laura20" class="csl-entry" role="doc-biblioentry">
+Freijeiro-González, Laura, Manuel Febrero-Bande, and Wenceslao González-Manteiga. 2020. <span>“<span class="nocase">A critical review of LASSO and its derivatives for variable selection under dependence among covariates</span>.”</span> <em>arXiv e-Prints</em>, December, arXiv:2012.11470. <a href="https://arxiv.org/abs/2012.11470">https://arxiv.org/abs/2012.11470</a>.
+</div>
+<div id="ref-Ogutu12" class="csl-entry" role="doc-biblioentry">
+Ogutu, Joseph O., Torben Schulz-Streeck, and Hans-Peter Piepho. 2012. <span>“Genomic Selection Using Regularized Linear Regression Models: Ridge Regression, Lasso, Elastic Net and Their Extensions.”</span> <em>BMC Proceedings</em> 6. <a href="https://login.ezproxy.lib.uwf.edu/login?url=https://www.proquest.com/scholarly-journals/genomic-selection-using-regularized-linear/docview/1014440955/se-2">https://login.ezproxy.lib.uwf.edu/login?url=https://www.proquest.com/scholarly-journals/genomic-selection-using-regularized-linear/docview/1014440955/se-2</a>.
+</div>
+<div id="ref-Sethi21" class="csl-entry" role="doc-biblioentry">
+Sethi, Jasleen Kaur, and Mamta Mittal. 2021. <span>“An Efficient Correlation Based Adaptive LASSO Regression Method for Air Quality Index Prediction.”</span> <em>Earth Science Informatics</em> 14 (4): 1777–86. <a href="https://doi.org/10.1007/s12145-021-00618-1">https://doi.org/10.1007/s12145-021-00618-1</a>.
+</div>
+<div id="ref-Song2021" class="csl-entry" role="doc-biblioentry">
+Song, Li, Shuang, and Shaobo Pan. 2021. <span>“Research on Time Series Characteristics of the Gas Drainage Evaluation Index Based on Lasso Regression.”</span> <em>Scientific Reports</em> 11 (1). <a href="https://doi.org/10.1038/s41598-021-00210-z">https://doi.org/10.1038/s41598-021-00210-z</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -282,10 +317,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./dataset_methods.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Methods and Materials</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

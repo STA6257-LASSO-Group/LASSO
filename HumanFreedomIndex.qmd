@@ -1,4 +1,4 @@
-## High Dimensional Data Example with Human Freedom Index
+## Human Freedom Index (High Dimensional Data Example)
 
 In this dataset, the data is already standardized. The dataset is being trimmed of summary scores and filtered to a single year. It is also being trimmed of variables with over 50% missing values. Only complete observations will be kept. This is to simulate the situation of a researcher being asked to review a single year of HFI data.
 
@@ -64,7 +64,7 @@ xtest <- data.matrix(xtest)
 predictors <- data.matrix(xtrain)
 resp <- ytrain
 
-linModel <- lm(pf_ss_homicide~., data=xtrainLin)
+linModel <- lm(hf_score~., data=xtrainLin)
 ```
 
 ![Model Output](images/HFIModel1.png){fig-align="center"} ![Model Output](images/HFModel2.png){fig-align="center"}
@@ -86,7 +86,6 @@ The basic code structure is as follows:
 -   Store results and display scores for each method.
 
 ```{r}
-set.seed(250)
 #LASSO
 modelResults <- data.frame(matrix(ncol=6,nrow=0))
 colnames(modelResults)<-c("Model","Train_RSquare","Train_RMSE","Test_RSquare","Test_RMSE","CoefficientCount")
@@ -249,7 +248,7 @@ The final model group looks like the table below.
 print(modelResults)
 ```
 
-The number of coefficients selected by each individual method corresponds to how "LASSO" like or "Ridge" like the alpha parameter was set. The pure LASSO regression shows that 13 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.
+The number of coefficients selected by each individual method corresponds to how "LASSO" like or "Ridge" like the alpha parameter was set. The pure LASSO regression shows that 17 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.
 
 The LASSO selected features included:
 
@@ -257,4 +256,4 @@ The LASSO selected features included:
 print(LASSOCoef)
 ```
 
-The model with the best fit in this case was the pure LASSO model. As has been shown, this regression model can be used for predictions. More refinement can be performed. For example, in this case, there is still the likelihood that the model is overfit since 13 predictors is still a large number when compared to 93 observations. To further understand this is a matter of the underlying mechanics in the data. It is also possible that these 13 predictors still have some manner of collinearity present. Regularization, in this case, has now given a workable group of features to analyze for a refined linear model.
+The model with the best fit in this case was the pure LASSO model. As has been shown, this regression model can be used for predictions. More refinement can be performed. For example, in this case, there is still the likelihood that the model is overfit since 17 predictors is still a large number when compared to 93 observations. To further understand this is a matter of the underlying mechanics in the data. It is also possible that these 17 predictors still have some manner of collinearity present. Regularization, in this case, has now given a workable group of features to analyze for a refined linear model.

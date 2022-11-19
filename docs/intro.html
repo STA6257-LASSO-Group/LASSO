@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 1&nbsp; Introduction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./LiteratureReview.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LiteratureReview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Methods and Materials</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">High Dimensional Data Example</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#linear-regression-overview" id="toc-linear-regression-overview" class="nav-link active" data-scroll-target="#linear-regression-overview"> <span class="header-section-number">1.1</span> Linear regression overview</a>
+  <ul class="collapse">
+  <li><a href="#regression-line-fitting" id="toc-regression-line-fitting" class="nav-link" data-scroll-target="#regression-line-fitting"> <span class="header-section-number">1.1.1</span> Regression line fitting</a></li>
+  <li><a href="#bias-and-variance" id="toc-bias-and-variance" class="nav-link" data-scroll-target="#bias-and-variance"> <span class="header-section-number">1.1.2</span> Bias and variance</a></li>
+  </ul></li>
+  <li><a href="#regularization" id="toc-regularization" class="nav-link" data-scroll-target="#regularization"> <span class="header-section-number">1.2</span> Regularization</a>
+  <ul class="collapse">
+  <li><a href="#lasso" id="toc-lasso" class="nav-link" data-scroll-target="#lasso"> <span class="header-section-number">1.2.1</span> LASSO</a></li>
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"> <span class="header-section-number">1.2.2</span> Ridge Regression</a></li>
+  <li><a href="#elastic-net-regularization" id="toc-elastic-net-regularization" class="nav-link" data-scroll-target="#elastic-net-regularization"> <span class="header-section-number">1.2.3</span> Elastic Net Regularization</a></li>
+  </ul></li>
+  <li><a href="#why-utilize-regularized-regression-methods" id="toc-why-utilize-regularized-regression-methods" class="nav-link" data-scroll-target="#why-utilize-regularized-regression-methods"> <span class="header-section-number">1.3</span> Why Utilize Regularized Regression Methods?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="linear-regression-overview" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="linear-regression-overview"><span class="header-section-number">1.1</span> Linear regression overview</h2>
+<p>Regression is the predicting or learning of numerical features in statistics and machine learning. This process includes the prediction of numeric as well as categorical attributes. Performing a regression allows for the determination of which factors in situations matter, what is their impact, and how they influence other factors. Regression allows for data driven decisions that eliminate guesswork. <span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span></p>
+<p>Simple linear regression finds the relationship between a dependent and independent variable whereas multiple linear regression can find the relationship between the dependent and multiple independent variables. <span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span></p>
+<p>The data is modeled on a graph and a line is fitted to the data. This allows for the determination of the coefficients of the independent variable or variables. <span class="citation" data-cites="Joshi20">(<a href="references.html#ref-Joshi20" role="doc-biblioref">Joshi and Saxena 2020</a>)</span></p>
+<section id="regression-line-fitting" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="regression-line-fitting"><span class="header-section-number">1.1.1</span> Regression line fitting</h3>
+<p>Regression line fitting is a delicate balance as the line should predict the desired value well based on several features but be applicable enough to be used repeatedly with different samples of data. The line should not be underfitted, which would not provide an accurate prediction. The line also should not be overfitted to the sample, which would cause the model not to work well with different samples and the data at large. <span class="citation" data-cites="Jabbar14">(<a href="references.html#ref-Jabbar14" role="doc-biblioref">Jabbar and Khan 2014</a>)</span></p>
+<p>Several methods can be used to ensure appropriate line fitting. We can compare the data to the AUC Curves which allows for determining the curves predictive ability by quantifying it. The higher the AUC the more predictive the model. The data is separated into two parts. 80% of the data is labeled as the training or estimation data and 20% of the data is labeled as the validation set. Both parts of the data are tested to ensure the AUC values are similar.<span class="citation" data-cites="Aheto21">(<a href="references.html#ref-Aheto21" role="doc-biblioref">Aheto et al. 2021</a>)</span></p>
+<p>The Penalty Method is important to prevent overfitting. We set <span class="math inline">\(E_{train}\)</span> and <span class="math inline">\(E_{test}\)</span> to be the test error, respectively. We then try to find a the minimal penalty such that <span class="math inline">\(E_{test} = E_{train} + Penalty\)</span> <span class="citation" data-cites="Jabbar14">(<a href="references.html#ref-Jabbar14" role="doc-biblioref">Jabbar and Khan 2014</a>)</span></p>
+<p>Early Stopping Method is used for the prevention of both over and underfitting. The sample data is broken down into three parts: training, validation, and testing. This data is then broken down in to the similar 80%/20% split to estimate the line and then to validate the process. <span class="citation" data-cites="Jabbar14">(<a href="references.html#ref-Jabbar14" role="doc-biblioref">Jabbar and Khan 2014</a>)</span></p>
+</section>
+<section id="bias-and-variance" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="bias-and-variance"><span class="header-section-number">1.1.2</span> Bias and variance</h3>
+<p>Bias measures the amount of deviation from the expected value is from the estimator in the models. Variance measures how far the data fluctuates. (Mehta, Bukov, Wang)</p>
+<p>If we consider the bulls eye as an example: low bias indicates that the estimators are in the vicinity of the bulls eye and low variance indicates that the estimators are close together like in a cluster. <span class="citation" data-cites="Gudivada17">(<a href="references.html#ref-Gudivada17" role="doc-biblioref">Gudivada 2017</a>)</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Gudivada.jpg" class="img-fluid figure-img" width="310"></p>
+<p></p><figcaption class="figure-caption"><em>Figure 1</em></figcaption><p></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="regularization" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="regularization"><span class="header-section-number">1.2</span> Regularization</h2>
+<p>Regularization was introduced in the context of dealing with the matrix inverse. This inverse issue caused the answer to live outside of the needed mathematical space. The introduction of the regularization parameter is a smoothness penalty which allowed the problem to be solved. <span class="citation" data-cites="Bickel06">(<a href="references.html#ref-Bickel06" role="doc-biblioref">Fan et al. 2006</a>)</span></p>
+<p>The fitting of models with large numbers of parameters also has similar issues in which makes the models unstable. This issue requires the need for regularization to get a sensible model. The LASSO regression also has a penalty to ensure the model is stable and thus works with the data. <span class="citation" data-cites="Bickel06">(<a href="references.html#ref-Bickel06" role="doc-biblioref">Fan et al. 2006</a>)</span></p>
+<p>Ordinary Least Squares needed improvements due to the issue with large variance even though the process has a low bias. Shrinking or setting the coefficients to zero can improve the accuracy of the predictions. This process can introduce some bias but will reduce the variance which can improve the prediction accuracy. <span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Hastie and Tibshirani 2015</a>)</span></p>
+<section id="lasso" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="lasso"><span class="header-section-number">1.2.1</span> LASSO</h3>
+<p>LASSO or Least Absolute Shrinkage and Selection Operator is a regularized regression modeling method that performs variable selection and regularization. These two components allow for better accuracy in prediction and interpretation in the model. <span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>.</p>
+<p>In the variable selection side, LASSO regression identifies the proper variables that will minimize prediction error and lessen the computer-intensive nature. Less variables, less computational power is needed. <span class="citation" data-cites="Cook18">(<a href="references.html#ref-Cook18" role="doc-biblioref">Ranstam and Cook 2018</a>)</span></p>
+<p>The selection of variables comes from a constraint on the model parameters. This is done by forcing the sum of the absolute value of these coefficients to be less than a fixed value <span class="math inline">\(\lambda\)</span>. This constraint lowers the complexity of the model by eliminating variables from the model that are reduced to zero after the shrinkage. <span class="citation" data-cites="Cook18">(<a href="references.html#ref-Cook18" role="doc-biblioref">Ranstam and Cook 2018</a>)</span></p>
+<p>This shrinking of some of the coefficients to zero provides for an automated way for doing model selection in linear regression. <span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Hastie and Tibshirani 2015</a>)</span></p>
+<p><span class="math inline">\(\lambda\)</span> is chosen using an automated k-fold cross-validation approach. This approach is were the data is partitioned into sub-samples of equal size. <em>k-1</em> out of <em>k</em> sub-samples are used for developing the model with the <span class="math inline">\(k^{th}\)</span> sample used to validate the model. This process is done <em>k</em> times to ensure each sub-set <em>k</em> is used to validate the model as some point. This process provides a range of values for <span class="math inline">\(\lambda\)</span>. This provides a data set that allows for choosing a preferred <span class="math inline">\(\lambda\)</span>. <span class="citation" data-cites="Cook18">(<a href="references.html#ref-Cook18" role="doc-biblioref">Ranstam and Cook 2018</a>)</span></p>
+<p>LASSO is not perfect. LASSO trades off the potential bias of individual parameter estimates for a better overall prediction. An important disadvantage to note is that the individual regression coefficients may be less reliable to interpret individually. The focus of the LASSO regression is to provide the best combined prediction. <span class="citation" data-cites="Cook18">(<a href="references.html#ref-Cook18" role="doc-biblioref">Ranstam and Cook 2018</a>)</span></p>
+</section>
+<section id="ridge-regression" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">1.2.2</span> Ridge Regression</h3>
+<p>Ridge Regression is a regularized regression model that predates the LASSO. <span class="citation" data-cites="Hastie15">(<a href="references.html#ref-Hastie15" role="doc-biblioref">Hastie and Tibshirani 2015</a>)</span> This method also has a shrinking effect on the coefficients of the linear model but does not reduce these coefficients to zero. <span class="citation" data-cites="Dehmer19">(<a href="references.html#ref-Dehmer19" role="doc-biblioref">Emmert-Streib and Dehmer 2019</a>)</span>. This method can simplify the problem from the original set of coefficients it does not have the added property of automated model selection.</p>
+</section>
+<section id="elastic-net-regularization" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="elastic-net-regularization"><span class="header-section-number">1.2.3</span> Elastic Net Regularization</h3>
+<p>Elastic Net Regularization is a regularized regression method that combines aspects from LASSO and ridge regressions. It does this by including a L2 norm penalty term in addition to the LASSO’s L1 norm penalty term. Similarly to the LASSO, it attempts to improve upon linear regression’s predictive accuracy along with the model’s interpretability in the presence of many predictors. Specifically, elastic net regularization attempts to improve upon LASSO in three scenarios:</p>
+<ul>
+<li>The case where there are more predictors than observations (p &gt; n). In this case, LASSO will predict at most n predictors.</li>
+<li>Grouped variables with high pairwise correlations will cause LASSO to pick only one of the variables.</li>
+<li>In the case of high multicollinearity in traditional regression scenarios (n &lt; p), LASSO’s performance is weaker than ridge regression. This means that the model does not benefit from LASSO’s feature selection properties.</li>
+</ul>
+<p>The Elastic Net combines qualities from LASSO and Ridge Regression to create a method that deals well with multicollinearity while also employing LASSO-like feature selection. <span class="citation" data-cites="Hastie05">(<a href="references.html#ref-Hastie05" role="doc-biblioref">Zou and Hastie 2005</a>)</span></p>
+</section>
+</section>
+<section id="why-utilize-regularized-regression-methods" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="why-utilize-regularized-regression-methods"><span class="header-section-number">1.3</span> Why Utilize Regularized Regression Methods?</h2>
+<p>Regularized Regression Methods seek generally to improve the Ordinary Least Squares estimates in the regression problem. The two general areas that these methods attempt to improve are prediction accuracy in the model and model interpretability. Prediction accuracy concerns come from Ordinary Least Squares estimates tending to be overfit (having low bias and high variance). Several underlying issues can cause overfitting, including having too many parameters in the model, but the end result is that the model will not have high prediction accuracy.</p>
+<p>To try and improve the prediction accuracy issue in these sorts of models, the regularization techniques try to alter the parameters (or their coefficients) in order to remove the high variance. This is often done at the expense of bias. The three regularization techniques handle this in different ways:</p>
+<ul>
+<li>Ridge Regression: As stated above, this method shrinks the coefficients in the model according to a shrinkage penalty term based on the L2 norm and the sum of squared residuals (RSS). The coefficients that have the least influence in the model tend towards 0 the fastest. This reduces their impact on the model and typically lowers the variance, especially when multicollinearity is present.</li>
+<li>LASSO Regression: This method uses a penalty term based on the L1 norm and the RSS to shrink, and even eliminate, coefficients from the model. As coefficients shrink, their impact on the model is reduced, but when a coefficient is dropped completely, the model simplifies further, helping to improve overfitting.<br>
+</li>
+<li>Elastic Net Regularization: This is an extension of LASSO where an additional L2 norm penalty term is added to the LASSO. This serves to give LASSO qualities of Ridge regression and helps to improve prediction accuracy by shrinking coefficients and removing unimportant predictors.</li>
+</ul>
+<p>The other main area that regularized regression methods attempt to improve is model interpretability. In this case, the LASSO and Elastic Net Regularization methods improve model interpretability by removing unimportant predictors from the model. This is also called feature selection. A downside of Ridge Regression is that it does not perform feature selection and is unable to improve model interpretability since all predictors remain in the model. In cases where there are high numbers of predictors, Ridge Regression, then, can produce a model that has good predictive ability, but poor interpretability. <span class="citation" data-cites="Hastie05">(<a href="references.html#ref-Hastie05" role="doc-biblioref">Zou and Hastie 2005</a>)</span> <span class="citation" data-cites="Tibshirani96">(<a href="references.html#ref-Tibshirani96" role="doc-biblioref">Tibshirani 1996</a>)</span></p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Aheto21" class="csl-entry" role="doc-biblioentry">
+Aheto, Justice Moses K., Henry Duah, Pascal Agbadi, and Emmanuel Nakua. 2021. <span>“A Predictive Model, and Predictors of Under-Five Child Malaria Prevalence in Ghana: How Do LASSO, Ridge and Elastic Net Regression Approaches Compare?”</span> <em>Preventive Medicine Reports</em> 23 (June): 101475. <a href="https://doi.org/10.1016/j.pmedr.2021.101475">https://doi.org/10.1016/j.pmedr.2021.101475</a>.
+</div>
+<div id="ref-Dehmer19" class="csl-entry" role="doc-biblioentry">
+Emmert-Streib, Frank, and Matthias Dehmer. 2019. <span>“High-Dimensional LASSO-Based Computational Regression Models: Regularization, Shrinkage, and Selection.”</span> <em>Machine Learning and Knowledge Extraction</em> 27 (2): 359–83. <a href="https://doi.org/10.1093/comjnl/27.2.97">https://doi.org/10.1093/comjnl/27.2.97</a>.
+</div>
+<div id="ref-Bickel06" class="csl-entry" role="doc-biblioentry">
+Fan, Jianqing, Peter Bickel, Bo Li, Alexandre Tsybakov, Sara van de Geer, B. Yu, Teofilo Valdes, Carlos Rivero, and Aad Vaart. 2006. <span>“Regularization in Statistics.”</span> <em>TEST: An Official Journal of the Spanish Society of Statistics and Operations Research</em> 15 (February): 271–344. <a href="https://doi.org/10.1007/BF02607055">https://doi.org/10.1007/BF02607055</a>.
+</div>
+<div id="ref-Gudivada17" class="csl-entry" role="doc-biblioentry">
+Gudivada, Amy &amp; Ding, Venkat &amp; Apon. 2017. <em>Data Quality Considerations for Big Data and Machine Learning: Going Beyond Data Cleaning and Transformations. International Journal on Advances in Software</em>.
+</div>
+<div id="ref-Hastie15" class="csl-entry" role="doc-biblioentry">
+Hastie, Wainwright, Trevor, and Robert Tibshirani. 2015. <em>Statistical Learning with Sparsity: The LASSO and Generalizations</em>. CRC Press, Taylor &amp; Francis Group.
+</div>
+<div id="ref-Jabbar14" class="csl-entry" role="doc-biblioentry">
+Jabbar, Haider Khalaf, and Rafiqul Zaman Khan. 2014. <span>“Methods to Avoid over-Fitting and Under-Fitting in Supervised Machine Learning (Comparative Study).”</span> In.
+</div>
+<div id="ref-Joshi20" class="csl-entry" role="doc-biblioentry">
+Joshi, Jigyasu, and Shweta Saxena. 2020. <span>“Regression Analysis in Data Science.”</span> <em>Journal of Analysis and Computation</em>, May, 97–111.
+</div>
+<div id="ref-Cook18" class="csl-entry" role="doc-biblioentry">
+Ranstam, J, and J A Cook. 2018. <span>“<span class="nocase">LASSO regression</span>.”</span> <em>British Journal of Surgery</em> 105 (10): 1348–48. <a href="https://doi.org/10.1002/bjs.10895">https://doi.org/10.1002/bjs.10895</a>.
+</div>
+<div id="ref-Tibshirani96" class="csl-entry" role="doc-biblioentry">
+Tibshirani, Robert. 1996. <span>“Regression Shrinkage and Selection via the Lasso.”</span> <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (1): 267–88. <a href="http://www.jstor.org/stable/2346178">http://www.jstor.org/stable/2346178</a>.
+</div>
+<div id="ref-Hastie05" class="csl-entry" role="doc-biblioentry">
+Zou, Hui, and Trevor Hastie. 2005. <span>“Regularization and Variable Selection via the Elastic Net.”</span> <em>Journal of the Royal Statistical Society. Series B (Statistical Methodology)</em> 67 (2): 301–20. <a href="http://www.jstor.org/stable/3647580">http://www.jstor.org/stable/3647580</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./LiteratureReview.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

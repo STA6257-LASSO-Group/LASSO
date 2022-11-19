@@ -9,6 +9,7 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - LiteratureReview.qmd
     - dataset_methods.qmd
     - JacksonHeart.qmd
     - HumanFreedomIndex.qmd
