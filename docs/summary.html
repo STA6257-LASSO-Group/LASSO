@@ -56,6 +56,7 @@ ul.task-list{list-style: none;}
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -137,7 +138,7 @@ ul.task-list{list-style: none;}
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"> <span class="header-section-number">6.1</span> <strong>Human Freedom Index (High Dimensional Data Example)</strong></a></li>
+  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"> <span class="header-section-number">6.1</span> Human Freedom Index (High Dimensional Data Example)</a></li>
   </ul>
 </nav>
     </div>
@@ -161,19 +162,74 @@ ul.task-list{list-style: none;}
 </header>
 
 <section id="human-freedom-index-high-dimensional-data-example" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="human-freedom-index-high-dimensional-data-example"><span class="header-section-number">6.1</span> <strong>Human Freedom Index (High Dimensional Data Example)</strong></h2>
+<h2 data-number="6.1" class="anchored" data-anchor-id="human-freedom-index-high-dimensional-data-example"><span class="header-section-number">6.1</span> Human Freedom Index (High Dimensional Data Example)</h2>
 <p>The Human Freedom Index uses parameters to determine the personal and economic freedoms of a particular country or jurisdiction. The data used to create the model was trimmed to include the parameters that contained greater than 50% of responses then the countries and jurisdictions with complete observations was utilized. The response variable for the model is the political freedom homicide model. The remaining distinct variables will be used as predictors.</p>
 <p>First a linear model was attempted. This model returned an error regarding the degrees of freedom due to the number of predictors in the set. The natural response is the need for a reduction in the number of predictors. The best way to manage a reduction of parameters is the use of regularization models.</p>
-<p>The three basic regularization models are ridge regression, elastic net, and LASSO. The data was then used to compute the LASSO lambda and the ridge regression lambda. The elastic net uses both lambdas as it is a blend of the two models.</p>
-<p>Ridge regression reduces the parameters coefficients but does not eliminate any parameters, LASSO eliminates the most parameters, and the elastic net is a blend of the two. The blending of the elastic net can be determined by the selection of alpha. Where an alpha closer to 0 is more like the ridge regression which retains more parameters and an alpha closer to 1 is closer to LASSO which retains less parameters.</p>
-<p>We created 5 models. | Predictors | p-values | Conclusion (based on evidence and p-value) | |———————-|———-|——————————————–| | Age | 0 | Significant | | Total Cholesterol | 0.0003 | Significant | | HBA1C | 0.237 | Not Significant | | High School Graduate | 0.530 | Not Significant | | BMI Categorization | 0.003 | Significant |</p>
+<p>The three basic regularization models are ridge regression, elastic net, and LASSO. The data was then used to compute the LASSO <span class="math inline">\(\lambda\)</span> and the ridge regression <span class="math inline">\(\lambda\)</span>. The elastic net uses both <span class="math inline">\(\lambda\)</span>’s as it is a blend of the two models.</p>
+<p>Ridge regression reduces the parameters coefficients but does not eliminate any parameters, LASSO eliminates the most parameters, and the elastic net is a blend of the two. The blending of the elastic net can be determined by the selection of <span class="math inline">\(\alpha\)</span>. Where an <span class="math inline">\(\alpha\)</span> closer to 0 is more like the ridge regression which retains more parameters and an <span class="math inline">\(\alpha\)</span> closer to 1 is closer to LASSO which retains less parameters.</p>
+<p>We created 5 models.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Regularization Model Type</th>
+<th style="text-align: center;">Number of Coefficients</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Ridge Regression</td>
+<td style="text-align: center;">98</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.25\)</span></td>
+<td style="text-align: center;">41</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.50\)</span></td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.75\)</span></td>
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LASSO</td>
+<td style="text-align: center;">10</td>
+</tr>
+</tbody>
+</table>
 <p>The data was broken down into an 80/20 split to allow for the creation and testing of the models. The R2 of the models were computed to determine the best model.</p>
-<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ridge Regression: &nbsp;0.360</p>
-<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Elastic Net with alpha =.25: 0.953</p>
-<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Elastic Net with alpha =.50: 0.992</p>
-<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Elastic Net with alpha =.75: 0.998</p>
-<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LASSO: 0.999</p>
-<p>The pure LASSO model was determined to be the best fit.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Regularization Model Type</th>
+<th style="text-align: center;"><span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Ridge Regression</td>
+<td style="text-align: center;">.283</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.25\)</span></td>
+<td style="text-align: center;">.855</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.50\)</span></td>
+<td style="text-align: center;">.975</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elastic net <span class="math inline">\(\alpha=0.75\)</span></td>
+<td style="text-align: center;">.994</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LASSO</td>
+<td style="text-align: center;">.998</td>
+</tr>
+</tbody>
+</table>
+<p>The pure LASSO model was determined to be the best fit. This model needs a little more testing to ensure the model is not overfit to the particular data. This may be an issue due to the low number of observations (<span class="math inline">\(n=93\)</span>). This model did reduce the number of parameters methodically which can allow us to revisit the linear model.</p>
 
 
 </section>
