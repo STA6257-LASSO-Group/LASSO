@@ -1,0 +1,448 @@
+---
+title: "Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity"
+editor: visual
+embed-resources: true
+---
+
+We chose the Jackson Heart Study (JHS) dataset to demonstrate multicollinearity and create an environment in which Ridge Regression typically outperforms the LASSO method. When two or more variables are highly collinear, LASSO regression will select one randomly and drop the others to zero. Elastic Net adapts the properties of both LASSO and Ridge, so dropping coefficients is more difficult than LASSO, but can still occur. Whereas, Ridge regression will keep highly collinear variables and adjust their importance with weight. Although this technique introduces more variability in the coefficients and p-values, the prediction of the dependent variable is not affected. Ridge performs well when there are more observations than variables and does well with multicollinearity. Although we started by observing the full JHS Visit 1 dataset of 2653 observations and 198 variables with the correlation matrix, we simplified the final model used for the Regularization Regression methods to exclude non-numeric data and categorical data and to include variables from several "hot spots" from the larger correlation matrix shown below. It is important to note that these regularization regression techniques can be used with other methods such as logistic regression had we decided to analyze the categorical data as well. However, many of the categorical variables were, in fact, composites of or redundant variables to the continuous variables included in this study.
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+#Code based on tutorial from David Caughlin's LASSO Regression in R
+#https://youtu.be/5GZ5BHOugBQ
+
+#Import libraries 
+library(GGally)
+library(haven)
+library(plyr)
+library(dbplyr)
+library(dtplyr)
+library(tidyverse)
+library(readr)
+library(caret)
+library(randomForest)
+library(mice)
+library(gdata)
+library(ggplot2)
+library(glmnet)
+library(olsrr)
+library(genridge)
+library(car)
+library(dplyr)
+library(repr)
+library(ggcorrplot)
+library(plotly)
+library(reshape2)
+library(AER)
+library(mctest)
+library(qgraph)
+```
+
+```{r include=FALSE}
+
+#Import data sets
+analysis1 <- read_dta("G:/My Drive/STA6257/datasets/analysis1.dta")
+
+V1_Impute <- read_dta("G:/My Drive/STA6257/datasets/data_imp2.dta")
+
+
+
+```
+
+## **Correlation Matrix heat map suggests multicollinearity for Jackson Heart Study Visit 1**
+
+Visit 1
+
+```{r}
+
+CorMatrix1_all <- ggcorr(V1_Impute, label_alpha = FALSE)
+
+CorMatrix1_all
+
+
+```
+
+```{r include=FALSE}
+#Regression Model for ALL continuous variables
+BIG_Mod <- lm(ef ~ ., data=V1_Impute)
+
+```
+
+## **Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1**
+
+#### **VIF Function gives Multicollinearity error for Linear Model of Ejection Fraction**
+
+![](images/paste-F27E00EC.png){width="546"}
+
+```{r include=FALSE}
+
+V1_Data <- V1_Impute %>% select(ef, height, age,weight, bmi, neck, waist,nbcohesion,nbpctpoverty, nbpopdensity1mi,nbviolence, nbk3favorfoodstore, vitamind3epimer, rwt,dbp,cv,qrs, sbp, qt,lvmecho, lvmindex,albuminuspot,fvcpp, fev1, homa_b, homa_ir, hba1c, fastinginsulin, fpg)
+
+#Regression Model for Smaller continuous variables dataset (Multicollinear)
+Multicol_Mod <- lm(ef ~ ., data=V1_Data)
+summary (Multicol_Mod)
+
+
+#nbsespc2score,,nbk3pafacilities,,darkgrnveg, weeklystress, abi
+```
+
+### Analysis of matrix "hot spots" demonstrates the LASSO's feature selection capabilities and the Ridge's ability to preserve a highly collinear model with competitive results
+
+```{r}
+CorMatrixV1_Small <- ggcorr(V1_Data, label_alpha = FALSE)
+
+CorMatrixV1_Small
+```
+
+```{r}
+VIF <- vif(Multicol_Mod)
+Tolerance = 1/VIF
+
+v1 <- data.frame(VIF)
+write.table(v1, "VIF Table")
+v2 <- data.frame(Tolerance)
+write.table(v2, "VIF Table")
+
+v.table = data.frame(cbind(v1,v2))
+print(v.table)
+```
+
+VIF's are found by regressing each predictor variable on all the other predictor variables. The higher the calculated R^2^ value, the better the performance of the regression model. Variance Inflation Factor (VIF) is the reciprocal of 1-R^2^. The typical cutoff for VIF is 5. A VIF score above 5 signifies severe multicollinearity and an increase in variance of the coefficients as a result. This inflation can be a large contributing source of Type II (False Negative) error in linear regression. A VIF \< 3 signifies a low correlation. Note the extreme VIF scores for several variables shown here, confirming our suspicions of multicollinearity in the data. The tolerance is the reciprocal of the VIF. It is calculated as 1-R^2^. Acceptable Tolerance scores are 0.25 and higher.
+
+Taken together, there is evidence of multicollnearity in the data that could pose a problem with interpretations of linear models. LASSO, Ridge and ElasticNet are most valuable for predictions that are more resistant to the multicollinearity problems that arise with general linear models. Next we will highlight LASSO's built-in feature selection capabilities and demonstrate Ridge Regression's ability to outperform LASSO given the right circumstances. The regularized model is more stable with predictions than coefficient and p-values.
+
+Regularization regression models are best at predictions. so, before we run regularization steps, we need to partition the data for training and testing, and find the optimal lambda in order to train the predictive models. To simplify, we will work with continuous data and variables found in several "hot spots" from the large correlation matrix above.
+
+```{r include=FALSE}
+#Partitioning Data 80/20 Split
+set.seed(12)
+
+#Create Index Matrix: 80% split matrix NOT list only split once
+index <- createDataPartition(V1_Data$ef, p=0.8, list=FALSE, times=1)
+
+#Create Test and Training df
+#-is all except index
+train_df <- V1_Data[index,]
+test_df <- V1_Data[-index,]
+```
+
+```{r}
+# k-fold Cross Validation to train LASSO
+#(because sample size is large, using 10-fold)
+
+#Train Control Function from Caret Package
+#Create Object to assign all the training method info to 
+#cross validation method, 10 fold
+tctrl_method <- trainControl(method='cv', number=10,
+                           savePredictions = 'all')
+
+#Specify & train LASSO Regression Model
+#Create vector of Lambda Values to find optimal (LASSO Tuning Parameter)
+lambda_vector <- 10^seq(5,-5, length=500)
+
+set.seed(12)
+
+#LASSO Regression Model estimated from Training data and 10-fold cv
+# dot is all other variables except outcome variable
+#grand mean center, "center" and standardize, "scale" at this step
+#c=combine, glmnet in caret package, alpha=1 for lasso (0 for ridge)
+```
+
+### LASSO Regression (L1)
+
+```{r include=FALSE}
+#LASSO Model (alpha=1)
+
+LASSO_mod1 <- train(ef ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=1,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit
+              )
+
+#Warning Message OK!!
+
+```
+
+### Finding Optimal Lambda with 10-fold Cross Validation
+
+```{r}
+#Best Optimal Lambda
+LASSO_mod1$bestTune
+LASSO_mod1$bestTune$lambda
+
+
+
+
+
+#plot log(lambda) & RMSE 
+
+plot(log(LASSO_mod1$results$lambda),
+     LASSO_mod1$results$RMSE,
+     xlab="log(lambda)",
+     ylab="RMSE",
+     xlim=c(-5,2))
+
+#print(log(0.013373))#check with log(lambda)
+```
+
+LASSO Predicts Variable Importance using the sum of decrease in error by each variable. Relative importance is variable importance standardized to the highest valued variable.
+
+```{r}
+#Predictor Variable Importance list top 20
+
+ImportantVars <- varImp(LASSO_mod1)
+
+
+#Data Visualization of importance
+
+ImportantVars_Plot <- ggplot(varImp(LASSO_mod1))
+
+
+print(ImportantVars_Plot)
+```
+
+Note that LASSO has dropped 3 variables from the model: height, weight and nbcohesion. It kept variables such as bmi (a composite of height and weight). Eliminating redundant variables demonstrates LASSO's automatic feature selection properties. These variables had very large VIF and low Tolerance scores, so dropping them from the model will likely not affect the model's ability to predict ejection fraction.
+
+```{r}
+
+#LASSO regression model coefficients/parameter estimates
+coef(LASSO_mod1$finalModel,LASSO_mod1$bestTune$lambda)
+#returns sparse matrix  
+```
+
+```{r include=FALSE}
+#Model Prediction on test data
+
+predict1 <- predict(LASSO_mod1, newdata=test_df)
+
+
+#Model Accuracy
+
+LASSO_mod1_rmse <- data.frame(RMSE=RMSE(predict1, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+LASSO_rss <- sum((predict1 - test_df$ef) ^ 2)
+LASSO_tss <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+LASSO_mod1_rsq <- 1 - LASSO_rss/LASSO_tss
+
+#LASSO_mod1_rmse
+#print(LASSO_mod1_rsq)
+```
+
+### Ridge Regression (L2)
+
+```{r include=FALSE}
+#Compare LASSO to Ridge Regression
+
+#Set Seed (reproducible results)
+set.seed(12)
+
+#Ridge Model (alpha=0)
+
+Ridge_mod2 <- train(ef ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=0,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+
+#Warning Message OK!!
+```
+
+```{r include=FALSE}
+#RIDGE plot log(lambda) & RMSE 
+
+plot(log(Ridge_mod2$results$lambda),
+     Ridge_mod2$results$RMSE,
+     xlab="log(lambda)",
+     ylab="RMSE",
+     xlim=c(-5,8))
+     
+#log(0.03213764)
+
+
+
+
+
+
+
+```
+
+```{r include=FALSE}
+
+#Predictor Variable Importance list top 20
+
+varImp(Ridge_mod2)
+```
+
+```{r}
+
+#Data Visualization of importance
+
+ggplot(varImp(Ridge_mod2))
+
+
+#Model Prediction on test data
+
+predict2 <- predict(Ridge_mod2, newdata=test_df)
+
+
+#Model Accuracy
+
+Ridge_mod2_rmse <- data.frame(RMSE=RMSE(predict2, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+Ridge_rss2 <- sum((predict2 - test_df$ef) ^ 2)
+Ridge_tss2 <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+Ridge_mod2_rsq <- 1 - Ridge_rss2/Ridge_tss2
+
+#Ridge_mod2_rmse
+#Ridge_mod2_rsq
+
+```
+
+Note that Ridge has preserved all the variables in the model.
+
+```{r}
+#Ridge regression model coefficients/parameter estimates
+coef(Ridge_mod2$finalModel,Ridge_mod2$bestTune$lambda)
+#returns complete
+```
+
+```{r include=FALSE}
+#ElasticNet Regresstion
+
+#tctrl_method (using from LASSO earlier)
+
+#Set Seed (reproducible results)
+set.seed(12)
+
+#Specify OLS model estimated with training data, train_df
+#10-fold cross validation
+
+EN_mod3 <- train(ef ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=0.5,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+#print(mod3)
+```
+
+```{r include=FALSE}
+#Predict outcome from training data based on test data using ElasticNet
+
+predict3 <- predict(EN_mod3, newdata=test_df)
+
+#Assess model performance
+#Model Accuracy
+
+EN_mod3_rmse <- data.frame(RMSE=RMSE(predict3, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+EN_rss3 <- sum((predict3 - test_df$ef) ^ 2)
+EN_tss3 <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+EN_mod3_rsq <- 1 - EN_rss3/EN_tss3
+
+#EN_mod3_rmse
+#EN_mod3_rsq
+
+```
+
+Note that the Elastic Net has dropped only 2 of the same variables as LASSO above. The distinction between the two might become more pronounced with larger models.
+
+```{r}
+#Elastic Net regression model coefficients/parameter estimates
+coef(EN_mod3$finalModel,EN_mod3$bestTune$lambda)
+#returns complete
+```
+
+```{r include=FALSE}
+#Compare LASSO to OLS Regresstion
+
+#tctrl_method (using from LASSO earlier)
+
+#Set Seed (reproducible results)
+set.seed(12)
+
+#Specify OLS model estimated with training data, train_df
+#10-fold cross validation
+
+OLS_mod4 <- train(ef ~ .,
+             data=train_df,
+             preProcess=c("center","scale"),#grand means center and scale to make results comparable to LASSO
+             method="lm",
+             trControl=tctrl_method,
+             na.action=na.omit)
+#print(mod4)
+```
+
+```{r include=FALSE}
+#Predict outcome from training data based on test data using OLS
+
+predict4 <- predict(OLS_mod4, newdata=test_df)
+
+#Assess model performance
+#Model Accuracy
+
+OLS_mod4_rmse <- data.frame(RMSE=RMSE(predict4, test_df$ef))
+
+#RMSE 10
+
+
+#R^2E
+
+OLS_rss4 <- sum((predict4 - test_df$ef) ^ 2)
+OLS_tss4 <- sum((test_df$ef - mean(test_df$ef)) ^ 2)
+OLS_mod4_rsq <- 1 - OLS_rss4/OLS_tss4
+
+#OLS_mod4_rmse
+#OLS_mod4_rsq
+
+```
+
+## Comparing the Models
+
+Model performance was overall very similar among the four models tested with Ridge Regression coming out slightly ahead in this instance (lowest RMSE, highest R^2^ values).
+
+```{r}
+#Compare LASSO and OLS predictive performance based on test_df
+
+comp <- matrix(c(LASSO_mod1_rmse, LASSO_mod1_rsq,
+                 Ridge_mod2_rmse,Ridge_mod2_rsq,
+                 EN_mod3_rmse,EN_mod3_rsq,
+                 OLS_mod4_rmse,OLS_mod4_rsq),
+               ncol=2,byrow=TRUE)
+
+#Labels
+colnames(comp) <- c("RMSE","R-squared")
+rownames(comp) <- c("LASSO", "Ridge", "ElasticNet", "OLS")
+
+
+
+
+
+
+print(comp)
+
+
+
+```
