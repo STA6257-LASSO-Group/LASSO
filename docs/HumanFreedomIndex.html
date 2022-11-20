@@ -273,10 +273,10 @@ div.csl-indent {
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>predictors <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xtrain)</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> ytrain</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>linModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(hf_score<span class="sc">~</span>., <span class="at">data=</span>xtrainLin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>linModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(hf_score<span class="sc">~</span>., <span class="at">data=</span>xtrainLin)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>linSummary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><img src="images/HFIModel1.png" class="img-fluid" data-fig-align="center" alt="Model Output"> <img src="images/HFModel2.png" class="img-fluid" data-fig-align="center" alt="Model Output"></p>
-<p>The figures above the show the outcome of trying to fit a traditional linear model to the data as it is. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.</p>
+<p>The Linear Model has an adjusted R-Squared of NaN. In addition, it doesn’t have any residual degrees of freedom, and invalid test scores. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.</p>
 <p>To fit the regularization models, the glmnet function will be used. The CV.glmnet function below performs a cross-fold validation on the training data in order to obtain the optimal lambda value for the respective model. In this function, the value of alpha controls the form of regularization that will be applied. An alpha value of 1 corresponds to LASSO regression, a value of 0 corresponds to Ridge Regression, and a value in between corresponds to a form of Elastic Net Regularization. The magnitude of alpha controls the penalty term in the Elastic Net Regularization. As in most regularization problems, the value of the penalty term (in this case lambda) is of critical importance.</p>
 </section>
 <section id="fitting-regularized-models" class="level3" data-number="5.0.2">
@@ -447,29 +447,29 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(modelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Model Train_RSquare Train_RMSE Test_RSquare  Test_RMSE CoefficientCount
-1   LASSO     0.9990381 0.07659473    0.9990583 0.03206453               10
-2   Ridge     0.5154186 1.71913554    0.3600676 0.83586890               98
-3 ENet.25     0.9893306 0.25509204    0.9532925 0.22582094               47
-4 ENet.50     0.9967308 0.14120407    0.9915769 0.09589751               27
-5 ENet.75     0.9987317 0.08794939    0.9981880 0.04447830               15</code></pre>
+1   LASSO     0.9990647 0.07949565    0.9976974 0.02945082               10
+2   Ridge     0.5262948 1.78901121    0.2828350 0.51975496               98
+3 ENet.25     0.9904047 0.25461763    0.8546090 0.23402265               41
+4 ENet.50     0.9968741 0.14532635    0.9747321 0.09756052               27
+5 ENet.75     0.9987773 0.09089239    0.9943804 0.04600908               13</code></pre>
 </div>
 </div>
-<p>The number of coefficients selected by each individual method corresponds to how “LASSO” like or “Ridge” like the alpha parameter was set. The pure LASSO regression shows that 17 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.</p>
+<p>The number of coefficients selected by each individual method corresponds to how “LASSO” like or “Ridge” like the alpha parameter was set. The pure LASSO regression shows that 9 predictors (without the intercept term) were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.</p>
 <p>The LASSO selected features included:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LASSOCoef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                         Predictor           Coefficient
-1                      (Intercept)    0.0541019086990051
-2  pf_ss_disappearances_fatalities -0.000805155818315659
-3             pf_ss_disappearances    -0.939049348382206
-4                      pf_ss_women    -0.949766153342742
-5                            pf_ss      2.86137680395171
-6           pf_religion_harassment  -0.00662609605478784
-7                      pf_religion  -0.00482360364150815
-8             pf_expression_killed   0.00324018387234992
-9                   ef_legal_crime    0.0379005856069777
-10         ef_trade_movement_visit -0.000534296769626714</code></pre>
+1                      (Intercept)     0.146490919100984
+2  pf_ss_disappearances_fatalities   -0.0212363595160555
+3             pf_ss_disappearances    -0.913737552722075
+4                      pf_ss_women    -0.955047621110517
+5                            pf_ss      2.85946335709078
+6           pf_religion_harassment   -0.0127804254185799
+7                      pf_religion -0.000370056255707164
+8           pf_expression_internet   -0.0013295634783857
+9                   ef_legal_crime    0.0390520848618338
+10         ef_trade_movement_visit  -0.00249144481920272</code></pre>
 </div>
 </div>
 <p>The model with the best fit in this case was the pure LASSO model. As has been shown, this regression model can be used for predictions. More refinement can be performed. For example, in this case, there is still the likelihood that the model is overfit since 17 predictors is still a large number when compared to 93 observations. To further understand this is a matter of the underlying mechanics in the data. It is also possible that these 17 predictors still have some manner of collinearity present. Regularization, in this case, has now given a workable group of features to analyze for a refined linear model.</p>

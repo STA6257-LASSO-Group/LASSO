@@ -7,7 +7,7 @@ The techniques in this demonstration utilize the glmnet package to fit the regul
 For this demonstration, the political freedom homicide variable will be the response variable. Each of the other distinct variables (excluding indexes and total scores) will be used as predictors.
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE, results='hide'}
-
+set.seed(120)
 library(ISLR)
 library(tidyverse)
 library(haven)
@@ -65,11 +65,10 @@ predictors <- data.matrix(xtrain)
 resp <- ytrain
 
 linModel <- lm(hf_score~., data=xtrainLin)
+linSummary <- summary(linModel)
 ```
 
-![Model Output](images/HFIModel1.png){fig-align="center"} ![Model Output](images/HFModel2.png){fig-align="center"}
-
-The figures above the show the outcome of trying to fit a traditional linear model to the data as it is. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.
+The Linear Model has an adjusted R-Squared of `r linSummary$adj.r.squared`. In addition, it doesn't have any residual degrees of freedom, and invalid test scores. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.
 
 To fit the regularization models, the glmnet function will be used. The CV.glmnet function below performs a cross-fold validation on the training data in order to obtain the optimal lambda value for the respective model. In this function, the value of alpha controls the form of regularization that will be applied. An alpha value of 1 corresponds to LASSO regression, a value of 0 corresponds to Ridge Regression, and a value in between corresponds to a form of Elastic Net Regularization. The magnitude of alpha controls the penalty term in the Elastic Net Regularization. As in most regularization problems, the value of the penalty term (in this case lambda) is of critical importance.
 
@@ -100,6 +99,7 @@ plot(model)
 The LASSO Lambda plot demonstrates the MSE for different values of lambda.
 
 ```{r}
+
 finalModel <- glmnet(predictors,resp, alpha=1, lambda=bestLambda)
 coefTable <- coefficients(finalModel)
 coefList <- data.frame(matrix(ncol=2,nrow=0))
@@ -248,7 +248,7 @@ The final model group looks like the table below.
 print(modelResults)
 ```
 
-The number of coefficients selected by each individual method corresponds to how "LASSO" like or "Ridge" like the alpha parameter was set. The pure LASSO regression shows that 17 predictors were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.
+The number of coefficients selected by each individual method corresponds to how "LASSO" like or "Ridge" like the alpha parameter was set. The pure LASSO regression shows that `r nrow(LASSOCoef) - 1` predictors (without the intercept term) were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.
 
 The LASSO selected features included:
 
