@@ -1,6 +1,10 @@
 # Methods and Materials
 
-## Data sets
+### Planned Demonstration
+
+Using two different data sets, three different demonstrations will show the general method and special use cases for applying regularized regression techniques. First will be a general demonstration of the methods focused on model implementation and interpretation of the model's outputs. Second will be a showcase of applying regularized regression in a high multicollinearity example, and finally will be a demonstration of regularized regression in a high dimensional data setting where the number of features is greater than the number of observations. 
+
+### Data sets
 
 Previous studies indicate LASSO regression outperforms Ridge regression with sparse data sets in which the variable size is larger than the sample size. Conversely, Ridge regression has been shown to outperform LASSO regression with dense data in which the variable size is smaller than the sample size.[@JamesTib21] The hybrid of the two, Elastic Net regression, will adapt to either type of data by using the properties of LASSO and Ridge regression together. We aim to use two data sets with different characteristics to highlight the advantages of each of the three linear regularization techniques while also using these statistical methods to model the data and make predictions.
 

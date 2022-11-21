@@ -1,4 +1,4 @@
-## Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)
+## Generic Regularized Regression Demonstration (Jackson Heart Study Data)
 
 ### Preparing the data
 
@@ -36,7 +36,7 @@ data.frame(
 }
 ```
 
-The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject's leptin levels will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index and past 12 month average alcohol use. In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.
+The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject's leptin levels will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index, weekly stress scores, neighborhood problem score, and past 12 month average alcohol use. This will be done for retirement age subjects(over 65 years old). In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.
 
 ```{r}
 set.seed(150)

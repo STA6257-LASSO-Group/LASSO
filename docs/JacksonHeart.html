@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</title>
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; Generic Regularized Regression Demonstration (Jackson Heart Study Data)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -128,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
 </div>
 
 
@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 
 </div>
-<p>The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject’s leptin levels will be modeled against the subject’s age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index and past 12 month average alcohol use. In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.</p>
+<p>The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject’s leptin levels will be modeled against the subject’s age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index, weekly stress scores, neighborhood problem score, and past 12 month average alcohol use. This will be done for retirement age subjects(over 65 years old). In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">150</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Import data sets</span></span>
