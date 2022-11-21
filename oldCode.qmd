@@ -1,7 +1,5 @@
 #### Calculating Model Using Ridge Regression
 
-!\[\](images/paste-F27E00EC.png){width="546"}
-
 ```{r}
 #xtest <- test %>% select(X2:X6830)
 #ytest <- test$X1

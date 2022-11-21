@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; Regularized Regression Implementation to the Jackson Heart Study Data</title>
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -88,7 +88,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./HumanFreedomIndex.html" rel="next">
+<link href="./LASSO_Experiment_11_20_AW.html" rel="next">
 <link href="./dataset_methods.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -128,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -173,17 +173,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -212,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></h1>
 </div>
 
 
@@ -231,286 +236,210 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 
 </div>
-<p>The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of total cholesterol will be modeled against the subject’s age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.</p>
+<p>The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject’s leptin levels will be modeled against the subject’s age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index and past 12 month average alcohol use. In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Import data sets</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>analysis1 <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"analysis1.dta"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (analysis1)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"totchol"</span>,<span class="st">"age"</span>,<span class="st">"bmi"</span>,<span class="st">"sbp"</span>,<span class="st">"dbp"</span>,<span class="st">"hba1c"</span>,<span class="st">"fpg"</span>,<span class="st">"fastinginsulin"</span>,<span class="st">"alcw"</span>, <span class="st">"waist"</span>))</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>mcar <span class="ot">&lt;-</span> <span class="fu">na.test</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> Little's MCAR Test
-
-     n nIncomp nPattern   chi2  df  pval 
-  2653     315       17 336.83 123 0.000</code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">150</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Import data sets</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>analysis1 <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"analysis1.dta"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (analysis1)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#df&lt;- df %&gt;% select(c("totchol","age","bmi","sbp","dbp","hba1c","fpg","alcw", "waist")) %&gt;% filter(age &gt;70)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"age"</span>,<span class="st">"bmi"</span>,<span class="st">"sbp"</span>,<span class="st">"dbp"</span>,<span class="st">"hba1c"</span>,<span class="st">"fpg"</span>,<span class="st">"alcw"</span>, <span class="st">"waist"</span>,<span class="st">"weight"</span>,<span class="st">"bsa"</span>,<span class="st">"abi"</span>,<span class="st">"homa_b"</span>,<span class="st">"totchol"</span>,<span class="st">"leptin"</span>,<span class="st">"trigs"</span>,<span class="st">"fasthours"</span>,<span class="st">"height"</span>,<span class="st">"weeklystress"</span>,<span class="st">"nbproblems"</span>)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age <span class="sc">&gt;</span><span class="dv">65</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">na.omit</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>The results of the MCAR test are significant, so the data is not missing at random.The MICE algorithm will be used to impute the missing data values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cleanedData <span class="ot">&lt;-</span> <span class="fu">mice</span>(df, <span class="at">printFlag =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">complete</span>(cleanedData,<span class="dv">1</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dfpred <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"totchol"</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dfResp <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"totchol"</span>))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dfResp <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(dfResp)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>dfpred <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(dfpred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dfpred <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="st">"leptin"</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dfResp <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"leptin"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dfResp <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(dfResp)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dfpred <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(dfpred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The data is now cleaned and complete.</p>
-<p>To see the impact of multicollinearity present in the fitted model, the VIF (Variable Inflation Factor) will be calculated and displayed.</p>
-<p>It will be passed through several regression models, beginning with a traditional OLS regression.</p>
-<p>Before we begin, we fill first examine the data for correlations between the variables.</p>
+<p>Before we begin, we fill first examine the data for correlations between the variables. This is a good initial step to become more familiar with the data being examined and in the case of a regression problem provides context as to whether or not a traditional OLS model will be appropriate.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="fu">cor</span>(df), <span class="at">method=</span><span class="st">"number"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="fu">cor</span>(df), <span class="at">method=</span><span class="st">"number"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="JacksonHeart_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The correlation matrix shows some correlation between waist and bmi, as well as systolic and diastolic blood pressures.</p>
-<p>Once the model has been fit, it will be examined for the presence of multicollinearity between its independent variables. The importance of these steps is to ensure that whatever model we fit will be the best fit for the specific qualities of the data.</p>
+<p>The darker colors on the correlation matrix show areas where correlation is strongest, and give an indication of how much difficulty an ordinary least squares method will have fitting the data. In this case, there is some strong correlation between a few of the variables, so there is the possibility that regularization will help improve the fit marginally.</p>
+<p>We will first fit an OLS model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df)<span class="sc">+</span><span class="fu">aes</span>(totchol)<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">30</span>)<span class="sc">+</span><span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Total Cholesterol"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="JacksonHeart_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(totchol <span class="sc">~</span> age<span class="sc">+</span>bmi<span class="sc">+</span>sbp<span class="sc">+</span>dbp<span class="sc">+</span>hba1c<span class="sc">+</span>fpg<span class="sc">+</span>fastinginsulin<span class="sc">+</span>alcw<span class="sc">+</span>waist, <span class="at">data=</span>df)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ols_vif_tol</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       Variables Tolerance      VIF
-1            age 0.7017314 1.425047
-2            bmi 0.3075805 3.251181
-3            sbp 0.5404506 1.850308
-4            dbp 0.6005314 1.665192
-5          hba1c 0.3467609 2.883832
-6            fpg 0.3603216 2.775299
-7 fastinginsulin 0.7602561 1.315346
-8           alcw 0.9528247 1.049511
-9          waist 0.3081649 3.245016</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = totchol ~ age + bmi + sbp + dbp + hba1c + fpg + 
-    fastinginsulin + alcw + waist, data = df)
 
-Residuals:
-     Min       1Q   Median       3Q      Max 
--101.925  -26.385   -2.842   23.943  136.475 
-
-Coefficients:
-                Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    142.39315    9.24184  15.407  &lt; 2e-16 ***
-age              0.46660    0.07536   6.191  6.9e-10 ***
-bmi              0.05100    0.19160   0.266  0.79012    
-sbp              0.05037    0.06473   0.778  0.43654    
-dbp              0.29825    0.11180   2.668  0.00768 ** 
-hba1c            0.52856    1.13923   0.464  0.64271    
-fpg              0.03150    0.04330   0.728  0.46695    
-fastinginsulin   0.11906    0.07243   1.644  0.10033    
-alcw             0.06914    0.14926   0.463  0.64324    
-waist           -0.07686    0.08403  -0.915  0.36050    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 38.18 on 2643 degrees of freedom
-Multiple R-squared:  0.03032,   Adjusted R-squared:  0.02702 
-F-statistic: 9.184 on 9 and 2643 DF,  p-value: 8.152e-14</code></pre>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(leptin <span class="sc">~</span> bmi<span class="sc">+</span>sbp<span class="sc">+</span>dbp<span class="sc">+</span>hba1c<span class="sc">+</span>fpg<span class="sc">+</span>waist<span class="sc">+</span>alcw<span class="sc">+</span>totchol<span class="sc">+</span>bsa<span class="sc">+</span>trigs<span class="sc">+</span>abi<span class="sc">+</span>homa_b<span class="sc">+</span>age<span class="sc">+</span>weight<span class="sc">+</span>fasthours<span class="sc">+</span>height<span class="sc">+</span>weeklystress<span class="sc">+</span>nbproblems, <span class="at">data=</span>df)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>modelSum <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.</p>
+<p>Our next step in this approach would be to use significance testing and to remove variables that we don’t consider significant. In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.</p>
+<p>We will now showcase how to fit a regularized version of this regression model using the glmnet package. In the glmnet package, the value of alpha corresponds to the regularization method being used where an alpha of 0 corresponds to a Ridge Regression and an alpha of 1 corresponds to a LASSO regression model. An alpha between 0 and 1 corresponds to an Elastic Net regression model.</p>
+<p>The basic code structure is as follows:</p>
+<ul>
+<li>Perform Cross Validation to acquire the optimal lambda. The alpha term is altered based on the method.</li>
+<li>Pass the optimal lambda into a new model based on the training data.</li>
+<li>Examine the impact on the coefficients.</li>
+<li>Calculate and display scores for each method.</li>
+</ul>
 </section>
 <section id="ridge-regression-model" class="level3" data-number="4.0.2">
 <h3 data-number="4.0.2" class="anchored" data-anchor-id="ridge-regression-model"><span class="header-section-number">4.0.2</span> Ridge Regression Model</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span><span class="dv">0</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 6.326801</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span><span class="dv">0</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="JacksonHeart_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<p><img src="JacksonHeart_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This plot shows the changing MSE for the various values of lambda. The algorithm chooses the lambda that gives the lowest MSE. The best lambda value chosen in this case was 3.9831346. This is now passed into the glmnet function to find the optimal model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Passing the Optimal Lambda</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ridge"</span>,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>RMSE,<span class="fu">count</span>(coefList)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(coefList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  Overall
-age            0.37616934
-bmi            0.02183441
-sbp            0.08298979
-dbp            0.21407434
-hba1c          0.59658200
-fpg            0.02993610
-fastinginsulin 0.09469994
-alcw           0.04436072
-waist          0.03572166</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      RMSE    Rsquare
-1 38.11748 0.02967211</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(genridge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'genridge' was built under R version 4.2.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: car</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'car' was built under R version 4.2.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: carData</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'car'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:dplyr':
-
-    recode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:purrr':
-
-    some</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'genridge'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:caret':
-
-    precision</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(finalModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>          Length Class     Mode   
-a0        1      -none-    numeric
-beta      9      dgCMatrix S4     
-df        1      -none-    numeric
-dim       2      -none-    numeric
-lambda    1      -none-    numeric
-dev.ratio 1      -none-    numeric
-nulldev   1      -none-    numeric
-npasses   1      -none-    numeric
-jerr      1      -none-    numeric
-offset    1      -none-    logical
-call      5      -none-    call   
-nobs      1      -none-    numeric</code></pre>
+<pre><code>      Predictor         Coefficient
+1   (Intercept)    77.9871111372982
+2           age  -0.277007667349493
+3           bmi    1.33182793767548
+4           sbp   0.146659875361366
+5           dbp  -0.391297476907155
+6         hba1c    1.90906256347131
+7           fpg -0.0462856703071172
+8          alcw -0.0248444545737805
+9         waist   0.270243342420437
+10       weight   0.126556976636525
+11          bsa   -2.93499142457999
+12          abi   -11.2230610184193
+13       homa_b  0.0309288328108574
+14      totchol  0.0192024882091495
+15        trigs -0.0205898916075054
+16    fasthours -0.0438642861452437
+17       height  -0.549660555635953
+18 weeklystress  0.0144778624093354
+19   nbproblems   -1.54074622626403</code></pre>
 </div>
 </div>
 <p>In the Ridge regression, each variable has now had their coefficient scaled based on how much importance they add to the model. No variable can be eliminated using this method, but the penalty term can cause their coefficient, and therefore their weight, to approach 0.</p>
 </section>
 <section id="lasso-regression-model" class="level3" data-number="4.0.3">
 <h3 data-number="4.0.3" class="anchored" data-anchor-id="lasso-regression-model"><span class="header-section-number">4.0.3</span> LASSO Regression Model</h3>
+<p>In the glmnet package, an alpha of 1 corresponds to a LASSO model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span><span class="dv">1</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span><span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Passing the Optimal Lambda</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LASSO"</span>,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>RMSE,<span class="fu">count</span>(coefList)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(coefList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5502728</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="JacksonHeart_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a> {<span class="fu">print</span>(coefTable[x,<span class="dv">1</span>])  </span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 148.9586
-[1] 0.408526
-[1] 0.05587295
-[1] 0.2102278
-[1] 0.2123032
-[1] 0.0272371
-[1] 0.05452052</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  Overall
-age            0.40828759
-bmi            0.00000000
-sbp            0.05612552
-dbp            0.20992863
-hba1c          0.20090331
-fpg            0.02757992
-fastinginsulin 0.05460627
-alcw           0.00000000
-waist          0.00000000</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      RMSE    Rsquare
-1 38.13041 0.02901385</code></pre>
+<pre><code>     Predictor         Coefficient
+1  (Intercept)    47.6326538855448
+2          bmi    2.14537255105611
+3          sbp  0.0585515721972467
+4          dbp   -0.25792785560877
+5        waist  0.0747155365397576
+6          abi   -8.16983430212925
+7       homa_b  0.0209504418095479
+8       height  -0.450987198636496
+9 weeklystress 0.00436079973519507</code></pre>
 </div>
 </div>
-<p>In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance is very low.</p>
+<p>In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance or the amount of information they add to the model is very low. In this case, several of the predictors have been dropped from the model.</p>
 </section>
 <section id="elastic-net-model" class="level3" data-number="4.0.4">
 <h3 data-number="4.0.4" class="anchored" data-anchor-id="elastic-net-model"><span class="header-section-number">4.0.4</span> Elastic Net Model</h3>
+<p>In glmnet, an alpha between 0 and 1 will run elastic net regularization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span>.<span class="dv">5</span>)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(dfpred, dfResp, <span class="at">alpha=</span>.<span class="dv">25</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Passing the Optimal Lambda</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span>.<span class="dv">25</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Elastic Net"</span>,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(dfResp,finalModelPredict,df)<span class="sc">$</span>RMSE,<span class="fu">count</span>(coefList)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(coefList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.325611</code></pre>
+<pre><code>      Predictor         Coefficient
+1   (Intercept)    60.8400168294724
+2           age  -0.162137469855504
+3           bmi    1.75627950976084
+4           sbp   0.115035773030254
+5           dbp  -0.339829555437511
+6         hba1c   0.591839690874828
+7         waist   0.220625478433008
+8           abi   -9.57342149887533
+9        homa_b  0.0281515728597371
+10      totchol 0.00627875606608306
+11        trigs -0.0104519264578124
+12       height  -0.507456715451998
+13 weeklystress 0.00903610772543083</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="JacksonHeart_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(dfpred,dfResp, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a> {<span class="fu">print</span>(coefTable[x,<span class="dv">1</span>])  </span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The results of this example can be seen below.</p>
+<div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 151.632
-[1] 0.3892131
-[1] 0.06072119
-[1] 0.1857907
-[1] 0.2094864
-[1] 0.02513331
-[1] 0.04559576</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> dfpred)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(dfResp,finalModelPredict,df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      RMSE    Rsquare
-1 38.13912 0.02856978</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>glmnet.fit <span class="sc">%&gt;%</span> <span class="fu">varImp</span>(<span class="at">lambda =</span> model<span class="sc">$</span>lambda.min, <span class="at">scale=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  Overall
-age            0.38919203
-bmi            0.00000000
-sbp            0.06081565
-dbp            0.18567852
-hba1c          0.19884465
-fpg            0.02543190
-fastinginsulin 0.04570139
-alcw           0.00000000
-waist          0.00000000</code></pre>
+<pre><code>        Model     Train_RSquare       Train_RMSE Predictors
+1         OLS 0.581825663903433 12.6301455149939         18
+2       Ridge 0.592400531086241 12.4296512626905         18
+3       LASSO 0.570656480408171 12.7568836696496          8
+4 Elastic Net 0.587590241926988 12.5027804628744         12</code></pre>
 </div>
 </div>
-<p>Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The value of alpha in the glmnet package determines the strength of the lambda parameter.</p>
 
 
 </section>
@@ -620,8 +549,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./HumanFreedomIndex.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./LASSO_Experiment_11_20_AW.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,11 +1,9 @@
-## Regularized Regression Implementation to the Jackson Heart Study Data
+## Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)
 
 ### Preparing the data
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE, results='hide'}
 
-#Code based on tutorial from David Caughlin's LASSO Regression in R
-#https://youtu.be/5GZ5BHOugBQ
 
 #Import libraries 
 library(GGally)
@@ -38,75 +36,101 @@ data.frame(
 }
 ```
 
-The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of total cholesterol will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, and plasma insulin level, waist circumference, and past 12 month average alcohol use. Missing observations will be corrected using the MICE algorithm.
+The Jackson Heart Study data will be examined using to show the process difference between LASSO, Ridge Regression, Elastic Net, and a traditional OLS regression model. The value of a subject's leptin levels will be modeled against the subject's age, bmi, hba1c, systolic blood pressure, diastolic blood pressure, plasma glucose level, waist circumference, how long they fasted before the examination, triglyceride levels, weight, HOMA-B, body surface area, ankle brachial index and past 12 month average alcohol use. In this example, only complete cases will be used. The purpose of this example is simply to show the method for fitting the three regularized regression models to a generic set of variables. It will demonstrate the method and interpretation of regularized regression output while providing a comparison against an ordinary least squares regression model.
 
 ```{r}
+set.seed(150)
 #Import data sets
 analysis1 <- read_dta("analysis1.dta")
 df <- (analysis1)
-df<- df %>% select(c("totchol","age","bmi","sbp","dbp","hba1c","fpg","fastinginsulin","alcw", "waist"))
-mcar <- na.test(df)
+#df<- df %>% select(c("totchol","age","bmi","sbp","dbp","hba1c","fpg","alcw", "waist")) %>% filter(age >70)
+
+df<- df %>% select(c("age","bmi","sbp","dbp","hba1c","fpg","alcw", "waist","weight","bsa","abi","homa_b","totchol","leptin","trigs","fasthours","height","weeklystress","nbproblems")) %>% filter(age >65)
+
+df<-na.omit(df)
 ```
 
-The results of the MCAR test are significant, so the data is not missing at random.The MICE algorithm will be used to impute the missing data values.
-
 ```{r}
-cleanedData <- mice(df, printFlag = FALSE)
-df <- complete(cleanedData,1)
-dfpred <- df %>% select(c(-"totchol"))
-dfResp <- df %>% select(c("totchol"))
+dfpred <- df %>% select(c(-"leptin"))
+dfResp <- df %>% select(c("leptin"))
 dfResp <- data.matrix(dfResp)
 dfpred <- data.matrix(dfpred)
 ```
 
 The data is now cleaned and complete.
 
-To see the impact of multicollinearity present in the fitted model, the VIF (Variable Inflation Factor) will be calculated and displayed.
-
-It will be passed through several regression models, beginning with a traditional OLS regression.
-
-Before we begin, we fill first examine the data for correlations between the variables.
+Before we begin, we fill first examine the data for correlations between the variables. This is a good initial step to become more familiar with the data being examined and in the case of a regression problem provides context as to whether or not a traditional OLS model will be appropriate.
 
 ```{r}
 corrplot::corrplot(cor(df), method="number")
 
 ```
 
-The correlation matrix shows some correlation between waist and bmi, as well as systolic and diastolic blood pressures.
+The darker colors on the correlation matrix show areas where correlation is strongest, and give an indication of how much difficulty an ordinary least squares method will have fitting the data. In this case, there is some strong correlation between a few of the variables, so there is the possibility that regularization will help improve the fit marginally.
 
-Once the model has been fit, it will be examined for the presence of multicollinearity between its independent variables. The importance of these steps is to ensure that whatever model we fit will be the best fit for the specific qualities of the data.
+We will first fit an OLS model.
+
+```{r echo=FALSE}
+modelResults <- data.frame(matrix(ncol=4,nrow=0))
+colnames(modelResults)<-c("Model","Train_RSquare","Train_RMSE","Predictors")
+```
 
 ```{r}
 
-ggplot(df)+aes(totchol)+geom_histogram(binwidth=30)+labs(x="Total Cholesterol")
-model = lm(totchol ~ age+bmi+sbp+dbp+hba1c+fpg+fastinginsulin+alcw+waist, data=df)
-ols_vif_tol(model)
-summary(model)
-
-
+model = lm(leptin ~ bmi+sbp+dbp+hba1c+fpg+waist+alcw+totchol+bsa+trigs+abi+homa_b+age+weight+fasthours+height+weeklystress+nbproblems, data=df)
+modelSum <- summary(model)
 ```
 
-In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.
+```{r include=FALSE}
+rows<-nrow(modelResults)
+newRow <- c("OLS",modelSum$adj.r.squared,modelSum$sigma,nrow(modelSum$coefficients)-1)
+modelResults[rows+1,]<-newRow
+```
+
+Our next step in this approach would be to use significance testing and to remove variables that we don't consider significant. In this approach, if we choose to remove the variables not considered significant, we would lose the information they provide to the model.
+
+We will now showcase how to fit a regularized version of this regression model using the glmnet package. In the glmnet package, the value of alpha corresponds to the regularization method being used where an alpha of 0 corresponds to a Ridge Regression and an alpha of 1 corresponds to a LASSO regression model. An alpha between 0 and 1 corresponds to an Elastic Net regression model.
+
+The basic code structure is as follows:
+
+-   Perform Cross Validation to acquire the optimal lambda. The alpha term is altered based on the method.
+-   Pass the optimal lambda into a new model based on the training data.
+-   Examine the impact on the coefficients.
+-   Calculate and display scores for each method.
 
 ### Ridge Regression Model
 
 ```{r}
 model <- cv.glmnet(dfpred, dfResp, alpha=0)
 bestLambda <- model$lambda.min
-bestLambda
 plot(model)
+```
 
+This plot shows the changing MSE for the various values of lambda. The algorithm chooses the lambda that gives the lowest MSE. The best lambda value chosen in this case was `r bestLambda`. This is now passed into the glmnet function to find the optimal model.
+
+```{r}
+#Passing the Optimal Lambda
 finalModel <- glmnet(dfpred,dfResp, alpha=0, lambda=bestLambda)
 coefTable <- coefficients(finalModel)
+coefList <- data.frame(matrix(ncol=2,nrow=0))
+colnames(coefList)<-c("Predictor","Coefficient")
+
+for(x in 1:nrow(coefTable)){
+ if(coefTable[x,1] != 0)
+ {rows <- nrow(coefList)
+ predNames <- data.frame(coefTable@Dimnames)
+   newRow <- c(predNames[x,1],coefTable[x,1])
+    coefList[rows+1,] <- newRow    
+   } 
+}
 
 finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
-model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
-eval_results(dfResp,finalModelPredict,df)
+rows<-nrow(modelResults)
 
-library(genridge)
-library(car)
-summary(finalModel)
+newRow <- c("Ridge",eval_results(dfResp,finalModelPredict,df)$Rsquare,eval_results(dfResp,finalModelPredict,df)$RMSE,count(coefList)-1)
+modelResults[rows+1,]<-newRow
 
+print(coefList)
 
 ```
 
@@ -114,49 +138,74 @@ In the Ridge regression, each variable has now had their coefficient scaled base
 
 ### LASSO Regression Model
 
+In the glmnet package, an alpha of 1 corresponds to a LASSO model.
+
 ```{r}
 model <- cv.glmnet(dfpred, dfResp, alpha=1)
 bestLambda <- model$lambda.min
-bestLambda
-plot(model)
+```
 
+```{r}
+#Passing the Optimal Lambda
 finalModel <- glmnet(dfpred,dfResp, alpha=1, lambda=bestLambda)
 coefTable <- coefficients(finalModel)
+coefList <- data.frame(matrix(ncol=2,nrow=0))
+colnames(coefList)<-c("Predictor","Coefficient")
+
 for(x in 1:nrow(coefTable)){
- if(coefTable[x,1] > 0)
- {print(coefTable[x,1])  
+ if(coefTable[x,1] != 0)
+ {rows <- nrow(coefList)
+ predNames <- data.frame(coefTable@Dimnames)
+   newRow <- c(predNames[x,1],coefTable[x,1])
+    coefList[rows+1,] <- newRow    
    } 
 }
 
 finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
-model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
-eval_results(dfResp,finalModelPredict,df)
+rows<-nrow(modelResults)
+
+newRow <- c("LASSO",eval_results(dfResp,finalModelPredict,df)$Rsquare,eval_results(dfResp,finalModelPredict,df)$RMSE,count(coefList)-1)
+modelResults[rows+1,]<-newRow
+
+print(coefList)
 ```
 
-In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance is very low.
+In the LASSO regression, the penalty term can cause the variables to be dropped from the model by setting their coefficient to 0. This occurs when their importance or the amount of information they add to the model is very low. In this case, several of the predictors have been dropped from the model.
 
 ### Elastic Net Model
 
-```{r}
-model <- cv.glmnet(dfpred, dfResp, alpha=.5)
-bestLambda <- model$lambda.min
-bestLambda
-plot(model)
+In glmnet, an alpha between 0 and 1 will run elastic net regularization.
 
-finalModel <- glmnet(dfpred,dfResp, alpha=.5, lambda=bestLambda)
+```{r}
+model <- cv.glmnet(dfpred, dfResp, alpha=.25)
+bestLambda <- model$lambda.min
+#Passing the Optimal Lambda
+finalModel <- glmnet(dfpred,dfResp, alpha=.25, lambda=bestLambda)
 coefTable <- coefficients(finalModel)
+coefList <- data.frame(matrix(ncol=2,nrow=0))
+colnames(coefList)<-c("Predictor","Coefficient")
+
 for(x in 1:nrow(coefTable)){
- if(coefTable[x,1] > 0)
- {print(coefTable[x,1])  
+ if(coefTable[x,1] != 0)
+ {rows <- nrow(coefList)
+ predNames <- data.frame(coefTable@Dimnames)
+   newRow <- c(predNames[x,1],coefTable[x,1])
+    coefList[rows+1,] <- newRow    
    } 
 }
 
 finalModelPredict <- predict(finalModel, s= bestLambda, newx = dfpred)
+rows<-nrow(modelResults)
 
-eval_results(dfResp,finalModelPredict,df)
+newRow <- c("Elastic Net",eval_results(dfResp,finalModelPredict,df)$Rsquare,eval_results(dfResp,finalModelPredict,df)$RMSE,count(coefList)-1)
+modelResults[rows+1,]<-newRow
 
-model$glmnet.fit %>% varImp(lambda = model$lambda.min, scale=F)
+print(coefList)
 
 ```
 
-Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The value of alpha in the glmnet package determines the strength of the lambda parameter.
+Similarly to the LASSO regression, the Elastic Net method can also cause variables to be dropped from the model when they offer no importance to the prediction. The results of this example can be seen below.
+
+```{r echo=FALSE}
+print(modelResults)
+```

@@ -11,8 +11,8 @@ book:
     - intro.qmd
     - LiteratureReview.qmd
     - dataset_methods.qmd
-    - LASSO_Experiment_11_20_AW.qmd
     - JacksonHeart.qmd
+    - LASSO_Experiment_11_20_AW.qmd
     - HumanFreedomIndex.qmd
     - summary.qmd
     - references.qmd

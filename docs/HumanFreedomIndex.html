@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 5&nbsp; Human Freedom Index (High Dimensional Data Example)</title>
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 6&nbsp; Human Freedom Index (High Dimensional Data Example)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,7 +108,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./summary.html" rel="next">
-<link href="./JacksonHeart.html" rel="prev">
+<link href="./LASSO_Experiment_11_20_AW.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -147,7 +147,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -192,17 +192,22 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -219,9 +224,9 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#trimming-and-fitting-a-linear-model" id="toc-trimming-and-fitting-a-linear-model" class="nav-link active" data-scroll-target="#trimming-and-fitting-a-linear-model"> <span class="header-section-number">5.0.1</span> Trimming and Fitting a Linear Model</a></li>
-  <li><a href="#fitting-regularized-models" id="toc-fitting-regularized-models" class="nav-link" data-scroll-target="#fitting-regularized-models"> <span class="header-section-number">5.0.2</span> Fitting Regularized Models</a></li>
-  <li><a href="#regularization-results-discussion" id="toc-regularization-results-discussion" class="nav-link" data-scroll-target="#regularization-results-discussion"> <span class="header-section-number">5.0.3</span> Regularization Results / Discussion</a></li>
+  <li><a href="#trimming-and-fitting-a-linear-model" id="toc-trimming-and-fitting-a-linear-model" class="nav-link active" data-scroll-target="#trimming-and-fitting-a-linear-model"> <span class="header-section-number">6.0.1</span> Trimming and Fitting a Linear Model</a></li>
+  <li><a href="#fitting-regularized-models" id="toc-fitting-regularized-models" class="nav-link" data-scroll-target="#fitting-regularized-models"> <span class="header-section-number">6.0.2</span> Fitting Regularized Models</a></li>
+  <li><a href="#regularization-results-discussion" id="toc-regularization-results-discussion" class="nav-link" data-scroll-target="#regularization-results-discussion"> <span class="header-section-number">6.0.3</span> Regularization Results / Discussion</a></li>
   </ul>
 </nav>
     </div>
@@ -230,7 +235,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></h1>
 </div>
 
 
@@ -250,8 +255,8 @@ div.csl-indent {
 <div class="cell">
 
 </div>
-<section id="trimming-and-fitting-a-linear-model" class="level3" data-number="5.0.1">
-<h3 data-number="5.0.1" class="anchored" data-anchor-id="trimming-and-fitting-a-linear-model"><span class="header-section-number">5.0.1</span> Trimming and Fitting a Linear Model</h3>
+<section id="trimming-and-fitting-a-linear-model" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="trimming-and-fitting-a-linear-model"><span class="header-section-number">6.0.1</span> Trimming and Fitting a Linear Model</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Human Freedom Index Linear Model</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>freedomData <span class="ot">&lt;-</span> hfi</span>
@@ -279,8 +284,8 @@ div.csl-indent {
 <p>The Linear Model has an adjusted R-Squared of NaN. In addition, it doesn’t have any residual degrees of freedom, and invalid test scores. The model is not workable due to a lack of degrees of freedom to fit the number of predictors in the data set. In this case, the number of predictors could be trimmed at random to get a working model, but the regularization techniques can be used to evaluate this data set without randomly choosing predictors.</p>
 <p>To fit the regularization models, the glmnet function will be used. The CV.glmnet function below performs a cross-fold validation on the training data in order to obtain the optimal lambda value for the respective model. In this function, the value of alpha controls the form of regularization that will be applied. An alpha value of 1 corresponds to LASSO regression, a value of 0 corresponds to Ridge Regression, and a value in between corresponds to a form of Elastic Net Regularization. The magnitude of alpha controls the penalty term in the Elastic Net Regularization. As in most regularization problems, the value of the penalty term (in this case lambda) is of critical importance.</p>
 </section>
-<section id="fitting-regularized-models" class="level3" data-number="5.0.2">
-<h3 data-number="5.0.2" class="anchored" data-anchor-id="fitting-regularized-models"><span class="header-section-number">5.0.2</span> Fitting Regularized Models</h3>
+<section id="fitting-regularized-models" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="fitting-regularized-models"><span class="header-section-number">6.0.2</span> Fitting Regularized Models</h3>
 <p>Each method will have a model fit. These will then have their RSquare and RMSE scores displayed to show a relative performance for each method.</p>
 <p>The basic code structure is as follows:</p>
 <ul>
@@ -440,8 +445,8 @@ div.csl-indent {
 <span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="regularization-results-discussion" class="level3" data-number="5.0.3">
-<h3 data-number="5.0.3" class="anchored" data-anchor-id="regularization-results-discussion"><span class="header-section-number">5.0.3</span> Regularization Results / Discussion</h3>
+<section id="regularization-results-discussion" class="level3" data-number="6.0.3">
+<h3 data-number="6.0.3" class="anchored" data-anchor-id="regularization-results-discussion"><span class="header-section-number">6.0.3</span> Regularization Results / Discussion</h3>
 <p>The final model group looks like the table below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(modelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -582,13 +587,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./JacksonHeart.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></span>
+      <a href="./LASSO_Experiment_11_20_AW.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

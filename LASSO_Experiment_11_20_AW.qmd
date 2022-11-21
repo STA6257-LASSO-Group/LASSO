@@ -73,6 +73,8 @@ BIG_Mod <- lm(ef ~ ., data=V1_Impute)
 
 ## **Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1**
 
+![](images/paste-F27E00EC.png){width="546"}
+
 #### **VIF Function gives Multicollinearity error for Linear Model of Ejection Fraction**
 
 ![](images/paste-86F31F81.png)
