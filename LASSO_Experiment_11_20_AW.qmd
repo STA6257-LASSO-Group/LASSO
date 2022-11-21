@@ -72,7 +72,7 @@ BIG_Mod <- lm(ef ~ ., data=V1_Impute)
 
 #### **VIF Function gives Multicollinearity error for Linear Model of Ejection Fraction**
 
-![](images/paste-F27E00EC.png){width="546"}
+
 
 ```{r include=FALSE}
 

@@ -1,5 +1,7 @@
 #### Calculating Model Using Ridge Regression
 
+!\[\](images/paste-F27E00EC.png){width="546"}
+
 ```{r}
 #xtest <- test %>% select(X2:X6830)
 #ytest <- test$X1
@@ -104,7 +106,6 @@ eval_results(resp,finalModelPredict,train)
 eval_results(ytest,finalModelTest,test)
 
 ```
-
 
 ```{r}
 train_ind <- sample(seq_len(nrow(iris)),size=100)
