@@ -2,19 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 6&nbsp; Summary</title>
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 7&nbsp; Summary</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -66,7 +71,7 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -111,17 +116,22 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -134,11 +144,11 @@ ul.task-list{list-style: none;}
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"> <span class="header-section-number">6.1</span> Human Freedom Index (High Dimensional Data Example)</a></li>
+  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"><span class="toc-section-number">7.1</span>  Human Freedom Index (High Dimensional Data Example)</a></li>
   </ul>
 </nav>
     </div>
@@ -147,7 +157,7 @@ ul.task-list{list-style: none;}
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></h1>
 </div>
 
 
@@ -161,8 +171,8 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<section id="human-freedom-index-high-dimensional-data-example" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="human-freedom-index-high-dimensional-data-example"><span class="header-section-number">6.1</span> Human Freedom Index (High Dimensional Data Example)</h2>
+<section id="human-freedom-index-high-dimensional-data-example" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="human-freedom-index-high-dimensional-data-example"><span class="header-section-number">7.1</span> Human Freedom Index (High Dimensional Data Example)</h2>
 <p>The Human Freedom Index uses parameters to determine the personal and economic freedoms of a particular country or jurisdiction. The data used to create the model was trimmed to include the parameters that contained greater than 50% of responses then the countries and jurisdictions with complete observations was utilized. The response variable for the model is the political freedom homicide model. The remaining distinct variables will be used as predictors.</p>
 <p>First a linear model was attempted. This model returned an error regarding the degrees of freedom due to the number of predictors in the set. The natural response is the need for a reduction in the number of predictors. The best way to manage a reduction of parameters is the use of regularization models.</p>
 <p>The three basic regularization models are ridge regression, elastic net, and LASSO. The data was then used to compute the LASSO <span class="math inline">\(\lambda\)</span> and the ridge regression <span class="math inline">\(\lambda\)</span>. The elastic net uses both <span class="math inline">\(\lambda\)</span>’s as it is a blend of the two models.</p>
@@ -304,7 +314,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
@@ -335,7 +346,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./HumanFreedomIndex.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

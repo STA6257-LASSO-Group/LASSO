@@ -1,7 +1,10 @@
+---
+title: "Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity"
+editor: visual
+embed-resources: true
+---
 
 ## Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity
-
-
 
 We chose the Jackson Heart Study (JHS) dataset to demonstrate multicollinearity and create an environment in which Ridge Regression typically outperforms the LASSO method. When two or more variables are highly collinear, LASSO regression will select one randomly and drop the others to zero. Elastic Net adapts the properties of both LASSO and Ridge, so dropping coefficients is more difficult than LASSO, but can still occur. Whereas, Ridge regression will keep highly collinear variables and adjust their importance with weight. Although this technique introduces more variability in the coefficients and p-values, the prediction of the dependent variable is not affected. Ridge performs well when there are more observations than variables and does well with multicollinearity. Although we started by observing the full JHS Visit 1 dataset of 2653 observations and 198 variables with the correlation matrix, we simplified the final model used for the Regularization Regression methods to exclude non-numeric data and categorical data and to include variables from several "hot spots" from the larger correlation matrix shown below. It is important to note that these regularization regression techniques can be used with other methods such as logistic regression had we decided to analyze the categorical data as well. However, many of the categorical variables were, in fact, composites of or redundant variables to the continuous variables included in this study.
 
@@ -72,7 +75,7 @@ BIG_Mod <- lm(ef ~ ., data=V1_Impute)
 
 #### **VIF Function gives Multicollinearity error for Linear Model of Ejection Fraction**
 
-
+![](images/paste-86F31F81.png)
 
 ```{r include=FALSE}
 
