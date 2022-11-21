@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods - 4&nbsp; Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./JacksonHeart.html" rel="next">
+<link href="./dataset_methods.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LiteratureReview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Current Literature</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset_methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Methods and Materials</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./HumanFreedomIndex.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Human Freedom Index (High Dimensional Data Example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#correlation-matrix-heat-map-suggests-multicollinearity-for-jackson-heart-study-visit-1" id="toc-correlation-matrix-heat-map-suggests-multicollinearity-for-jackson-heart-study-visit-1" class="nav-link active" data-scroll-target="#correlation-matrix-heat-map-suggests-multicollinearity-for-jackson-heart-study-visit-1"> <span class="header-section-number">4.1</span> <strong>Correlation Matrix heat map suggests multicollinearity for Jackson Heart Study Visit 1</strong></a></li>
+  <li><a href="#variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1" id="toc-variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1" class="nav-link" data-scroll-target="#variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1"> <span class="header-section-number">4.2</span> <strong>Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1</strong></a>
+  <ul class="collapse">
+  <li><a href="#analysis-of-matrix-hot-spots-demonstrates-the-lassos-feature-selection-capabilities-and-the-ridges-ability-to-preserve-a-highly-collinear-model-with-competitive-results" id="toc-analysis-of-matrix-hot-spots-demonstrates-the-lassos-feature-selection-capabilities-and-the-ridges-ability-to-preserve-a-highly-collinear-model-with-competitive-results" class="nav-link" data-scroll-target="#analysis-of-matrix-hot-spots-demonstrates-the-lassos-feature-selection-capabilities-and-the-ridges-ability-to-preserve-a-highly-collinear-model-with-competitive-results"> <span class="header-section-number">4.2.1</span> Analysis of matrix “hot spots” demonstrates the LASSO’s feature selection capabilities and the Ridge’s ability to preserve a highly collinear model with competitive results</a></li>
+  <li><a href="#lasso-regression-l1" id="toc-lasso-regression-l1" class="nav-link" data-scroll-target="#lasso-regression-l1"> <span class="header-section-number">4.2.2</span> LASSO Regression (L1)</a></li>
+  <li><a href="#finding-optimal-lambda-with-10-fold-cross-validation" id="toc-finding-optimal-lambda-with-10-fold-cross-validation" class="nav-link" data-scroll-target="#finding-optimal-lambda-with-10-fold-cross-validation"> <span class="header-section-number">4.2.3</span> Finding Optimal Lambda with 10-fold Cross Validation</a></li>
+  <li><a href="#ridge-regression-l2" id="toc-ridge-regression-l2" class="nav-link" data-scroll-target="#ridge-regression-l2"> <span class="header-section-number">4.2.4</span> Ridge Regression (L2)</a></li>
+  </ul></li>
+  <li><a href="#comparing-the-models" id="toc-comparing-the-models" class="nav-link" data-scroll-target="#comparing-the-models"> <span class="header-section-number">4.3</span> Comparing the Models</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>We chose the Jackson Heart Study (JHS) dataset to demonstrate multicollinearity and create an environment in which Ridge Regression typically outperforms the LASSO method. When two or more variables are highly collinear, LASSO regression will select one randomly and drop the others to zero. Elastic Net adapts the properties of both LASSO and Ridge, so dropping coefficients is more difficult than LASSO, but can still occur. Whereas, Ridge regression will keep highly collinear variables and adjust their importance with weight. Although this technique introduces more variability in the coefficients and p-values, the prediction of the dependent variable is not affected. Ridge performs well when there are more observations than variables and does well with multicollinearity. Although we started by observing the full JHS Visit 1 dataset of 2653 observations and 198 variables with the correlation matrix, we simplified the final model used for the Regularization Regression methods to exclude non-numeric data and categorical data and to include variables from several “hot spots” from the larger correlation matrix shown below. It is important to note that these regularization regression techniques can be used with other methods such as logistic regression had we decided to analyze the categorical data as well. However, many of the categorical variables were, in fact, composites of or redundant variables to the continuous variables included in this study.</p>
+<section id="correlation-matrix-heat-map-suggests-multicollinearity-for-jackson-heart-study-visit-1" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="correlation-matrix-heat-map-suggests-multicollinearity-for-jackson-heart-study-visit-1"><span class="header-section-number">4.1</span> <strong>Correlation Matrix heat map suggests multicollinearity for Jackson Heart Study Visit 1</strong></h2>
+<p>Visit 1</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_11_20_AW_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1"><span class="header-section-number">4.2</span> <strong>Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1</strong></h2>
+<section id="vif-function-gives-multicollinearity-error-for-linear-model-of-ejection-fraction" class="level4" data-number="4.2.0.1">
+<h4 data-number="4.2.0.1" class="anchored" data-anchor-id="vif-function-gives-multicollinearity-error-for-linear-model-of-ejection-fraction"><span class="header-section-number">4.2.0.1</span> <strong>VIF Function gives Multicollinearity error for Linear Model of Ejection Fraction</strong></h4>
+<p><img src="images/paste-F27E00EC.png" class="img-fluid" width="546"></p>
+</section>
+<section id="analysis-of-matrix-hot-spots-demonstrates-the-lassos-feature-selection-capabilities-and-the-ridges-ability-to-preserve-a-highly-collinear-model-with-competitive-results" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="analysis-of-matrix-hot-spots-demonstrates-the-lassos-feature-selection-capabilities-and-the-ridges-ability-to-preserve-a-highly-collinear-model-with-competitive-results"><span class="header-section-number">4.2.1</span> Analysis of matrix “hot spots” demonstrates the LASSO’s feature selection capabilities and the Ridge’s ability to preserve a highly collinear model with competitive results</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_11_20_AW_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                          VIF   Tolerance
+height              31.358866 0.031888908
+age                  2.310040 0.432892905
+weight             104.244240 0.009592856
+bmi                 95.368793 0.010485610
+neck                 2.502269 0.399637366
+waist                4.355093 0.229616199
+nbcohesion           2.424089 0.412526140
+nbpctpoverty         2.675049 0.373824975
+nbpopdensity1mi      4.822823 0.207347436
+nbviolence           3.570020 0.280110446
+nbk3favorfoodstore   4.517589 0.221357033
+vitamind3epimer      1.037610 0.963753300
+rwt                  1.210239 0.826283110
+dbp                  1.788176 0.559229062
+cv                   1.261053 0.792988047
+qrs                  1.261875 0.792471777
+sbp                  1.945465 0.514015914
+qt                   1.212909 0.824464181
+lvmecho             56.301555 0.017761499
+lvmindex            50.257911 0.019897365
+albuminuspot         1.104439 0.905436835
+fvcpp                2.201059 0.454326743
+fev1                 4.838928 0.206657329
+homa_b               2.979653 0.335609586
+homa_ir              2.263362 0.441820566
+hba1c                3.265512 0.306230659
+fastinginsulin       3.097308 0.322861002
+fpg                  4.236465 0.236045863</code></pre>
+</div>
+</div>
+<p>VIF’s are found by regressing each predictor variable on all the other predictor variables. The higher the calculated R<sup>2</sup> value, the better the performance of the regression model. Variance Inflation Factor (VIF) is the reciprocal of 1-R<sup>2</sup>. The typical cutoff for VIF is 5. A VIF score above 5 signifies severe multicollinearity and an increase in variance of the coefficients as a result. This inflation can be a large contributing source of Type II (False Negative) error in linear regression. A VIF &lt; 3 signifies a low correlation. Note the extreme VIF scores for several variables shown here, confirming our suspicions of multicollinearity in the data. The tolerance is the reciprocal of the VIF. It is calculated as 1-R<sup>2</sup>. Acceptable Tolerance scores are 0.25 and higher.</p>
+<p>Taken together, there is evidence of multicollnearity in the data that could pose a problem with interpretations of linear models. LASSO, Ridge and ElasticNet are most valuable for predictions that are more resistant to the multicollinearity problems that arise with general linear models. Next we will highlight LASSO’s built-in feature selection capabilities and demonstrate Ridge Regression’s ability to outperform LASSO given the right circumstances. The regularized model is more stable with predictions than coefficient and p-values.</p>
+<p>Regularization regression models are best at predictions. so, before we run regularization steps, we need to partition the data for training and testing, and find the optimal lambda in order to train the predictive models. To simplify, we will work with continuous data and variables found in several “hot spots” from the large correlation matrix above.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="lasso-regression-l1" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="lasso-regression-l1"><span class="header-section-number">4.2.2</span> LASSO Regression (L1)</h3>
+</section>
+<section id="finding-optimal-lambda-with-10-fold-cross-validation" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="finding-optimal-lambda-with-10-fold-cross-validation"><span class="header-section-number">4.2.3</span> Finding Optimal Lambda with 10-fold Cross Validation</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    alpha     lambda
+159     1 0.01466671</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01466671</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_11_20_AW_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>LASSO Predicts Variable Importance using the sum of decrease in error by each variable. Relative importance is variable importance standardized to the highest valued variable.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_11_20_AW_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note that LASSO has dropped 3 variables from the model: height, weight and nbcohesion. It kept variables such as bmi (a composite of height and weight). Eliminating redundant variables demonstrates LASSO’s automatic feature selection properties. These variables had very large VIF and low Tolerance scores, so dropping them from the model will likely not affect the model’s ability to predict ejection fraction.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>29 x 1 sparse Matrix of class "dgCMatrix"
+                            s1
+(Intercept)        62.06311823
+height              .         
+age                 0.37433590
+weight              .         
+bmi                -0.20621469
+neck                0.55728216
+waist               0.27193781
+nbcohesion          .         
+nbpctpoverty       -0.41411821
+nbpopdensity1mi     1.48446824
+nbviolence          0.32721465
+nbk3favorfoodstore -0.94216393
+vitamind3epimer    -0.59175868
+rwt                 0.57516426
+dbp                -0.47172460
+cv                 -0.54967558
+qrs                -0.49977220
+sbp                 0.37892530
+qt                  0.37706281
+lvmecho            -1.58162530
+lvmindex            0.83933373
+albuminuspot       -0.17443143
+fvcpp               0.44543967
+fev1               -0.36674425
+homa_b             -0.35596479
+homa_ir             0.05015134
+hba1c              -0.37127668
+fastinginsulin      0.26863477
+fpg                -0.08627352</code></pre>
+</div>
+</div>
+</section>
+<section id="ridge-regression-l2" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="ridge-regression-l2"><span class="header-section-number">4.2.4</span> Ridge Regression (L2)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_11_20_AW_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note that Ridge has preserved all the variables in the model.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>29 x 1 sparse Matrix of class "dgCMatrix"
+                             s1
+(Intercept)        62.063118229
+height             -0.328942291
+age                 0.367253633
+weight             -0.177554773
+bmi                -0.046283161
+neck                0.509833915
+waist               0.284977446
+nbcohesion          0.005698985
+nbpctpoverty       -0.391973095
+nbpopdensity1mi     1.165485436
+nbviolence          0.358429644
+nbk3favorfoodstore -0.653056339
+vitamind3epimer    -0.578156859
+rwt                 0.546975215
+dbp                -0.456671077
+cv                 -0.548001203
+qrs                -0.487851438
+sbp                 0.362746921
+qt                  0.365676114
+lvmecho            -0.816777075
+lvmindex            0.156455130
+albuminuspot       -0.187184851
+fvcpp               0.443247304
+fev1               -0.373001677
+homa_b             -0.359786953
+homa_ir             0.073694767
+hba1c              -0.353360710
+fastinginsulin      0.270718173
+fpg                -0.115286297</code></pre>
+</div>
+</div>
+<p>Note that the Elastic Net has dropped only 2 of the same variables as LASSO above. The distinction between the two might become more pronounced with larger models.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>29 x 1 sparse Matrix of class "dgCMatrix"
+                            s1
+(Intercept)        62.06311823
+height              .         
+age                 0.36806785
+weight             -0.01070930
+bmi                -0.20818113
+neck                0.56078455
+waist               0.28205005
+nbcohesion          .         
+nbpctpoverty       -0.42004989
+nbpopdensity1mi     1.48073175
+nbviolence          0.33299455
+nbk3favorfoodstore -0.93908016
+vitamind3epimer    -0.59304457
+rwt                 0.57582898
+dbp                -0.47455288
+cv                 -0.55061788
+qrs                -0.50091946
+sbp                 0.38179182
+qt                  0.37820512
+lvmecho            -1.56578638
+lvmindex            0.82483823
+albuminuspot       -0.17629896
+fvcpp               0.45225827
+fev1               -0.37729951
+homa_b             -0.36493807
+homa_ir             0.05402918
+hba1c              -0.37205524
+fastinginsulin      0.27569625
+fpg                -0.09518685</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="comparing-the-models" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="comparing-the-models"><span class="header-section-number">4.3</span> Comparing the Models</h2>
+<p>Model performance was overall very similar among the four models tested with Ridge Regression coming out slightly ahead in this instance (lowest RMSE, highest R<sup>2</sup> values).</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>           RMSE     R-squared 
+LASSO      6.650703 0.04752869
+Ridge      6.64124  0.0502371 
+ElasticNet 6.650348 0.04763028
+OLS        6.645341 0.04906372</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dataset_methods.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Methods and Materials</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./JacksonHeart.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
