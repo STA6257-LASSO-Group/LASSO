@@ -1,0 +1,546 @@
+## Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity
+
+When two or more variables are highly collinear, LASSO regression will select one randomly and drop the others to zero. Elastic Net adapts the properties of both LASSO and Ridge, so dropping coefficients is less frequent than for LASSO, but can still occur. Whereas, Ridge regression will keep highly collinear variables and adjust their importance with weight. Although this technique introduces more variability in the coefficients and p-values, the prediction of the dependent variable is not affected, but keeping large models can consume large amounts of computational time. memory and power. LASSO performs well when there are more observations than variables and does well with multicollinearity, simplifying the model by dropping variables including collinear variables.
+
+Although we started by observing the full JHS Visit 1 dataset of 2653 observations and 198 variables with the correlation matrix, we simplified the final model used for the Regularization Regression methods to exclude non-numeric data and categorical data and to include variables from several "hot spots" from the larger correlation matrix shown below. It is important to note that these regularization regression techniques can be used with other methods such as logistic regression had we decided to analyze the categorical data as well. However, many of the categorical variables were, in fact, composites of or redundant variables to the continuous variables included in this study.
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+#Code based on tutorial from David Caughlin's LASSO Regression in R
+#https://youtu.be/5GZ5BHOugBQ
+
+#Import libraries 
+library(GGally)
+library(haven)
+library(plyr)
+library(dbplyr)
+library(dtplyr)
+library(tidyverse)
+library(readr)
+library(caret)
+library(randomForest)
+library(mice)
+library(gdata)
+library(ggplot2)
+library(glmnet)
+library(olsrr)
+library(genridge)
+library(car)
+library(repr)
+library(ggcorrplot)
+library(plotly)
+library(reshape2)
+library(AER)
+library(mctest)
+library(qgraph)
+library(fmsb)
+library(coefplot)
+library(cowplot)
+library(magick)
+library(png)
+library(ggpmisc)
+library(gamlr)
+```
+
+```{r include=FALSE}
+
+#Import data sets
+analysis1 <- read_dta("analysis1.dta")
+
+V1_Impute <- read_dta("data_imp2.dta")
+
+
+
+```
+
+```{r include=FALSE}
+#New dataset from initial lm model
+ 
+#Take out non-numeric, categorical, and singularities, keep Y/N from LM model
+
+LM_Data <- V1_Impute %>% dplyr::select(depression,fasthours,age,bmi, weight,neck,fastinginsulin, homa_ir,aldosterone, adiponectin,maneuvers, fev1,fev6,fev1pp,systlvdia,lvmecho,repolarant,dailydiscr,lifetimediscrm,discrmburden,perceivedstress,weeklystress,vitamind2,vitamind3,darkgrnveg,nbpctresiden1mi,sportindex,hyindex)
+
+LM_Mod <-lm(depression ~., data=LM_Data)
+summary(LM_Mod)
+
+```
+
+## Correlation Matrix heat map and Variance Inflation Factor (VIF) Scores suggest high multicollinearity for Jackson Heart Study Visit 1
+
+```{r}
+
+CorMatrix1_all <- ggcorr(V1_Impute, label_alpha = FALSE)
+
+CorMatrix1_all
+
+
+```
+
+```{r}
+CorMatrixV1_Small <- ggcorr(LM_Data, label_alpha = FALSE)
+
+CorMatrixV1_Small
+```
+
+### Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1
+
+Taken together, there is evidence of multicollnearity in the data that could pose a problem with interpretations of linear models. Modifying linear models with regularization through LASSO, Ridge and ElasticNet are most valuable for predictions. VIF scores over 5 & Tolerance scores under 0.2 indicate severe multicollinearity. We can use regularization to shrink the importance of the coefficients that are inflated by collinearity.
+
+```{r}
+#Regression Model for smaller LM dataset (Multicollinear)
+VIF <- vif(LM_Mod)
+Tolerance = 1/VIF
+
+v1 <- data.frame(VIF)
+write.table(v1, "VIF Table")
+v2 <- data.frame(Tolerance)
+write.table(v2, "VIF Table")
+
+v.table = data.frame(cbind(v1,v2))
+
+head(v.table)
+
+```
+
+Along with the severe multicollinearity found, the data for the depression model violate important assumptions for linear regression (below). The histogram of our dependent variable has more of a gamma distribution with the QQ plot showing heavy tail, also indicating that the data are not normal. Fitted Residuals plot shows a fanning distribution with error variance not constant. Finally, the scale-location plot shows the data are clustered without an equal spread of points, suggesting unequal variances. Although this dataset and model are not ideal for making predictions about depression without first finding the appropriate transformation to meet assumptions (which is beyond the scope of this study), we can still apply regularization to demonstrate the important differences among LASSO, Ridge and Elastic Net.
+
+```{r include=FALSE}
+#get list of residuals 
+res <- resid(LM_Mod)
+
+#produce residual vs. fitted plot
+plot(fitted(LM_Mod), res)
+
+#add a horizontal line at 0 
+abline(0,0)
+
+```
+
+```{r include=FALSE}
+
+#create Q-Q plot for residuals
+qqnorm(res)
+
+#add a straight diagonal line to the plot
+qqline(res) 
+```
+
+```{r}
+
+layout_matrix_1 <- matrix(1:4, ncol = 2)                  # Define position matrix
+#layout_matrix_1                                           # Print position matrix
+#      [,1] [,2] 
+# [1,]    1    3    
+# [2,]    2    4    
+
+
+layout(layout_matrix_1)                                   # Specify layout
+
+hist(LM_Data$depression, xlim=c(0,45), breaks=100, col='navy',main = "Histogram of Depression Frequency", xlab = "Depression Scale Score")
+#create diagnostic plots
+plot(LM_Mod)
+```
+
+## Analysis of depression model taken from matrix "hot spots" demonstrates reduction of multicollinearity and the LASSO's feature selection capabilities
+
+Next we highlighted LASSO's built-in feature selection capabilities and demonstrated how regularization can mediate multicollinearity. Most importantly, the regularized model is more stable with predictions than coefficient and p-values. In order to make predictions, we needed to partition the data for training and testing and find the optimal lambda in order to train the predictive models. We modeled the Total Depressive Symptoms Score (depression) as the Dependent variable (y). To simplify, we worked with continuous data and variables found in several "hot spots" from the correlation matrix above.
+
+### Jackson Heart: LASSO (𝞪=1), L1 Norm (lm)
+
+### **𝞴 x \|Slope\|**
+
+Both LASSO and Ridge shrink coefficients towards constraint region, LASSO's constraint is towards the absolute value of the slope. In order to minimize the Residual Sum of Squares, we want the modified coefficient closest to that of the OLS Beta. For LASSO, this can be on the axis, essentially zeroing out a coefficient in the model. LASSO is good for feature selection by helping to winnow out the model, and it is good for getting the VIF down (as seen below).
+
+On the left is the path of coefficients shrinking to zero for the linear model,on the right is the optimal lambda is found using the largest lambda with the smallest mean squared error.
+
+```{r}
+#define response variable
+y <- LM_Data$depression
+
+#define matrix of predictor variables
+x <- data.matrix(LM_Data[, c('fasthours','age','weight','neck','bmi','fastinginsulin', 'homa_ir','aldosterone','adiponectin','maneuvers','fev1','fev6','fev1pp','systlvdia','lvmecho','repolarant','dailydiscr','lifetimediscrm','discrmburden','perceivedstress','weeklystress','vitamind2','vitamind3','darkgrnveg','nbpctresiden1mi','sportindex','hyindex')])
+
+
+layout_matrix_1 <- matrix(1:2, ncol = 2)                  # Define position matrix
+#layout_matrix_1                                           # Print position matrix
+#      [,1] [,2] 
+# [1,]    1    3    
+# [2,]    2    4    
+
+
+layout(layout_matrix_1)
+
+LASSO_fit <- glmnet(x,y,alpha = 1)
+
+#cross-validated fit of lambda
+LASSO_cvfit <- cv.glmnet(x, y, alpha=1)
+LASSO_cvfit$lambda.min
+
+plot(LASSO_fit)
+plot(LASSO_cvfit)
+```
+
+### Jackson Heart: LASSO (𝞪=1), L1 Norm (Gamma Penalty)
+
+The path of coefficients shrinking to zero for the LASSO lm distribution is shown on the left, gamma distribution model is shown on the right.Optimal lambda is found using the largest lambda value with the smallest mean squared error. The gamma penalty gives a larger lambda than the lm model.
+
+```{r}
+layout_matrix_1 <- matrix(1:2, ncol = 2)                  # Define position matrix
+#layout_matrix_1                                           # Print position matrix
+#      [,1] [,2] 
+# [1,]    1    3    
+# [2,]    2    4    
+
+
+layout(layout_matrix_1)
+
+
+Gamma_Mod <- gamlr(x, y, 
+   family=c("gaussian"),
+   gamma=0,nlambda=100, lambda.start=Inf,  
+   lambda.min.ratio=0.01, free=NULL, standardize=TRUE, 
+   obsweight=NULL,varweight=NULL,
+   tol=1e-7,maxit=1e5,verb=FALSE)
+
+## run models to extra small lambda 1e-3xlambda.start
+fitlasso <- gamlr(x, y, gamma=0, lambda.min.ratio=1e-3) # lasso
+fitgl <- gamlr(x, y, gamma=2, lambda.min.ratio=1e-3) # small gamma
+fitglbv <- gamlr(x, y, gamma=10, lambda.min.ratio=1e-3) # big gamma
+
+par(mfrow=c(1,2))
+ylim = range(c(fitglbv$beta@x))
+plot(fitlasso, ylim=ylim, col="navy")
+plot(fitgl, ylim=ylim, col="maroon")
+#plot(fitglbv, ylim=ylim, col="darkorange")
+```
+
+```{r include=FALSE}
+#cross-validated fit of lambda
+LASSO_cvfit <- cv.glmnet(x, y, alpha=1)
+plot(LASSO_cvfit)
+LASSO_cvfit$lambda.min
+```
+
+### Jackson Heart: LASSO (𝞪=1), L1 Norm
+
+More Variables are dropped as the Lambda value is increased. Initially, the highest VIF's were BMI, weight, fev1, fev6 . Note that at the optimal lambda (s2), LASSO has dropped 1 variable from the lm model: fastinginsulin. It kept variables such as bmi (a composite of height and weight) in the optimal lambda model, but with larger lambda values, the highest vif variables are eliminated. Eliminating redundant variables demonstrates LASSO's automatic feature selection properties. These variables had very large VIF and low Tolerance scores, so dropping them from the model will likely not affect the model's ability to predict depression; however, we also ran the LASSO with the gamma penalty to see how optimal lambda changes for data with a gamma distribution (bottom panel). Note that at the optimal lambda (seg98), the LASSO has dropped 3 variables from the gamma-penalty=2 model: fastinginsulin, fasthours and weight.
+
+```{r}
+#LASSO regression model coefficients/parameter estimates
+head(coef(LASSO_fit,s=c(0.002,0.004,0.2,2.0)),n=10)
+head(coef(Gamma_Mod, select=NULL, k=2, corrected=TRUE),n=10)
+```
+
+### Jackson Heart: Ridge (𝞪=0), L2 Norm
+
+### **𝞴 x Slope^2^**
+
+Both LASSO and Ridge shrink coefficients towards a constraint region, Ridge's constraint is towards the squared slope. In order to minimize the Residual Sum of Squares, we want the modified coefficient closest to that of the OLS Beta. However, unlike LASSO, Ridge can't get the coefficient to all the way to zero, but it can get really close and is also good for getting the VIF down.
+
+```{r}
+layout_matrix_1 <- matrix(1:2, ncol = 2)                  # Define position matrix
+#layout_matrix_1                                           # Print position matrix
+#      [,1] [,2] 
+# [1,]    1    3    
+# [2,]    2    4    
+
+
+layout(layout_matrix_1)
+
+Ridge_fit <- glmnet(x,y,alpha = 0)
+#cross-validated fit of lambda
+Ridge_cvfit <- cv.glmnet(x, y, alpha=0)
+Ridge_cvfit$lambda.min
+
+
+plot(Ridge_fit)
+plot(Ridge_cvfit )
+```
+
+Note that Ridge has preserved all the variables in the model. No Variables were dropped as the Lambda value is increased.
+
+```{r}
+#Ridge regression model coefficients/parameter estimates
+head(coef(Ridge_fit,s=c(0.03,0.34,3.0,30)))
+```
+
+```{r include=FALSE}
+#Partitioning Data 80/20 Split
+set.seed(123)
+
+#Create Index Matrix: 80% split matrix NOT list only split once
+index <- createDataPartition(LM_Data$depression, p=0.8, list=FALSE, times=1)
+
+#Create Test and Training df
+#-is all except index
+train_df <- LM_Data[index,]
+test_df <- LM_Data[-index,]
+```
+
+```{r include=FALSE}
+# k-fold Cross Validation to train LASSO
+#(because sample size is large, using 10-fold)
+
+#Train Control Function from Caret Package
+#Create Object to assign all the training method info to 
+#cross validation method, 10 fold
+tctrl_method <- trainControl(method='cv', number=10,
+                           savePredictions = 'all')
+
+#Specify & train LASSO Regression Model
+#Create vector of Lambda Values to find optimal (LASSO Tuning Parameter)
+lambda_vector <- 10^seq(5,-5, length=500)
+
+set.seed(123)
+
+#LASSO Regression Model estimated from Training data and 10-fold cv
+# dot is all other variables except outcome variable
+#grand mean center, "center" and standardize, "scale" at this step
+#c=combine, glmnet in caret package, alpha=1 for lasso (0 for ridge)
+```
+
+```{r include=FALSE}
+#LASSO Model (alpha=1)
+
+LASSO_mod1 <- train(depression ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=1,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit
+              )
+
+#Warning Message OK!!
+```
+
+```{r include=FALSE}
+#Best Optimal Lambda
+LASSO_mod1$bestTune
+LASSO_mod1$bestTune$lambda
+
+
+
+
+
+#plot log(lambda) & RMSE 
+
+plot(log(LASSO_mod1$results$lambda),
+     LASSO_mod1$results$RMSE,
+     xlab="log(lambda)",
+     ylab="RMSE",
+     xlim=c(-6,3))
+
+#print(log(0.013373))#check with log(lambda)
+```
+
+```{r include=FALSE}
+#Model Prediction on test data
+
+predict1 <- predict(LASSO_mod1, newdata=test_df)
+
+
+#Model Accuracy
+
+LASSO_mod1_rmse <- data.frame(RMSE=RMSE(predict1, test_df$depression))
+
+#RMSE 10
+
+
+#R^2E
+
+LASSO_rss <- sum((predict1 - test_df$depression) ^ 2)
+LASSO_tss <- sum((test_df$depression - mean(test_df$depression)) ^ 2)
+LASSO_mod1_rsq <- 1 - LASSO_rss/LASSO_tss
+
+LASSO_mod1_rmse
+LASSO_mod1_rsq
+```
+
+```{r include=FALSE}
+#Compare LASSO to Ridge Regression
+
+#Set Seed (reproducible results)
+set.seed(123)
+
+#Ridge Model (alpha=0)
+
+Ridge_mod2 <- train(depression ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=0,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+
+#Warning Message OK!!
+```
+
+```{r include=FALSE}
+#Model Prediction on test data
+
+predict2 <- predict(Ridge_mod2, newdata=test_df)
+
+
+#Model Accuracy
+
+Ridge_mod2_rmse <- data.frame(RMSE=RMSE(predict2, test_df$depression))
+
+#RMSE 10
+
+
+#R^2E
+
+Ridge_rss2 <- sum((predict2 - test_df$depression) ^ 2)
+Ridge_tss2 <- sum((test_df$depression - mean(test_df$depression)) ^ 2)
+Ridge_mod2_rsq <- 1 - Ridge_rss2/Ridge_tss2
+
+Ridge_mod2_rmse
+Ridge_mod2_rsq
+```
+
+```{r include=FALSE}
+#ElasticNet Regresstion
+
+#tctrl_method (using from LASSO earlier)
+
+#Set Seed (reproducible results)
+set.seed(123)
+
+#Specify OLS model estimated with training data, train_df
+#10-fold cross validation
+
+EN_mod3 <- train(depression ~ .,
+              data=train_df,
+              preProcess=c("center", "scale"),
+              method="glmnet",
+              tuneGrid=expand.grid(alpha=0.5,lambda=lambda_vector),
+              trControl=tctrl_method,
+              na.action=na.omit)
+```
+
+```{r include=FALSE}
+#Predict outcome from training data based on test data using ElasticNet
+
+predict3 <- predict(EN_mod3, newdata=test_df)
+
+#Assess model performance
+#Model Accuracy
+
+EN_mod3_rmse <- data.frame(RMSE=RMSE(predict3, test_df$depression))
+
+#RMSE 10
+
+
+#R^2E
+
+EN_rss3 <- sum((predict3 - test_df$depression) ^ 2)
+EN_tss3 <- sum((test_df$depression - mean(test_df$depression)) ^ 2)
+EN_mod3_rsq <- 1 - EN_rss3/EN_tss3
+
+EN_mod3_rmse
+EN_mod3_rsq
+```
+
+```{r}
+#Compare LASSO to OLS Regresstion
+
+#tctrl_method (using from LASSO earlier)
+
+#Set Seed (reproducible results)
+set.seed(123)
+
+#Specify OLS model estimated with training data, train_df
+#10-fold cross validation
+
+OLS_mod4 <- train(depression ~ .,
+             data=train_df,
+             preProcess=c("center","scale"),#grand means center and scale to make results comparable to LASSO
+             method="lm",
+             trControl=tctrl_method,
+             na.action=na.omit)
+#print(mod4)
+```
+
+### Jackson Heart: Elastic Net (𝞪=0.5) L1 & L2 Norm
+
+Elastic Net dropped only 2 of the same variables as LASSO above. The distinction between the two might become more pronounced with larger models.
+
+```{r}
+#Elastic Net regression model coefficients/parameter estimates
+head(coef(EN_mod3$finalModel,EN_mod3$bestTune$lambda))
+#returns complete
+```
+
+```{r include=FALSE}
+#Predict outcome from training data based on test data using OLS
+
+predict4 <- predict(OLS_mod4, newdata=test_df)
+
+#Assess model performance
+#Model Accuracy
+
+OLS_mod4_rmse <- data.frame(RMSE=RMSE(predict4, test_df$depression))
+
+#RMSE 10
+
+
+#R^2E
+
+OLS_rss4 <- sum((predict4 - test_df$depression) ^ 2)
+OLS_tss4 <- sum((test_df$depression - mean(test_df$depression)) ^ 2)
+OLS_mod4_rsq <- 1 - OLS_rss4/OLS_tss4
+
+OLS_mod4_rmse
+OLS_mod4_rsq
+```
+
+```{r include=FALSE}
+#compare models 
+compare_models(LASSO_mod1,Ridge_mod2, metric="RMSE")
+compare_models(LASSO_mod1,Ridge_mod2, metric="Rsquared")
+
+compare_models(LASSO_mod1,EN_mod3, metric="RMSE")
+compare_models(LASSO_mod1,EN_mod3, metric="Rsquared")
+
+compare_models(LASSO_mod1,OLS_mod4, metric="RMSE")
+compare_models(LASSO_mod1,OLS_mod4, metric="Rsquared")
+
+
+compare_models(Ridge_mod2,EN_mod3, metric="RMSE")
+compare_models(Ridge_mod2,EN_mod3, metric="Rsquared")
+
+compare_models(Ridge_mod2,OLS_mod4, metric="RMSE")
+compare_models(Ridge_mod2,OLS_mod4, metric="Rsquared")
+
+compare_models(EN_mod3,OLS_mod4, metric="RMSE")
+compare_models(EN_mod3,OLS_mod4, metric="Rsquared")
+```
+
+### Jackson Heart: Comparing Models
+
+Model performance was overall very similar among the four models tested with LASSO Regression coming out slightly ahead in this instance (lowest RMSE, highest R^2^ values).
+
+LASSO \>Elastic Net\>OLS\>Ridge
+
+```{r}
+#Compare LASSO and OLS predictive performance based on test_df
+
+comp <- matrix(c(LASSO_mod1_rmse, LASSO_mod1_rsq,
+                 Ridge_mod2_rmse,Ridge_mod2_rsq,
+                 EN_mod3_rmse,EN_mod3_rsq,
+                 OLS_mod4_rmse,OLS_mod4_rsq),
+               ncol=2,byrow=TRUE)
+
+#Labels
+colnames(comp) <- c("RMSE","R-squared")
+rownames(comp) <- c("LASSO", "Ridge", "ElasticNet", "OLS")
+
+
+
+
+
+
+print(comp)
+```

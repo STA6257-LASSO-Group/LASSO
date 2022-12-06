@@ -8,9 +8,9 @@ Because these methods are well established, there is continuing development on e
 
 ## Feature selection
 
-LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. ([@Aheto21]) This ill-fitting is mentioned in the previous section on regression line fitting.
+LASSO, Ridge, and Elastic Net Regression simplify the features by reducing and/or simplifying the values to zero. Due to this type of feature selection and/or reduction, the model may result in poor fitting. [@Aheto21] This ill-fitting is mentioned in the previous section on regression line fitting.
 
-Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. ([@Laura20])
+Modeling a situation where the number of features is larger than the number of observations is a difficult and unsolved problem in many situations. [@Laura20]
 
 In their paper, [@Song2021] used a LASSO regression algorithm to perform feature selection on a time-series problem that studied gas concentration rates over time in Chinese coal mines. The idea behind this study was that the concentration of gas is linked to accident rates in coal mines, but there were a large number of features to deal with. The researchers used LASSO to perform feature selection before fitting an ANN with both the complete set and reduced set of features. In this case, the predictors solved the LASSO problem (finding the optimal value of the shrinkage penalty Lambda) using the Least Angle Regression (LARS) algorithm.
 

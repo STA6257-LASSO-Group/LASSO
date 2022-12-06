@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>lasso_experiment_12_5_aw</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="LASSO_Experiment_12_5_AW_files/libs/clipboard/clipboard.min.js"></script>
+<script src="LASSO_Experiment_12_5_AW_files/libs/quarto-html/quarto.js"></script>
+<script src="LASSO_Experiment_12_5_AW_files/libs/quarto-html/popper.min.js"></script>
+<script src="LASSO_Experiment_12_5_AW_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="LASSO_Experiment_12_5_AW_files/libs/quarto-html/anchor.min.js"></script>
+<link href="LASSO_Experiment_12_5_AW_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="LASSO_Experiment_12_5_AW_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="LASSO_Experiment_12_5_AW_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="LASSO_Experiment_12_5_AW_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="LASSO_Experiment_12_5_AW_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="regularized-regression-and-the-jackson-heart-study-dataset-multicollinearity" class="level2">
+<h2 class="anchored" data-anchor-id="regularized-regression-and-the-jackson-heart-study-dataset-multicollinearity">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</h2>
+<p>When two or more variables are highly collinear, LASSO regression will select one randomly and drop the others to zero. Elastic Net adapts the properties of both LASSO and Ridge, so dropping coefficients is less frequent than for LASSO, but can still occur. Whereas, Ridge regression will keep highly collinear variables and adjust their importance with weight. Although this technique introduces more variability in the coefficients and p-values, the prediction of the dependent variable is not affected, but keeping large models can consume large amounts of computational time. memory and power. LASSO performs well when there are more observations than variables and does well with multicollinearity, simplifying the model by dropping variables including collinear variables.</p>
+<p>Although we started by observing the full JHS Visit 1 dataset of 2653 observations and 198 variables with the correlation matrix, we simplified the final model used for the Regularization Regression methods to exclude non-numeric data and categorical data and to include variables from several “hot spots” from the larger correlation matrix shown below. It is important to note that these regularization regression techniques can be used with other methods such as logistic regression had we decided to analyze the categorical data as well. However, many of the categorical variables were, in fact, composites of or redundant variables to the continuous variables included in this study.</p>
+</section>
+<section id="correlation-matrix-heat-map-and-variance-inflation-factor-vif-scores-suggest-high-multicollinearity-for-jackson-heart-study-visit-1" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-matrix-heat-map-and-variance-inflation-factor-vif-scores-suggest-high-multicollinearity-for-jackson-heart-study-visit-1">Correlation Matrix heat map and Variance Inflation Factor (VIF) Scores suggest high multicollinearity for Jackson Heart Study Visit 1</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1" class="level3">
+<h3 class="anchored" data-anchor-id="variance-inflation-factor-and-tolerance-scores-suggest-severe-multicollinearity-in-jackson-heart-study-visit-1">Variance Inflation Factor and Tolerance Scores suggest severe multicollinearity in Jackson Heart Study Visit 1</h3>
+<p>Taken together, there is evidence of multicollnearity in the data that could pose a problem with interpretations of linear models. Modifying linear models with regularization through LASSO, Ridge and ElasticNet are most valuable for predictions. VIF scores over 5 &amp; Tolerance scores under 0.2 indicate severe multicollinearity. We can use regularization to shrink the importance of the coefficients that are inflated by collinearity.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                     VIF  Tolerance
+fasthours       1.188521 0.84138180
+age             3.568913 0.28019737
+bmi            24.901065 0.04015892
+weight         25.258306 0.03959094
+neck            2.786419 0.35888353
+fastinginsulin  1.639202 0.61005295</code></pre>
+</div>
+</div>
+<p>Along with the severe multicollinearity found, the data for the depression model violate important assumptions for linear regression (below). The histogram of our dependent variable has more of a gamma distribution with the QQ plot showing heavy tail, also indicating that the data are not normal. Fitted Residuals plot shows a fanning distribution with error variance not constant. Finally, the scale-location plot shows the data are clustered without an equal spread of points, suggesting unequal variances. Although this dataset and model are not ideal for making predictions about depression without first finding the appropriate transformation to meet assumptions (which is beyond the scope of this study), we can still apply regularization to demonstrate the important differences among LASSO, Ridge and Elastic Net.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="analysis-of-depression-model-taken-from-matrix-hot-spots-demonstrates-reduction-of-multicollinearity-and-the-lassos-feature-selection-capabilities" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-of-depression-model-taken-from-matrix-hot-spots-demonstrates-reduction-of-multicollinearity-and-the-lassos-feature-selection-capabilities">Analysis of depression model taken from matrix “hot spots” demonstrates reduction of multicollinearity and the LASSO’s feature selection capabilities</h2>
+<p>Next we highlighted LASSO’s built-in feature selection capabilities and demonstrated how regularization can mediate multicollinearity. Most importantly, the regularized model is more stable with predictions than coefficient and p-values. In order to make predictions, we needed to partition the data for training and testing and find the optimal lambda in order to train the predictive models. We modeled the Total Depressive Symptoms Score (depression) as the Dependent variable (y). To simplify, we worked with continuous data and variables found in several “hot spots” from the correlation matrix above.</p>
+<section id="jackson-heart-lasso-𝞪1-l1-norm-lm" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-lasso-𝞪1-l1-norm-lm">Jackson Heart: LASSO (𝞪=1), L1 Norm (lm)</h3>
+</section>
+<section id="𝞴-x-slope" class="level3">
+<h3 class="anchored" data-anchor-id="𝞴-x-slope"><strong>𝞴 x |Slope|</strong></h3>
+<p>Both LASSO and Ridge shrink coefficients towards constraint region, LASSO’s constraint is towards the absolute value of the slope. In order to minimize the Residual Sum of Squares, we want the modified coefficient closest to that of the OLS Beta. For LASSO, this can be on the axis, essentially zeroing out a coefficient in the model. LASSO is good for feature selection by helping to winnow out the model, and it is good for getting the VIF down (as seen below).</p>
+<p>On the left is the path of coefficients shrinking to zero for the linear model,on the right is the optimal lambda is found using the largest lambda with the smallest mean squared error.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01175954</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="jackson-heart-lasso-𝞪1-l1-norm-gamma-penalty" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-lasso-𝞪1-l1-norm-gamma-penalty">Jackson Heart: LASSO (𝞪=1), L1 Norm (Gamma Penalty)</h3>
+<p>The path of coefficients shrinking to zero for the LASSO lm distribution is shown on the left, gamma distribution model is shown on the right.Optimal lambda is found using the largest lambda value with the smallest mean squared error. The gamma penalty gives a larger lambda than the lm model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="jackson-heart-lasso-𝞪1-l1-norm" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-lasso-𝞪1-l1-norm">Jackson Heart: LASSO (𝞪=1), L1 Norm</h3>
+<p>More Variables are dropped as the Lambda value is increased. Initially, the highest VIF’s were BMI, weight, fev1, fev6 . Note that at the optimal lambda (s2), LASSO has dropped 1 variable from the lm model: fastinginsulin. It kept variables such as bmi (a composite of height and weight) in the optimal lambda model, but with larger lambda values, the highest vif variables are eliminated. Eliminating redundant variables demonstrates LASSO’s automatic feature selection properties. These variables had very large VIF and low Tolerance scores, so dropping them from the model will likely not affect the model’s ability to predict depression; however, we also ran the LASSO with the gamma penalty to see how optimal lambda changes for data with a gamma distribution (bottom panel). Note that at the optimal lambda (seg98), the LASSO has dropped 3 variables from the gamma-penalty=2 model: fastinginsulin, fasthours and weight.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>10 x 4 sparse Matrix of class "dgCMatrix"
+                          s1            s2            s3       s4
+(Intercept)     7.2345149003  7.2459049017  6.848887e+00 8.906514
+fasthours       0.0154461464  0.0152448395  .            .       
+age             0.0294692360  0.0294523061  1.534655e-02 .       
+weight         -0.0003486204 -0.0002235076  .            .       
+neck           -0.0802404801 -0.0801305475  .            .       
+bmi             0.0176598946  0.0172365464  .            .       
+fastinginsulin  .             .             .            .       
+homa_ir         0.0769312162  0.0767433347  3.154321e-02 .       
+aldosterone    -0.0769100321 -0.0767902446 -2.957659e-02 .       
+adiponectin    -0.0001319057 -0.0001316802 -3.294485e-05 .       </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10 x 1 sparse Matrix of class "dgCMatrix"
+                       seg98
+intercept       7.6329993761
+fasthours       .           
+age             0.0295323517
+weight          .           
+neck           -0.0585369916
+bmi             0.0083291197
+fastinginsulin  .           
+homa_ir         0.0620299899
+aldosterone    -0.0696243295
+adiponectin    -0.0001134787</code></pre>
+</div>
+</div>
+</section>
+<section id="jackson-heart-ridge-𝞪0-l2-norm" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-ridge-𝞪0-l2-norm">Jackson Heart: Ridge (𝞪=0), L2 Norm</h3>
+</section>
+<section id="𝞴-x-slope2" class="level3">
+<h3 class="anchored" data-anchor-id="𝞴-x-slope2"><strong>𝞴 x Slope<sup>2</sup></strong></h3>
+<p>Both LASSO and Ridge shrink coefficients towards a constraint region, Ridge’s constraint is towards the squared slope. In order to minimize the Residual Sum of Squares, we want the modified coefficient closest to that of the OLS Beta. However, unlike LASSO, Ridge can’t get the coefficient to all the way to zero, but it can get really close and is also good for getting the VIF down.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3427968</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="LASSO_Experiment_12_5_AW_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note that Ridge has preserved all the variables in the model. No Variables were dropped as the Lambda value is increased.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 4 sparse Matrix of class "dgCMatrix"
+                      s1           s2           s3            s4
+(Intercept)  7.683856888  7.683856888  8.907952186 10.0177820079
+fasthours    0.015702540  0.015702540  0.004486646 -0.0051594351
+age          0.034959017  0.034959017  0.017302881 -0.0015970507
+weight      -0.009863117 -0.009863117 -0.004290117 -0.0005102981
+neck        -0.089650693 -0.089650693 -0.064795298 -0.0186218701
+bmi          0.045435093  0.045435093  0.023309123  0.0081255094</code></pre>
+</div>
+</div>
+<div class="cell">
+
+</div>
+</section>
+<section id="jackson-heart-elastic-net-𝞪0.5-l1-l2-norm" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-elastic-net-𝞪0.5-l1-l2-norm">Jackson Heart: Elastic Net (𝞪=0.5) L1 &amp; L2 Norm</h3>
+<p>Elastic Net dropped only 2 of the same variables as LASSO above. The distinction between the two might become more pronounced with larger models.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                     s1
+(Intercept) 10.53647059
+fasthours    0.06413026
+age          0.24773363
+bmi          0.04583096
+weight       .         
+neck        -0.30749960</code></pre>
+</div>
+</div>
+</section>
+<section id="jackson-heart-comparing-models" class="level3">
+<h3 class="anchored" data-anchor-id="jackson-heart-comparing-models">Jackson Heart: Comparing Models</h3>
+<p>Model performance was overall very similar among the four models tested with LASSO Regression coming out slightly ahead in this instance (lowest RMSE, highest R<sup>2</sup> values).</p>
+<p>LASSO &gt;Elastic Net&gt;OLS&gt;Ridge</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>           RMSE     R-squared
+LASSO      6.305145 0.3074768
+Ridge      6.313302 0.3056838
+ElasticNet 6.30564  0.3073681
+OLS        6.305874 0.3073168</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
