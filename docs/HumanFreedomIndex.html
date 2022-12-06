@@ -108,7 +108,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./summary.html" rel="next">
-<link href="./LASSO_Experiment_11_20_AW.html" rel="prev">
+<link href="./LASSO_Experiment_12_5_AW.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -192,12 +192,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geneirc Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
+  <a href="./LASSO_Experiment_12_5_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -341,115 +341,121 @@ div.csl-indent {
 <p><img src="HumanFreedomIndex_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The Ridge Regression plot shows higher values of lambda. For Ridge Regression, the choice of lambda represents a factor of shrinkage. A lambda of 0 would be equivalent to normal linear regression while a very high lambda would shrink all coefficients towards 0.</p>
+<p>The Ridge Regression plot shows higher values of lambda. For Ridge Regression, the choice of lambda represents a factor of shrinkage. A lambda of 0 would be equivalent to normal linear regression while a very high lambda would shrink all coefficients towards 0. Now the model is fit with the optimal lambda. The LASSO process is repeated to determine the coefficients which can be seen in the collapsed code below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ridge"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">lambda=</span>bestLambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Three different models using elastic net will now be fit with different increments of alpha.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 1</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">25</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">25</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.25"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 2</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">5</span>)</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.50"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 3</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">75</span>)</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">75</span>, <span class="at">lambda=</span>bestLambda)</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>   } </span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.75"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ridge"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The process is now repeated for three different elastic net models fit with different increments of alpha. You can display the code using the option below.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 1</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">25</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">25</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.25"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 2</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">5</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.50"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#Elastic Net 3</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(predictors, resp, <span class="at">alpha=</span>.<span class="dv">75</span>)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> model<span class="sc">$</span>lambda.min</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal Lambda has been fit.</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>finalModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(predictors,resp, <span class="at">alpha=</span>.<span class="dv">75</span>, <span class="at">lambda=</span>bestLambda)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>coefTable <span class="ot">&lt;-</span> <span class="fu">coefficients</span>(finalModel)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>coefList <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol=</span><span class="dv">2</span>,<span class="at">nrow=</span><span class="dv">0</span>))</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coefList)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Predictor"</span>,<span class="st">"Coefficient"</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coefTable)){</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(coefTable[x,<span class="dv">1</span>] <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a> {rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(coefList)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a> predNames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(coefTable<span class="sc">@</span>Dimnames)</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>   newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(predNames[x,<span class="dv">1</span>],coefTable[x,<span class="dv">1</span>])</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    coefList[rows<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> newRow    </span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>finalModelPredict <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> predictors)</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>finalModelTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalModel, <span class="at">s=</span> bestLambda, <span class="at">newx =</span> xtest)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>rows<span class="ot">&lt;-</span><span class="fu">nrow</span>(modelResults)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>newRow <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ENet.75"</span>,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(resp,finalModelPredict,freedomData)<span class="sc">$</span>RMSE,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>Rsquare,<span class="fu">eval_results</span>(ytest,finalModelTest,freedomData)<span class="sc">$</span>RMSE, <span class="fu">count</span>(coefList))</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>modelResults[rows<span class="sc">+</span><span class="dv">1</span>,]<span class="ot">&lt;-</span>newRow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="regularization-results-discussion" class="level3" data-number="6.0.3">
 <h3 data-number="6.0.3" class="anchored" data-anchor-id="regularization-results-discussion"><span class="header-section-number">6.0.3</span> Regularization Results / Discussion</h3>
 <p>The final model group looks like the table below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(modelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Model Train_RSquare Train_RMSE Test_RSquare  Test_RMSE CoefficientCount
 1   LASSO     0.9990647 0.07949565    0.9976974 0.02945082               10
@@ -462,7 +468,6 @@ div.csl-indent {
 <p>The number of coefficients selected by each individual method corresponds to how “LASSO” like or “Ridge” like the alpha parameter was set. The pure LASSO regression shows that 9 predictors (without the intercept term) were selected, while the pure Ridge Regression shows all 98 possible predictors were chosen. The Elastic Net models fall somewhere between, depending on the strength of the alpha parameter.</p>
 <p>The LASSO selected features included:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LASSOCoef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                         Predictor           Coefficient
 1                      (Intercept)     0.146490919100984
@@ -587,7 +592,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./LASSO_Experiment_11_20_AW.html" class="pagination-link">
+      <a href="./LASSO_Experiment_12_5_AW.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></span>
       </a>          
   </div>
