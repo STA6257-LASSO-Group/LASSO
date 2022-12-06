@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.0.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,15 +11,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 </style>
 
 
@@ -116,12 +111,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  <a href="./LASSO_Experiment_12_5_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -144,11 +139,12 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"><span class="toc-section-number">7.1</span>  Human Freedom Index (High Dimensional Data Example)</a></li>
+  <li><a href="#human-freedom-index-high-dimensional-data-example" id="toc-human-freedom-index-high-dimensional-data-example" class="nav-link active" data-scroll-target="#human-freedom-index-high-dimensional-data-example"> <span class="header-section-number">7.1</span> Human Freedom Index (High Dimensional Data Example)</a></li>
+  <li><a href="#jackson-heart-study" id="toc-jackson-heart-study" class="nav-link" data-scroll-target="#jackson-heart-study"> <span class="header-section-number">7.2</span> Jackson Heart Study</a></li>
   </ul>
 </nav>
     </div>
@@ -240,6 +236,87 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>The pure LASSO model was determined to be the best fit. This model needs a little more testing to ensure the model is not overfit to the particular data. This may be an issue due to the low number of observations (<span class="math inline">\(n=93\)</span>). This model did reduce the number of parameters methodically which can allow us to revisit the linear model.</p>
+</section>
+<section id="jackson-heart-study" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="jackson-heart-study"><span class="header-section-number">7.2</span> Jackson Heart Study</h2>
+<p>Both LASSO and Ridge shrink coefficients towards a constraint region, LASSO’s constraint is towards the absolute value of the slope while Ridge’s constraint is towards the squared slope. In order to minimize the Residual Sum of Squares, we want the modified coefficient closest to that of the OLS Beta. For LASSO, this can be on the axis, essentially zeroing out a coefficient in the model. This makes LASSO good for feature selection by helping to cull out the model. Here you can see increasing Lambda values shrink the number of coefficients for LASSO and Elastic Net ( hybrid of LASSO and Ridge). All models started with 28 variables. Ordinary least squares model is included for comparison (with no penalty term).</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Regularization Model Type</th>
+<th>Number of Coefficients</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LASSO (linear model), lambda=0.002</td>
+<td>27</td>
+</tr>
+<tr class="even">
+<td>LASSO (linear model) optimal lambda=0.004</td>
+<td>27</td>
+</tr>
+<tr class="odd">
+<td>LASSO (linear model) lambda=0.2</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>LASSO (linear model) lambda=2.0</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>LASSO (gamma penalty)</td>
+<td>25</td>
+</tr>
+<tr class="even">
+<td>Ridge ( at all lambda values)</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>Elastic Net at optimal lambda</td>
+<td>26</td>
+</tr>
+<tr class="even">
+<td>Ordinary Least Squares</td>
+<td>28</td>
+</tr>
+</tbody>
+</table>
+<p>The example of Collinearity in JHS data saw few features with large coefficients, indicating LASSO was predicted to outperform the others. In fact, model performance was overall very similar among the four models tested with LASSO Regression coming out slightly ahead in this instance (lowest RMSE, highest R<sup>2</sup> values).</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th>RMSE</th>
+<th>R-squared</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LASSO</td>
+<td>6.305145</td>
+<td>0.3074768</td>
+</tr>
+<tr class="even">
+<td>Ridge</td>
+<td>6.313302</td>
+<td>0.3056838</td>
+</tr>
+<tr class="odd">
+<td>ElasticNet</td>
+<td>6.30564</td>
+<td>0.3073681</td>
+</tr>
+<tr class="even">
+<td>OLS</td>
+<td>6.305874</td>
+<td>0.3073168</td>
+</tr>
+</tbody>
+</table>
+<p><img src="images/Comp_Table.png" class="img-fluid"></p>
+<p>In summary, Lasso, Ridge, and Elastic Net Regression are regularization modifications of the General Linear Model. They add bias to the model to compensate for overfitting. Multiplying coefficients using a penalty term shrinks the coefficients to add bias and can provide tolerance to multicollinearity. In Lasso’s case, coefficients can go to all the way to zero, so LASSO can be used in feature selection as well. All three techniques have their limitations and can be sensitive to the ratio of the sample size to the feature size.</p>
+<p>Future studies include using <em>Group LASSO</em> with these datasets to get a better model for multicollinearity data, especially for the features that are redundant or can be grouped. Additionally, <em>Adaptive LASSO</em> is another technique that runs Ridge first then LASSO to improve performance, and <em>Least Angle Regression (LARS) LASSO</em> and <em>Forward Stagewise</em> are alternative methods for choosing Lambda.</p>
 
 
 </section>
@@ -314,8 +391,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

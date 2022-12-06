@@ -24,6 +24,8 @@ library(olsrr)
 library(openintro)
 library(mice)
 library(misty)
+library(knitr)
+library(quarto)
 
 eval_results <- function(true, predicted, df) {
   SSE <- sum((predicted - true)^2)
@@ -132,15 +134,21 @@ plot(model)
 
 ```
 
-The Ridge Regression plot shows higher values of lambda. For Ridge Regression, the choice of lambda represents a factor of shrinkage. A lambda of 0 would be equivalent to normal linear regression while a very high lambda would shrink all coefficients towards 0.
+The Ridge Regression plot shows higher values of lambda. For Ridge Regression, the choice of lambda represents a factor of shrinkage. A lambda of 0 would be equivalent to normal linear regression while a very high lambda would shrink all coefficients towards 0. Now the model is fit with the optimal lambda. The LASSO process is repeated to determine the coefficients which can be seen in the collapsed code below.  
 
 ```{r}
 
 finalModel <- glmnet(predictors,resp, alpha=0, lambda=bestLambda)
+
+```
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 coefTable <- coefficients(finalModel)
 coefList <- data.frame(matrix(ncol=2,nrow=0))
 colnames(coefList)<-c("Predictor","Coefficient")
-
 for(x in 1:nrow(coefTable)){
  if(coefTable[x,1] != 0)
  {rows <- nrow(coefList)
@@ -157,9 +165,11 @@ newRow <- c("Ridge",eval_results(resp,finalModelPredict,freedomData)$Rsquare,eva
 modelResults[rows+1,]<-newRow
 ```
 
-Three different models using elastic net will now be fit with different increments of alpha.
+The process is now repeated for three different elastic net models fit with different increments of alpha. You can display the code using the option below. 
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Elastic Net 1
 model <- cv.glmnet(predictors, resp, alpha=.25)
 bestLambda <- model$lambda.min
@@ -244,7 +254,7 @@ modelResults[rows+1,]<-newRow
 
 The final model group looks like the table below.
 
-```{r}
+```{r echo=FALSE}
 print(modelResults)
 ```
 
@@ -252,7 +262,7 @@ The number of coefficients selected by each individual method corresponds to how
 
 The LASSO selected features included:
 
-```{r}
+```{r echo=FALSE}
 print(LASSOCoef)
 ```
 

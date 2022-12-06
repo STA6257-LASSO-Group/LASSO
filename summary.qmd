@@ -49,18 +49,15 @@ Both LASSO and Ridge shrink coefficients towards a constraint region, LASSO's co
 
 The example of Collinearity in JHS data saw few features with large coefficients, indicating LASSO was predicted to outperform the others. In fact, model performance was overall very similar among the four models tested with LASSO Regression coming out slightly ahead in this instance (lowest RMSE, highest R^2^ values).
 
-|                | RMSE      | R-squared |
-|----------------|-----------|-----------|
-| LASSO          | 6.305145  | 0.3074768 |
-| Ridge          | 6.313302  | 0.3056838 |
-| ElasticNet     | 6.30564   | 0.3073681 |
-| OLS            | 6.305874  | 0.3073168 |
+|            | RMSE     | R-squared |
+|------------|----------|-----------|
+| LASSO      | 6.305145 | 0.3074768 |
+| Ridge      | 6.313302 | 0.3056838 |
+| ElasticNet | 6.30564  | 0.3073681 |
+| OLS        | 6.305874 | 0.3073168 |
 
 ![](images/Comp_Table.png)
 
+In summary, Lasso, Ridge, and Elastic Net Regression are regularization modifications of the General Linear Model. They add bias to the model to compensate for overfitting. Multiplying coefficients using a penalty term shrinks the coefficients to add bias and can provide tolerance to multicollinearity. In Lasso's case, coefficients can go to all the way to zero, so LASSO can be used in feature selection as well. All three techniques have their limitations and can be sensitive to the ratio of the sample size to the feature size.
 
-
-In summary, Lasso, Ridge, and Elastic Net Regression are regularization modifications of the General
-Linear Model. They add bias to the model to compensate for overfitting. Multiplying coefficients using a penalty term shrinks the coefficients to add bias and can provide tolerance to multicollinearity. In Lasso\'s case, coefficients can go to all the way to zero, so LASSO can be used in feature selection as well. All three techniques have their limitations and can be sensitive to the ratio of the sample size to the feature size.
-
-Future studies include using *Group LASSO* with these datasets to get a better model for multicollinearity data, especially for the features that are redundant or can be grouped. Additionally, *Adaptive LASSO is another technique that runs Ridge first then LASSO to improve performance, and* Least Angle Regression (LARS) LASSO and Forward Stagewise are alternative methods for choosing Lambda.
+Future studies include using *Group LASSO* with these datasets to get a better model for multicollinearity data, especially for the features that are redundant or can be grouped. Additionally, *Adaptive LASSO* is another technique that runs Ridge first then LASSO to improve performance, and *Least Angle Regression (LARS) LASSO* and *Forward Stagewise* are alternative methods for choosing Lambda.

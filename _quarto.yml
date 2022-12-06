@@ -5,14 +5,14 @@ project:
 book:
   title: "An Overview of LASSO, Ridge, and Elastic Net Regularized Regression Methods"
   author: "Autumn Weeks, Kathleen Annis, Matt Thompson"
-  date: "11/4/2022"
+  date: "12/6/2022"
   chapters:
     - index.qmd
     - intro.qmd
     - LiteratureReview.qmd
     - dataset_methods.qmd
     - JacksonHeart.qmd
-    - LASSO_Experiment_11_20_AW.qmd
+    - LASSO_Experiment_12_5_AW.qmd
     - HumanFreedomIndex.qmd
     - summary.qmd
     - references.qmd
