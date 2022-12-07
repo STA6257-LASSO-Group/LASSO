@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.0.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,15 +11,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -133,12 +128,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LASSO_Experiment_11_20_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
+  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generic Regularized Regression Demonstration (Jackson Heart Study Data)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./JacksonHeart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression Implementation to the Jackson Heart Study Data</span></a>
+  <a href="./LASSO_Experiment_12_5_AW.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Regularized Regression and the Jackson Heart Study Dataset: Multicollinearity</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -183,6 +178,10 @@ div.csl-indent {
 </header>
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-caret" class="csl-entry" role="doc-biblioentry">
+<span>“A Short Introduction to the Caret Package.”</span> n.d.
+cran.r-project.org. <a href="https://cran.r-project.org/web/packages/caret/vignettes/caret.html">https://cran.r-project.org/web/packages/caret/vignettes/caret.html</a>.
+</div>
 <div id="ref-Aheto21" class="csl-entry" role="doc-biblioentry">
 Aheto, Justice Moses K., Henry Duah, Pascal Agbadi, and Emmanuel Nakua.
 2021. <span>“A Predictive Model, and Predictors of Under-Five Child
@@ -245,6 +244,10 @@ Ogutu, Joseph O., Torben Schulz-Streeck, and Hans-Peter Piepho. 2012.
 Ridge Regression, Lasso, Elastic Net and Their Extensions.”</span>
 <em>BMC Proceedings</em> 6. <a href="https://login.ezproxy.lib.uwf.edu/login?url=https://www.proquest.com/scholarly-journals/genomic-selection-using-regularized-linear/docview/1014440955/se-2">https://login.ezproxy.lib.uwf.edu/login?url=https://www.proquest.com/scholarly-journals/genomic-selection-using-regularized-linear/docview/1014440955/se-2</a>.
 </div>
+<div id="ref-gamlr" class="csl-entry" role="doc-biblioentry">
+<span>“One-Step Estimator Paths for Concave Regularization.”</span> n.d.
+cran.r-project.org. <a href="http://arxiv.org/abs/1308.5623">http://arxiv.org/abs/1308.5623</a>.
+</div>
 <div id="ref-Cook18" class="csl-entry" role="doc-biblioentry">
 Ranstam, J, and J A Cook. 2018. <span>“<span class="nocase">LASSO
 regression</span>.”</span> <em>British Journal of Surgery</em> 105 (10):
@@ -260,6 +263,9 @@ Prediction.”</span> <em>Earth Science Informatics</em> 14 (4): 1777–86.
 Song, Li, Shuang, and Shaobo Pan. 2021. <span>“Research on Time Series
 Characteristics of the Gas Drainage Evaluation Index Based on Lasso
 Regression.”</span> <em>Scientific Reports</em> 11 (1). <a href="https://doi.org/10.1038/s41598-021-00210-z">https://doi.org/10.1038/s41598-021-00210-z</a>.
+</div>
+<div id="ref-mice" class="csl-entry" role="doc-biblioentry">
+<span>“The Mice Algorithm.”</span> n.d. cran.r-project.org. <a href="https://cran.r-project.org/web/packages/caret/vignettes/caret.html">https://cran.r-project.org/web/packages/caret/vignettes/caret.html</a>.
 </div>
 <div id="ref-Tibshirani96" class="csl-entry" role="doc-biblioentry">
 Tibshirani, Robert. 1996. <span>“Regression Shrinkage and Selection via
@@ -346,8 +352,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
